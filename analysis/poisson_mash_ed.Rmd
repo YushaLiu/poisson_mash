@@ -1,0 +1,147 @@
+---
+title: "Comparison of the ED step for poisson mash"
+author: "Yusha Liu"
+header-includes:
+date: "2020-06-18"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Summary
+Run two versions of ED for poisson mash, using a subset of the single cell cytokines data.
+
+### Model
+Let $\tilde{\beta}_j = \log(\lambda_{jr}) - \mu_j 1$, 
+\begin{align}
+\tilde{\beta}_j  & =  \sum_{h}  \pi_{h} \: MVN(0, \: U_h) + v_j \sum_{g} \pi_{g} \: u_g \\
+\text{where} \quad v_j & \sim N(0, 1) \quad \text{and} \quad \sum_{h} \pi_h + \sum_{g} \pi_g = 1. \\
+\end{align}
+
+```{r warning=FALSE, message=FALSE}
+library(RColorBrewer)
+
+load("data/data_jr.RData")
+source("code/util_ed.R")
+
+idx <- c(1:10, 16:25, 46:50)
+
+data <- data.jr[,idx]
+s <- s.r[idx]/8
+rm(data.jr, s.r)
+
+res.pca <- pois_cov_pca(data, s, npc=6, min.count=5)
+subset <- res.pca$subset
+data.ed <- data[subset,]
+
+cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9,name="PuRd"), 
+              brewer.pal(n=9,name="Reds"), brewer.pal(n=9,name="Oranges"),
+              brewer.pal(n=9,name="Purples"), brewer.pal(n=9,name="YlOrRd"))
+cols.trt <- cols.all[idx]
+
+fit.v1 <- readRDS("output/ed_v1_maxiter1000.Rds")
+fit.v2 <- readRDS("output/ed_v2_maxiter1000.Rds")
+```
+
+### Compare runtime
+```{r warning=F}
+## running time for the original version
+fit.v1$runtime/length(fit.v1$ELBO)
+
+## running time for the updated version
+fit.v2$runtime/length(fit.v2$ELBO)
+```
+
+
+### Compare the estimate weights
+```{r warning=F}
+## estimated pi for the original version
+fit.v1$pi
+
+## estimated pi for the updated version
+c(fit.v2$pi[3:8], fit.v2$pi[1:2])
+```
+
+
+### Compare ELBO
+```{r warning=F}
+const <- sum(data.ed%*%log(s)) - sum(lgamma(data.ed+1)) + nrow(data.ed)*ncol(data.ed)/2
+
+plot(fit.v2$ELBO, xlab = "niter", ylab = "elbo")
+points(fit.v1$ELBO + const, col="red")
+legend("bottomright", legend=c("updated ED", "original ED"),
+       col=c("black", "red"), lty=1:1, cex=1, bty="n")
+```
+
+
+### Estimated U_k from the original version of ED
+```{r warning=F}
+par(mfrow=c(3,2))
+
+## the estimate of the eigenvector corresponding to positive eigenvalue, initialized by PCA-based rank-1 covariance matrix
+for (k in 1:6){
+  v <- eigen(fit.v1$Ulist[[k]])$vectors[,1]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = names(fit.v1$Ulist)[k], col = cols.trt)
+}
+
+## the estimate of eigenvectors corresponding to positive eigenvalues, initialized by PCA-based rank-6 covariance matrix
+eig.tPCA <- eigen(fit.v1$Ulist[[7]])
+pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
+
+for (k in 1:6){
+  v <- eig.tPCA$vectors[,k]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = paste0(names(fit.v1$Ulist)[7], ": Eigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"), col = cols.trt)
+}
+
+## the estimate of the top eigenvectors, initialized by the empirical covariance matrix
+eig.empcov <- eigen(fit.v1$Ulist[[8]])
+pve.empcov <- eig.empcov$values/sum(eig.empcov$values)
+
+for (k in 1:12){
+  v <- eig.empcov$vectors[,k]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = paste0(names(fit.v1$Ulist)[8], ": Eigenvector ", k, " (pve = ", round(pve.empcov[k],3), ")"), col = cols.trt)
+}
+```
+
+
+### Estimated U_k from the updated version of ED
+```{r warning=F}
+par(mfrow=c(3,2))
+
+## the estimate of the eigenvector corresponding to positive eigenvalue, initialized by PCA-based rank-1 covariance matrix
+for (k in 1:6){
+  v <- fit.v2$ulist[[k]]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = names(fit.v2$ulist)[k], col = cols.trt)
+}
+
+
+## the estimate of the top eigenvectors, initialized by PCA-based rank-6 covariance matrix
+eig.tPCA <- eigen(fit.v2$Ulist[[1]])
+pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
+
+for (k in 1:6){
+  v <- eig.tPCA$vectors[,k]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = paste0(names(fit.v2$Ulist)[1], ": Eigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"), col = cols.trt)
+}
+
+## the estimate of eigenvectors corresponding to positive eigenvalues, initialized by the empirical covariance matrix
+eig.empcov <- eigen(fit.v2$Ulist[[2]])
+pve.empcov <- eig.empcov$values/sum(eig.empcov$values)
+
+for (k in 1:12){
+  v <- eig.empcov$vectors[,k]
+  
+  barplot(v/max(abs(v)), names = names(s), cex.names = 0.5,
+          las = 2, main = paste0(names(fit.v2$Ulist)[2], ": Eigenvector ", k, " (pve = ", round(pve.empcov[k],3), ")"), col = cols.trt)
+}
+```
