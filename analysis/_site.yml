@@ -1,7 +1,7 @@
-name: "poisson_mash"
+name: poisson_mash
 output_dir: ../docs
 navbar:
-  title: "poisson_mash"
+  title: poisson_mash
   left:
   - text: Home
     href: index.html
@@ -9,6 +9,10 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/YushaLiu/poisson_mash
 output:
   workflowr::wflow_html:
     toc: yes
