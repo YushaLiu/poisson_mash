@@ -333,7 +333,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-06-26
+<strong>Last updated:</strong> 2020-07-01
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree48262ed4e5ed843ea682c527b41fe51aebe41051targetblank48262eda"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/48262ed4e5ed843ea682c527b41fe51aebe41051" target="_blank">48262ed</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree264ddb04f8619e22bd5d16607e21ea52e32d85a3targetblank264ddb0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/264ddb04f8619e22bd5d16607e21ea52e32d85a3" target="_blank">264ddb0</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree48262ed4e5ed843ea682c527b41fe51aebe41051targetblank48262eda" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree264ddb04f8619e22bd5d16607e21ea52e32d85a3targetblank264ddb0a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/48262ed4e5ed843ea682c527b41fe51aebe41051" target="_blank">48262ed</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/264ddb04f8619e22bd5d16607e21ea52e32d85a3" target="_blank">264ddb0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -385,11 +385,17 @@ Ignored files:
 
 Untracked files:
     Untracked:  code/util6.R
+    Untracked:  code/util8.R
     Untracked:  code/util_ed.R
     Untracked:  data/data_jr.RData
+    Untracked:  output/ed_all_trts_maxiter1500.Rds
     Untracked:  output/ed_v1_maxiter1000.Rds
     Untracked:  output/ed_v2_maxiter1000.Rds
+    Untracked:  output/mash_data_limma.rds
     Untracked:  output/mash_fit_limma.rds
+    Untracked:  output/mash_fit_limma_all_trts.rds
+    Untracked:  output/pois_mash_contrast_posterior_all_trts.Rds
+    Untracked:  output/pois_mash_fit_all_trts.Rds
     Untracked:  output/poisson_mash_fit.Rds
     Untracked:  output/poisson_mash_fit_contrast_posterior.Rds
 
@@ -430,6 +436,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/264ddb04f8619e22bd5d16607e21ea52e32d85a3/analysis/index.Rmd" target="_blank">264ddb0</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-01
+</td>
+<td>
+Add more results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/cb1ba2cc42e4395c124a747538aff00484c0a5a2/docs/index.html" target="_blank">cb1ba2c</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-06-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -591,7 +631,7 @@ Start workflowr project.
 </div>
 </div>
 <p>Welcome to my research website.</p>
-<p>Click on this <a href="poisson_mash.html">link</a> to see my results.</p>
+<p>Click on this <a href="pois_mash_all_trts.html">link</a> to see how to fit poisson mash to a subset of cytokines data. <br/> Click on this <a href="pois_mash_only_examples.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash but not mash. <br/> Click on this <a href="pois_mash_and_mash_examples.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash.</p>
 
 
 <!-- Adjust MathJax settings so that all math formulae are shown using
