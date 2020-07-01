@@ -1,0 +1,65 @@
+---
+title: "Examples of genes that are identified by both poisson mash and mash"
+author: "Yusha Liu"
+header-includes:
+date: "2020-6-30"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Summary
+We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. Now we present some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash. 
+```{r warning=FALSE, message=FALSE}
+### load in functions
+source("code/util8.R")
+
+### load in data
+load("data/data_jr.RData")
+data <- data.jr
+s <- s.r/8
+rm(data.jr, s.r)
+
+### remove genes that have fewer than 20 total counts across all 50 treatments
+data <- data[rowSums(data) >= 20,]
+
+### color code for treatments
+library(RColorBrewer)
+cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9,name="PuRd"), 
+              brewer.pal(n=9,name="Reds"), brewer.pal(n=9,name="Oranges"),
+              brewer.pal(n=9,name="Purples"), brewer.pal(n=9,name="YlOrRd"))
+
+### load in posterior summary of pois mash
+post <- readRDS("output/pois_mash_contrast_posterior_all_trts.Rds")
+lfsr.pois.mash <- post$lfsr
+idx.pois.mash <- which(apply(lfsr.pois.mash, 1, min) < 0.05)
+
+### load in posterior summary of mash
+mash.fit <- readRDS("output/mash_fit_limma_all_trts.rds")
+lfsr.mash <- mash.fit$result$lfsr
+idx.mash <- mashr::get_significant_results(mash.fit)
+
+### genes that are identified to be differentially expressed by both poisson mash and mash
+idx.both <- idx.pois.mash[names(idx.pois.mash) %in% names(idx.mash)]
+
+### order genes by the minimum lfsr across all treatments
+lfsr.both <- lfsr.pois.mash[idx.both,]
+idx.both.ordered <- idx.both[order(apply(lfsr.both, 1, min))]
+
+```
+
+
+```{r warning=FALSE, message=FALSE}
+### a few examples
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Limd2", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Rps7", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Gm20400", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Rpl9", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Igfbp4", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Ppia", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Rpsa", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Jun", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Rpl21", cols.trt=cols.all)
+create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Anp32b", cols.trt=cols.all)
+
+```
