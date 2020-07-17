@@ -24,9 +24,9 @@ dim(data)
 
 
 ### Model
-We assume $\log(X_{jr}) \sim Pois(s_r \lambda_{jr})$, and $\tilde{\beta}_{jr} = \log(\lambda_{jr}) - \mu_j$, where $\mu_j$ is the gene-specific mean on the log scale shared by all conditions.
+We assume $X_{jr} \sim Pois(s_r \lambda_{jr})$, and $\beta_{jr} = \log(\lambda_{jr}) - \mu_j$, where $s_r$ accounts for the different sequencing depth of each condition, $\mu_j$ is the gene-specific mean on the log scale shared by all conditions, and $\beta_{jr}$ models the condition-specific treatment effect.
 \begin{align}
-& \tilde{\beta}_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g) \\
+& \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g) \\
 \text{where} \quad & \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1. \\
 \end{align}
 
@@ -122,7 +122,7 @@ pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row = 5, fonts
 
 
 ### Comparison to mash
-We use the output from poisson mash fit to calculate posterior summaries of $\delta_{jr} = \tilde{\beta}_{jr} - \sum_{r=1}^R \tilde{\beta}_{jr}/R = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R$, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from mash. We apply mash to only genes that have reads in at least $50*5=250$ cells. There are 7,353 such genes. In mash, we calculate $\hat{s}_{jr}$ assuming that the observation noise is constant across conditions. 
+We use the output from poisson mash fit to calculate posterior summaries of $\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R$, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from mash. We apply mash to only genes that have reads in at least $50*5=250$ cells. There are 7,353 such genes. In mash, we calculate $\hat{s}_{jr}$ assuming that the observation noise is constant across conditions. 
 ```{r warning=FALSE, message=FALSE}
 ## load in the posterior summaries from poisson mash fit
 post <- readRDS("output/pois_mash_contrast_posterior_all_trts.Rds")
