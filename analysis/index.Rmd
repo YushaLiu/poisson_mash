@@ -12,5 +12,8 @@ Welcome to my research website.
 
 Click on this [link](pois_mash_all_trts.html) to see how to fit poisson mash to a subset of cytokines data. <br/>
 Click on this [link](pois_mash_only_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash but not mash. <br/>
-Click on this [link](pois_mash_and_mash_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash.
+Click on this [link](pois_mash_and_mash_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash. <br/>
+Click on this [link](pois_mash_random_effects.html) to see how to fit poisson mash with random effects to a subset of cytokines data. <br/>
+Click on this [link](pois_mash_random_effects_only_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/>
+Click on this [link](pois_mash_and_mash_random_effects_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash.
 

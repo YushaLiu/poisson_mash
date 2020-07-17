@@ -1,0 +1,158 @@
+---
+title: "Application of poisson mash with random effects to single cell cytokines data"
+author: "Yusha Liu"
+header-includes:
+date: "2020-7-17"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Summary
+We apply poisson mash with random effects to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. The count data matrix $X$ is $14,853 \times 46$, where $X_{jr}$ represents the read counts of gene $j$ in condition $r$. 
+```{r warning=FALSE, message=FALSE}
+load("data/data_jr.RData")
+source("code/util_random_effects.R")
+
+data <- data.jr
+s <- s.r/8
+rm(data.jr, s.r)
+
+data <- data[,5:50]
+s <- s[5:50]
+
+dim(data)
+
+```
+
+
+### Model
+We assume $X_{jr} \sim Pois(s_r \lambda_{jr})$, and $\log(\lambda_{jr}) = \mu_j + \beta_{jr} + \eta_{jr}$, where $s_r$ accounts for the different sequencing depth of each condition, $\mu_j$ is the gene-specific mean on the log scale shared by all conditions, $\beta_{jr}$ models the condition-specific treatment effect, and $\eta_{jr}$ models the random effect. We are mainly interested in estimation and inference on $\beta_{jr}$. The following priors are assumed in our model:
+\begin{align}
+& \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g) \\
+\text{where} \quad & \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1 \\
+& \eta_j \sim MVN(0, \: \tau_j^2 I_R). \\
+\end{align}
+
+
+### ED step
+To estimate the data-driven prior covariances $U_h$ and $u_g u'_g$, we fit the poisson mash model without scaling parameters $w_l$ to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test. 
+```{r warning=FALSE, message=FALSE}
+##  identify the subset of differentially expressed genes and initialize the data-driven prior covariances
+res.pca <- pois_cov_pca(data, s, npc=6, min.count=10)
+subset <- res.pca$subset
+data.ed <- data[subset,]
+
+## the number of differentially expressed genes identified by the multinomial goodness-of-fit test
+dim(data.ed)
+
+## load in the ED results
+fit.ed <- readRDS("output/ed_second_batch_maxiter1500.Rds")
+
+## running time per iteration in ED
+fit.ed$runtime/length(fit.ed$ELBO)
+
+## estimated weights for different candidate data-driven prior covariances
+fit.ed$pi
+
+## look at the ELBO
+plot(fit.ed$ELBO, xlab = "niter", ylab = "elbo", main="fitting ED step")
+
+```
+
+
+### Estimate of data-driven covariances from ED
+```{r warning=F}
+library(RColorBrewer)
+
+cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9,name="PuRd"), 
+              brewer.pal(n=9,name="Reds"), brewer.pal(n=9,name="Oranges"),
+              brewer.pal(n=9,name="Purples"), brewer.pal(n=9,name="YlOrRd"))
+
+cols.trt <- cols.all[5:50]
+
+par(mfrow=c(3,2))
+
+for (k in 1:6){
+  v <- fit.ed$ulist[[k]]
+  
+  barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.4,
+          las = 2, main = names(fit.ed$ulist)[k], col = cols.trt)
+}
+
+
+## the estimate of the top eigenvectors, initialized by PCA-based rank-6 covariance matrix
+eig.tPCA <- eigen(fit.ed$Ulist[[1]])
+pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
+
+for (k in 1:6){
+  v <- eig.tPCA$vectors[,k]
+  
+  barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.4,
+          las = 2, main = paste0(names(fit.ed$Ulist)[1], ": Eigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"), col = cols.trt)
+}
+
+```
+
+
+### Running poisson mash
+We then fit the poisson mash model to all the genes in $X$ which have at least 20 total read counts in all conditions. There are 10,733 such genes.
+```{r warning=FALSE, message=FALSE}
+## remove genes that have fewer than 20 total read counts in all 46 conditions
+data <- data[rowSums(data) >= 20,]
+dim(data)
+
+## load in the poisson mash fit results
+res <- readRDS("output/pois_mash_fit_second_batch.Rds")
+res$runtime
+
+## look at ELBO
+plot(res$ELBO, xlab = "niter", ylab = "elbo", main="Fitting poisson mash with random effects")
+
+## look at the estimated weights of prior covariance matrices
+library(pheatmap)
+library(gridExtra)
+
+wlist <- c(1e-6, 1e-5, 1e-4, 4e-4, 1e-3, 4e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 
+           1, 2, 4, 6, 8, 16, 32)
+
+pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
+
+rownames(pi.mat) <- c(paste0("U", 1:2), paste0("u", 1:52))
+colnames(pi.mat) <- paste0("w=", wlist)
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row = 5, fontsize_col=6, main="Estimated weights of prior covariances in poisson mash fit")
+
+```
+
+
+
+### Comparison to mash
+We use the output from poisson mash fit to calculate posterior summaries of $\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R$, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from mash. We apply mash to only genes that have reads in at least $46*5=230$ cells. There are 7,429 such genes. In mash, we calculate $\hat{s}_{jr}$ assuming that the observation noise is constant across conditions $r$ for each gene $j$.
+```{r warning=FALSE, message=FALSE}
+## load in the posterior summaries from poisson mash fit
+post <- readRDS("output/pois_mash_contrast_posterior_second_batch.Rds")
+
+## load in the mash fit
+mash.fit <- readRDS("output/mash_fit_second_batch.rds")
+
+## the number of significant genes identified by poisson mash (in 10,733 genes tested by poisson mash)
+lfsr <- post$lfsr
+idx.pois.mash <- which(apply(lfsr, 1, min) < 0.05)
+length(idx.pois.mash)
+
+## the number of significant genes identified by mash (in 7,429 genes tested by mash)
+idx.mash <- mashr::get_significant_results(mash.fit)
+length(idx.mash)
+
+## the number of genes that are identified by both poisson mash and mash
+sum(names(idx.mash) %in% names(idx.pois.mash))
+
+## the number of genes that are identified only by poisson mash (in 7,429 genes tested by both)
+pois_mash_only <- idx.pois.mash[!(names(idx.pois.mash) %in% names(idx.mash)) & (names(idx.pois.mash) %in% rownames(mash.fit$result$lfsr))]
+length(pois_mash_only)
+
+## the number of genes that are identified only by mash 
+mash_only <- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
+length(mash_only)
+
+```
