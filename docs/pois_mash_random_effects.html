@@ -387,7 +387,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Application of poisson mash with random effects to single cell cytokines data</h1>
 <h4 class="author">Yusha Liu</h4>
-<h4 class="date">2020-7-17</h4>
+<h4 class="date">2020-7-20</h4>
 
 </div>
 
@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-17
+<strong>Last updated:</strong> 2020-07-20
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree10208c10a56c88ab605d04be8ea1b5f8522b4766targetblank10208c1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/10208c10a56c88ab605d04be8ea1b5f8522b4766" target="_blank">10208c1</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreed64e44bb97021d8d000857a100a8b43689ff7310targetblankd64e44ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/d64e44bb97021d8d000857a100a8b43689ff7310" target="_blank">d64e44b</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree10208c10a56c88ab605d04be8ea1b5f8522b4766targetblank10208c1a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreed64e44bb97021d8d000857a100a8b43689ff7310targetblankd64e44ba" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/10208c10a56c88ab605d04be8ea1b5f8522b4766" target="_blank">10208c1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/d64e44bb97021d8d000857a100a8b43689ff7310" target="_blank">d64e44b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -521,15 +521,18 @@ Note that you need to be careful to ensure that all relevant files for the analy
 Ignored files:
     Ignored:    .DS_Store
     Ignored:    .Rhistory
+    Ignored:    code/.DS_Store
 
 Untracked files:
     Untracked:  code/util6.R
     Untracked:  code/util8.R
     Untracked:  code/util_ed.R
     Untracked:  code/util_random_effects.R
+    Untracked:  code/util_random_effects_v2.R
     Untracked:  data/data_jr.RData
     Untracked:  output/ed_all_trts_maxiter1500.Rds
     Untracked:  output/ed_second_batch_maxiter1500.Rds
+    Untracked:  output/ed_second_batch_v2_maxiter2000.Rds
     Untracked:  output/ed_v1_maxiter1000.Rds
     Untracked:  output/ed_v2_maxiter1000.Rds
     Untracked:  output/mash_data_limma.rds
@@ -539,10 +542,15 @@ Untracked files:
     Untracked:  output/mash_fit_second_batch.rds
     Untracked:  output/pois_mash_contrast_posterior_all_trts.Rds
     Untracked:  output/pois_mash_contrast_posterior_second_batch.Rds
+    Untracked:  output/pois_mash_contrast_posterior_second_batch_v2.Rds
     Untracked:  output/pois_mash_fit_all_trts.Rds
     Untracked:  output/pois_mash_fit_second_batch.Rds
+    Untracked:  output/pois_mash_fit_second_batch_v2.Rds
     Untracked:  output/poisson_mash_fit.Rds
     Untracked:  output/poisson_mash_fit_contrast_posterior.Rds
+
+Unstaged changes:
+    Modified:   analysis/pois_mash_and_mash_random_effects_examples.Rmd
 
 </code></pre>
 <p>
@@ -586,6 +594,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d64e44bb97021d8d000857a100a8b43689ff7310/analysis/pois_mash_random_effects.Rmd" target="_blank">d64e44b</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+<td>
+Update results of poisson mash with random effects
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/pois_mash_random_effects.html" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/10208c10a56c88ab605d04be8ea1b5f8522b4766/analysis/pois_mash_random_effects.Rmd" target="_blank">10208c1</a>
 </td>
 <td>
@@ -609,7 +651,7 @@ Add analysis results of poisson mash with random effects
 <h2>Summary</h2>
 <p>We apply poisson mash with random effects to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. The count data matrix <span class="math inline">\(X\)</span> is <span class="math inline">\(14,853 \times 46\)</span>, where <span class="math inline">\(X_{jr}\)</span> represents the read counts of gene <span class="math inline">\(j\)</span> in condition <span class="math inline">\(r\)</span>.</p>
 <pre class="r"><code>load(&quot;data/data_jr.RData&quot;)
-source(&quot;code/util_random_effects.R&quot;)
+source(&quot;code/util_random_effects_v2.R&quot;)
 
 data &lt;- data.jr
 s &lt;- s.r/8
@@ -640,19 +682,59 @@ data.ed &lt;- data[subset,]
 dim(data.ed)</code></pre>
 <pre><code>[1] 2481   46</code></pre>
 <pre class="r"><code>## load in the ED results
-fit.ed &lt;- readRDS(&quot;output/ed_second_batch_maxiter1500.Rds&quot;)
+fit.ed &lt;- readRDS(&quot;output/ed_second_batch_v2_maxiter2000.Rds&quot;)
 
 ## running time per iteration in ED
 fit.ed$runtime/length(fit.ed$ELBO)</code></pre>
-<pre><code>    user   system  elapsed 
-44.35608  0.05345 44.42964 </code></pre>
+<pre><code>      user     system    elapsed 
+26.6547415  0.0340515 26.7004645 </code></pre>
 <pre class="r"><code>## estimated weights for different candidate data-driven prior covariances
+names(fit.ed$pi) &lt;- c(names(res.pca$Ulist), names(res.pca$ulist), &quot;u_0&quot;)
 fit.ed$pi</code></pre>
-<pre><code>[1] 0.48559749 0.01301540 0.09412635 0.07238321 0.08550638 0.19078120 0.04573107
-[8] 0.01285890</code></pre>
+<pre><code>      tPCA    Emp_cov        u_1        u_2        u_3        u_4        u_5 
+0.38845798 0.01338601 0.10262373 0.06804855 0.14390832 0.20852552 0.04550993 
+       u_6        u_0 
+0.01324699 0.01629297 </code></pre>
 <pre class="r"><code>## look at the ELBO
 plot(fit.ed$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;fitting ED step&quot;)</code></pre>
 <p><img src="figure/pois_mash_random_effects.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects.Rmd/unnamed-chunk-2-1.png" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="estimate-of-data-driven-covariances-from-ed" class="section level3">
 <h3>Estimate of data-driven covariances from ED</h3>
@@ -673,6 +755,43 @@ for (k in 1:6){
           las = 2, main = names(fit.ed$ulist)[k], col = cols.trt)
 }</code></pre>
 <p><img src="figure/pois_mash_random_effects.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects.Rmd/unnamed-chunk-3-1.png" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## the estimate of the top eigenvectors, initialized by PCA-based rank-6 covariance matrix
 eig.tPCA &lt;- eigen(fit.ed$Ulist[[1]])
 pve.tPCA &lt;- eig.tPCA$values/sum(eig.tPCA$values)
@@ -684,6 +803,43 @@ for (k in 1:6){
           las = 2, main = paste0(names(fit.ed$Ulist)[1], &quot;: Eigenvector &quot;, k, &quot; (pve = &quot;, round(pve.tPCA[k],3), &quot;)&quot;), col = cols.trt)
 }</code></pre>
 <p><img src="figure/pois_mash_random_effects.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects.Rmd/unnamed-chunk-3-2.png" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="running-poisson-mash" class="section level3">
 <h3>Running poisson mash</h3>
@@ -693,13 +849,50 @@ data &lt;- data[rowSums(data) &gt;= 20,]
 dim(data)</code></pre>
 <pre><code>[1] 10733    46</code></pre>
 <pre class="r"><code>## load in the poisson mash fit results
-res &lt;- readRDS(&quot;output/pois_mash_fit_second_batch.Rds&quot;)
+res &lt;- readRDS(&quot;output/pois_mash_fit_second_batch_v2.Rds&quot;)
 res$runtime</code></pre>
 <pre><code>     user    system   elapsed 
-22557.359   218.277 22832.257 </code></pre>
+38879.243   422.308 39318.688 </code></pre>
 <pre class="r"><code>## look at ELBO
 plot(res$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;Fitting poisson mash with random effects&quot;)</code></pre>
 <p><img src="figure/pois_mash_random_effects.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects.Rmd/unnamed-chunk-4-1.png" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## look at the estimated weights of prior covariance matrices
 library(pheatmap)
 library(gridExtra)
@@ -709,16 +902,53 @@ wlist &lt;- c(1e-6, 1e-5, 1e-4, 4e-4, 1e-3, 4e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 
 
 pi.mat &lt;- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
 
-rownames(pi.mat) &lt;- c(paste0(&quot;U&quot;, 1:2), paste0(&quot;u&quot;, 1:52))
+rownames(pi.mat) &lt;- c(paste0(&quot;U&quot;, 1:2), paste0(&quot;u&quot;, 1:52), &quot;u0&quot;)
 colnames(pi.mat) &lt;- paste0(&quot;w=&quot;, wlist)
 pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row = 5, fontsize_col=6, main=&quot;Estimated weights of prior covariances in poisson mash fit&quot;)</code></pre>
 <p><img src="figure/pois_mash_random_effects.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-2">
+Past versions of unnamed-chunk-4-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects.Rmd/unnamed-chunk-4-2.png" target="_blank">db445f3</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-17
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="comparison-to-mash" class="section level3">
 <h3>Comparison to mash</h3>
 <p>We use the output from poisson mash fit to calculate posterior summaries of <span class="math inline">\(\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R\)</span>, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from mash. We apply mash to only genes that have reads in at least <span class="math inline">\(46*5=230\)</span> cells. There are 7,429 such genes. In mash, we calculate <span class="math inline">\(\hat{s}_{jr}\)</span> assuming that the observation noise is constant across conditions <span class="math inline">\(r\)</span> for each gene <span class="math inline">\(j\)</span>.</p>
 <pre class="r"><code>## load in the posterior summaries from poisson mash fit
-post &lt;- readRDS(&quot;output/pois_mash_contrast_posterior_second_batch.Rds&quot;)
+post &lt;- readRDS(&quot;output/pois_mash_contrast_posterior_second_batch_v2.Rds&quot;)
 
 ## load in the mash fit
 mash.fit &lt;- readRDS(&quot;output/mash_fit_second_batch.rds&quot;)
@@ -727,22 +957,22 @@ mash.fit &lt;- readRDS(&quot;output/mash_fit_second_batch.rds&quot;)
 lfsr &lt;- post$lfsr
 idx.pois.mash &lt;- which(apply(lfsr, 1, min) &lt; 0.05)
 length(idx.pois.mash)</code></pre>
-<pre><code>[1] 1052</code></pre>
+<pre><code>[1] 1111</code></pre>
 <pre class="r"><code>## the number of significant genes identified by mash (in 7,429 genes tested by mash)
 idx.mash &lt;- mashr::get_significant_results(mash.fit)
 length(idx.mash)</code></pre>
 <pre><code>[1] 685</code></pre>
 <pre class="r"><code>## the number of genes that are identified by both poisson mash and mash
 sum(names(idx.mash) %in% names(idx.pois.mash))</code></pre>
-<pre><code>[1] 507</code></pre>
+<pre><code>[1] 519</code></pre>
 <pre class="r"><code>## the number of genes that are identified only by poisson mash (in 7,429 genes tested by both)
 pois_mash_only &lt;- idx.pois.mash[!(names(idx.pois.mash) %in% names(idx.mash)) &amp; (names(idx.pois.mash) %in% rownames(mash.fit$result$lfsr))]
 length(pois_mash_only)</code></pre>
-<pre><code>[1] 434</code></pre>
+<pre><code>[1] 482</code></pre>
 <pre class="r"><code>## the number of genes that are identified only by mash 
 mash_only &lt;- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
 length(mash_only)</code></pre>
-<pre><code>[1] 178</code></pre>
+<pre><code>[1] 166</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
