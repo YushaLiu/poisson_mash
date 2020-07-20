@@ -2,7 +2,7 @@
 title: "Examples of genes that are identified by poisson mash with random effects only"
 author: "Yusha Liu"
 header-includes:
-date: "2020-7-17"
+date: "2020-7-20"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -12,7 +12,7 @@ editor_options:
 We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash. 
 ```{r warning=FALSE, message=FALSE}
 ### load in functions
-source("code/util_random_effects.R")
+source("code/util_random_effects_v2.R")
 
 ### load in data
 load("data/data_jr.RData")
@@ -33,7 +33,7 @@ cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9
 cols.trt <- cols.all[5:50]
 
 ### load in posterior summary of pois mash
-post <- readRDS("output/pois_mash_contrast_posterior_second_batch.Rds")
+post <- readRDS("output/pois_mash_contrast_posterior_second_batch_v2.Rds")
 lfsr.pois.mash <- post$lfsr
 idx.pois.mash <- which(apply(lfsr.pois.mash, 1, min) < 0.01)
 

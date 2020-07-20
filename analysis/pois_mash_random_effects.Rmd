@@ -2,7 +2,7 @@
 title: "Application of poisson mash with random effects to single cell cytokines data"
 author: "Yusha Liu"
 header-includes:
-date: "2020-7-17"
+date: "2020-7-20"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -12,7 +12,7 @@ editor_options:
 We apply poisson mash with random effects to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. The count data matrix $X$ is $14,853 \times 46$, where $X_{jr}$ represents the read counts of gene $j$ in condition $r$. 
 ```{r warning=FALSE, message=FALSE}
 load("data/data_jr.RData")
-source("code/util_random_effects.R")
+source("code/util_random_effects_v2.R")
 
 data <- data.jr
 s <- s.r/8
@@ -47,12 +47,13 @@ data.ed <- data[subset,]
 dim(data.ed)
 
 ## load in the ED results
-fit.ed <- readRDS("output/ed_second_batch_maxiter1500.Rds")
+fit.ed <- readRDS("output/ed_second_batch_v2_maxiter2000.Rds")
 
 ## running time per iteration in ED
 fit.ed$runtime/length(fit.ed$ELBO)
 
 ## estimated weights for different candidate data-driven prior covariances
+names(fit.ed$pi) <- c(names(res.pca$Ulist), names(res.pca$ulist), "u_0")
 fit.ed$pi
 
 ## look at the ELBO
@@ -103,7 +104,7 @@ data <- data[rowSums(data) >= 20,]
 dim(data)
 
 ## load in the poisson mash fit results
-res <- readRDS("output/pois_mash_fit_second_batch.Rds")
+res <- readRDS("output/pois_mash_fit_second_batch_v2.Rds")
 res$runtime
 
 ## look at ELBO
@@ -118,7 +119,7 @@ wlist <- c(1e-6, 1e-5, 1e-4, 4e-4, 1e-3, 4e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.3
 
 pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
 
-rownames(pi.mat) <- c(paste0("U", 1:2), paste0("u", 1:52))
+rownames(pi.mat) <- c(paste0("U", 1:2), paste0("u", 1:52), "u0")
 colnames(pi.mat) <- paste0("w=", wlist)
 pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row = 5, fontsize_col=6, main="Estimated weights of prior covariances in poisson mash fit")
 
@@ -130,7 +131,7 @@ pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row = 5, fonts
 We use the output from poisson mash fit to calculate posterior summaries of $\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R$, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from mash. We apply mash to only genes that have reads in at least $46*5=230$ cells. There are 7,429 such genes. In mash, we calculate $\hat{s}_{jr}$ assuming that the observation noise is constant across conditions $r$ for each gene $j$.
 ```{r warning=FALSE, message=FALSE}
 ## load in the posterior summaries from poisson mash fit
-post <- readRDS("output/pois_mash_contrast_posterior_second_batch.Rds")
+post <- readRDS("output/pois_mash_contrast_posterior_second_batch_v2.Rds")
 
 ## load in the mash fit
 mash.fit <- readRDS("output/mash_fit_second_batch.rds")
