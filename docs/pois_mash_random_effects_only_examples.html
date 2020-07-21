@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-07-20
+<strong>Last updated:</strong> 2020-07-21
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreed64e44bb97021d8d000857a100a8b43689ff7310targetblankd64e44ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/d64e44bb97021d8d000857a100a8b43689ff7310" target="_blank">d64e44b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree6744057bfb07ab45bba596e85867b8bdf8600c31targetblank6744057a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/6744057bfb07ab45bba596e85867b8bdf8600c31" target="_blank">6744057</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreed64e44bb97021d8d000857a100a8b43689ff7310targetblankd64e44ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree6744057bfb07ab45bba596e85867b8bdf8600c31targetblank6744057a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/d64e44bb97021d8d000857a100a8b43689ff7310" target="_blank">d64e44b</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/6744057bfb07ab45bba596e85867b8bdf8600c31" target="_blank">6744057</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -548,9 +548,6 @@ Untracked files:
     Untracked:  output/pois_mash_fit_second_batch_v2.Rds
     Untracked:  output/poisson_mash_fit.Rds
     Untracked:  output/poisson_mash_fit_contrast_posterior.Rds
-
-Unstaged changes:
-    Modified:   analysis/pois_mash_and_mash_random_effects_examples.Rmd
 
 </code></pre>
 <p>
@@ -589,6 +586,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/6744057bfb07ab45bba596e85867b8bdf8600c31/analysis/pois_mash_random_effects_only_examples.Rmd" target="_blank">6744057</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-21
+</td>
+<td>
+Update results about poisson mash with random effects
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/d6a20dc95111447e4d25f9ed609433991363a81b/docs/pois_mash_random_effects_only_examples.html" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -649,7 +680,7 @@ Add analysis results of poisson mash with random effects
 </div>
 <div id="summary" class="section level2">
 <h2>Summary</h2>
-<p>We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash.</p>
+<p>We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now.</p>
 <pre class="r"><code>### load in functions
 source(&quot;code/util_random_effects_v2.R&quot;)
 
@@ -679,15 +710,16 @@ idx.pois.mash &lt;- which(apply(lfsr.pois.mash, 1, min) &lt; 0.01)
 ### load in posterior summary of mash
 mash.fit &lt;- readRDS(&quot;output/mash_fit_second_batch.rds&quot;)
 lfsr.mash &lt;- mash.fit$result$lfsr
-idx.mash &lt;- mashr::get_significant_results(mash.fit)
-
-### genes that are identified to be differentially expressed only by poisson mash, but also get tested in mash
-pois_mash_only &lt;- idx.pois.mash[(!(names(idx.pois.mash) %in% names(idx.mash))) &amp; (names(idx.pois.mash) %in% rownames(lfsr.mash))]
+idx.mash &lt;- mashr::get_significant_results(mash.fit)</code></pre>
+<p>Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash.</p>
+<pre class="r"><code>### genes that are identified to be differentially expressed only by poisson mash, but also get tested in mash
+geneset1 &lt;- idx.pois.mash[(!(names(idx.pois.mash) %in% names(idx.mash))) &amp; (names(idx.pois.mash) %in% rownames(lfsr.mash))]
 
 ### randomly select 10 genes to plot
 set.seed(500)
-genes.to.plot &lt;- names(pois_mash_only)[sample(1:length(pois_mash_only), 10, replace = FALSE)]</code></pre>
-<pre class="r"><code>### a few examples
+genes.to.plot &lt;- names(geneset1)[sample(1:length(geneset1), 10, replace = FALSE)]
+
+### a few examples
 for(j in 1:10){
   create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
 }</code></pre>
@@ -714,6 +746,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-1.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-1.png" target="_blank">db445f3</a>
@@ -754,6 +797,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-2.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-2.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -790,6 +844,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-3.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-3.png" target="_blank">db445f3</a>
@@ -830,6 +895,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-4.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-4.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -866,6 +942,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-5.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-5.png" target="_blank">db445f3</a>
@@ -906,6 +993,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-6.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-6.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -942,6 +1040,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-7.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-7.png" target="_blank">db445f3</a>
@@ -982,6 +1091,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-8.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-8.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1018,6 +1138,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-9.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-9.png" target="_blank">db445f3</a>
@@ -1058,6 +1189,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-10.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-10.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1094,6 +1236,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-11.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-11.png" target="_blank">db445f3</a>
@@ -1134,6 +1287,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-12.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-12.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1170,6 +1334,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-13.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-13.png" target="_blank">db445f3</a>
@@ -1210,6 +1385,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-14.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-14.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1246,6 +1432,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-15.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-15.png" target="_blank">db445f3</a>
@@ -1286,6 +1483,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-16.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-16.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1322,6 +1530,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-17.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-17.png" target="_blank">db445f3</a>
@@ -1362,6 +1581,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-18.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-18.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1398,6 +1628,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-19.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-19.png" target="_blank">db445f3</a>
@@ -1438,6 +1679,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/d6a20dc95111447e4d25f9ed609433991363a81b/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-20.png" target="_blank">d6a20dc</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-07-20
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-2-20.png" target="_blank">db445f3</a>
 </td>
 <td>
@@ -1451,6 +1703,19 @@ yushaliu
 </table>
 </div>
 </div>
+<p>Now we present some examples of genes that get tesed in poisson mash only and are identified to be differentially expressed across treatments.</p>
+<pre class="r"><code>### genes that are identified to be differentially expressed only by poisson mash, but also get tested in mash
+geneset2 &lt;- idx.pois.mash[!(names(idx.pois.mash) %in% rownames(lfsr.mash))]
+
+### randomly select 10 genes to plot
+set.seed(500)
+genes.to.plot &lt;- names(geneset2)[sample(1:length(geneset2), 10, replace = FALSE)]
+
+### a few examples
+for(j in 1:10){
+  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt, plot.mash=FALSE)
+}</code></pre>
+<p><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_only_examples.Rmd/unnamed-chunk-3-20.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
