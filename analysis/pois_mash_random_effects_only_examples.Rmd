@@ -9,7 +9,8 @@ editor_options:
 ---
 
 ## Summary
-We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash. 
+We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. 
+
 ```{r warning=FALSE, message=FALSE}
 ### load in functions
 source("code/util_random_effects_v2.R")
@@ -42,20 +43,38 @@ mash.fit <- readRDS("output/mash_fit_second_batch.rds")
 lfsr.mash <- mash.fit$result$lfsr
 idx.mash <- mashr::get_significant_results(mash.fit)
 
+```
+
+
+Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash. 
+```{r warning=FALSE, message=FALSE}
 ### genes that are identified to be differentially expressed only by poisson mash, but also get tested in mash
-pois_mash_only <- idx.pois.mash[(!(names(idx.pois.mash) %in% names(idx.mash))) & (names(idx.pois.mash) %in% rownames(lfsr.mash))]
+geneset1 <- idx.pois.mash[(!(names(idx.pois.mash) %in% names(idx.mash))) & (names(idx.pois.mash) %in% rownames(lfsr.mash))]
 
 ### randomly select 10 genes to plot
 set.seed(500)
-genes.to.plot <- names(pois_mash_only)[sample(1:length(pois_mash_only), 10, replace = FALSE)]
+genes.to.plot <- names(geneset1)[sample(1:length(geneset1), 10, replace = FALSE)]
+
+### a few examples
+for(j in 1:10){
+  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
+}
 
 ```
 
 
+Now we present some examples of genes that get tesed in poisson mash only and are identified to be differentially expressed across treatments. 
 ```{r warning=FALSE, message=FALSE}
+### genes that are identified to be differentially expressed only by poisson mash, but also get tested in mash
+geneset2 <- idx.pois.mash[!(names(idx.pois.mash) %in% rownames(lfsr.mash))]
+
+### randomly select 10 genes to plot
+set.seed(500)
+genes.to.plot <- names(geneset2)[sample(1:length(geneset2), 10, replace = FALSE)]
+
 ### a few examples
 for(j in 1:10){
-  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
+  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt, plot.mash=FALSE)
 }
 
 ```
