@@ -17,11 +17,11 @@ We simulate 20 single cell datasets in total.
 
 
 ### Plot ROC for detecting non-null units
-See [plots](https://yushaliu.github.io/poisson_mash/non_null_units_v1.pdf). \
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_v1.pdf). \
 
 
 ### Plot ROC for detecting non-null unit-condition pairs
-See [plots](https://yushaliu.github.io/poisson_mash/non_null_pairs_v1.pdf). \
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_v1.pdf). \
 
 
 ### Summary of results at a threshold of lfsr=0.05 for each replicate
