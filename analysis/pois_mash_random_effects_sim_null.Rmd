@@ -1,0 +1,52 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data under the null"
+author: "Yusha Liu"
+header-includes:
+date: "2020-7-31"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. We simulate 20 single cell datasets in total.
+
+
+## Poisson mash with random effects
+```{r warning=FALSE, message=FALSE}
+### poisson mash results
+num_effects_pois <- rep(NA, 20)
+
+for(i in 1:20){
+  post <- readRDS(paste0("output/null_sim/pois_mash_posterior_rep_", i, ".Rds"))
+  idx.pois.mash <- which(apply(post$lfsr, 1, min) < 0.05)
+  num_effects_pois[i] <- length(idx.pois.mash)
+}
+
+### number of false positives
+num_effects_pois
+
+### false positive rates
+num_effects_pois/7492
+
+```
+
+
+### Mash with no common baseline
+```{r warning=FALSE, message=FALSE}
+##  mash results
+num_effects_mash <- rep(NA, 20)
+
+for(i in 1:20){
+  mash.fit <- readRDS(paste0("output/null_sim/mash_fit_rep_", i, ".Rds"))
+  num_effects_mash[i] <- length(mashr::get_significant_results(mash.fit))
+}
+
+### number of false positives
+num_effects_mash
+
+### false positive rates
+num_effects_mash/7492
+
+```
+
