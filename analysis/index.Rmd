@@ -18,5 +18,5 @@ Click on this [link](pois_mash_and_mash_random_effects_examples.html) to see som
 
 ## Application to simulated data
 Click on this [link](pois_mash_random_effects_sim_null.html) to see results to single cell data simulated under the null. <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_v1.html) to see results to single cell data simulated with signal by thinning (setting 1). <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_v2.html) to see results to single cell data simulated with signal by thinning (setting 2).
+Click on this [link](pois_mash_random_effects_sim_non_null_setting1.html) to see results to single cell data simulated with signal by thinning (setting 1). <br/>
+Click on this [link](pois_mash_random_effects_sim_non_null_setting2.html) to see results to single cell data simulated with signal by thinning (setting 2).

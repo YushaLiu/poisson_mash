@@ -1,0 +1,120 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data with signal (setting 1)"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-3"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash and mash to simulated single cell data with differential expression across conditions for a subset of genes. We start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. We first fit poisson mash with random effects to this dataset, so we can simulate realistic signals later based on this poisson mash fit.
+
+Starting with the real dataset, we randomly permute the cells with respect to the condition labels independently for each gene, so that there does not exist association between gene expression levels and conditions. Then we use thinning (https://cran.r-project.org/web/packages/seqgendiff/index.html) to add a known amount of signal to the randomly permuted data. Before thinning, we remove genes that have fewer than 200 total counts over all conditions, so there are 5,859 genes left. Then we add signals to the 568 genes that are identified to be differentially expressed across conditions in the real dataset by poisson mash, at the threshold of lfsr = 0.1. The signals are added in terms of $\log_2$ effect across conditions, based on the posterior mean estimate in the original dataset by poisson mash.
+
+We simulate 20 single cell datasets in total.
+
+
+### Plot ROC for detecting non-null units
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_setting1.pdf). \
+
+
+### Plot ROC for detecting non-null unit-condition pairs
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_setting1.pdf). \
+
+
+### Summary of results at a threshold of lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+### load in the ground truth
+load("output/non_null_sim_setting1/truth.RData")
+
+### calculate condition-specific deviations from the mean
+J <- nrow(beta)
+R <- ncol(beta)
+C <- diag(R) - (1/R)
+beta.contrast <- beta %*% C
+
+num.effects.pois <- rep(NA, 20)
+num.effects.mash <- rep(NA, 20)
+tpr.pois <- rep(NA, 20)
+fpr.pois <- rep(NA, 20)
+tpr.mash <- rep(NA, 20)
+fpr.mash <- rep(NA, 20)
+tpr.pair.pois <- rep(NA, 20)
+fpr.pair.pois <- rep(NA, 20)
+tpr.pair.mash <- rep(NA, 20)
+fpr.pair.mash <- rep(NA, 20)
+
+for(iter in 1:20){
+  # poisson mash
+  post <- readRDS(paste0("output/non_null_sim_setting1/pois_mash_posterior_rep_", iter, ".Rds"))
+
+  # calculate TPR and FPR for detecting non-null units
+  idx.pois <- which(apply(post$lfsr, 1, min) < 0.05)
+  tpr.pois[iter] <- sum(names(idx.pois) %in% names(non.null.idx))/length(non.null.idx)
+  fpr.pois[iter] <- sum(!names(idx.pois) %in% names(non.null.idx))/(J-length(non.null.idx))
+    
+  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  sign.pair <- post$PosteriorMean * beta.contrast
+  tpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  
+  # number of significant genes identified
+  num.effects.pois[iter] <- length(idx.pois)
+  
+  
+  # mash
+  mash.fit <- readRDS(paste0("output/non_null_sim_setting1/mash_fit_rep_", iter, ".Rds"))
+  
+  # calculate TPR and FPR for detecting non-null units
+  idx.mash <- mashr::get_significant_results(mash.fit, 0.05)
+  tpr.mash[iter] <- sum(names(idx.mash) %in% names(non.null.idx))/length(non.null.idx)
+  fpr.mash[iter] <- sum(!names(idx.mash) %in% names(non.null.idx))/(J-length(non.null.idx))
+    
+  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  lfsr.pair <- ashr::get_lfsr(mash.fit)
+  mean.pair <- ashr::get_pm(mash.fit)
+  sign.pair <- mean.pair * beta.contrast
+  tpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  
+  num.effects.mash[iter] <- length(idx.mash)
+}
+
+```
+
+
+### Number of significant non-null units at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+num.effects.pois
+
+num.effects.mash
+
+```
+
+
+### TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+tpr.pois
+
+fpr.pois
+
+tpr.mash
+
+fpr.mash
+
+```
+
+
+### TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+tpr.pair.pois
+
+fpr.pair.pois
+
+tpr.pair.mash
+
+fpr.pair.mash
+
+```
