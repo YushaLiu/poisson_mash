@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data with signal (setting 1)</title>
+<title>Application of poisson mash and mash to simulated single cell data with signal (setting 3)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data with signal (setting 1)</h1>
+<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data with signal (setting 3)</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-8-3</h4>
 
@@ -571,7 +571,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_sim_non_null_setting1.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_sim_non_null_setting3.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_sim_non_null_setting3.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -600,7 +600,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd" target="_blank">60163cb</a>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/pois_mash_random_effects_sim_non_null_setting3.Rmd" target="_blank">60163cb</a>
 </td>
 <td>
 yushaliu
@@ -610,40 +610,6 @@ yushaliu
 </td>
 <td>
 add simulation results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/f8284914e71c1069b66bdd41c4725e8f3aae0fae/docs/pois_mash_random_effects_sim_non_null_setting1.html" target="_blank">f828491</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/542307af9297823f6b022a87e8ed56fa5cb251d4/analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd" target="_blank">542307a</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Add simulation results
 </td>
 </tr>
 </tbody>
@@ -656,33 +622,22 @@ Add simulation results
 <div id="simulation-procedure" class="section level2">
 <h2>Simulation procedure</h2>
 <p>We apply poisson mash and mash to simulated single cell data with differential expression across conditions for a subset of genes using thinning.</p>
-<p>We start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. We first fit poisson mash with random effects to this dataset, and then simulate signals later based on this poisson mash fit.</p>
-<p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels independently for each gene, so that there does not exist association between gene expression levels and conditions. Then we use thinning (<a href="https://cran.r-project.org/web/packages/seqgendiff/index.html" class="uri">https://cran.r-project.org/web/packages/seqgendiff/index.html</a>) to add a known amount of signal to the randomly permuted data. Before thinning, we remove genes that have fewer than 200 total counts over all conditions, so there are 5,859 genes left. Then we add signals to the 568 genes that are identified to be differentially expressed across conditions in the real dataset by poisson mash, at the threshold of lfsr = 0.1. The signals are added in terms of differential effects across conditions on the log scale, based on the posterior mean estimate in the original dataset by poisson mash. The signals are further scaled appropriately to have realistic effect sizes (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>).</p>
+<p>We start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. We first fit poisson mash with random effects to this dataset, and use the covariance matrices (both canonical and data-driven ones) learned from this poisson mash fit to simulate signals later. There are 3 data-driven covariances (each assigned <span class="math inline">\(30\%\)</span> weight) and 2 canonical covariances modeling condition-specific effects (each assigned <span class="math inline">\(5\%\)</span> weight) in total.</p>
+<p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels independently for each gene, so that there does not exist association between gene expression levels and conditions. Then we use thinning (<a href="https://cran.r-project.org/web/packages/seqgendiff/index.html" class="uri">https://cran.r-project.org/web/packages/seqgendiff/index.html</a>) to add a known amount of signal to the randomly permuted data. Before thinning, we remove genes that have fewer than 200 total counts over all conditions, so there are 5,859 genes left. Then for each replicate dataset, we add signals to a randomly chosen subset of 500 genes. The signals are added in terms of differential effects across conditions on the log scale, which are simulated from a multivariate normal distribution with zero mean and covariance drawn randomly from one of the covariances learned from the poisson mash fit of the original dataset. The signals are further scaled appropriately to have realistic effect sizes (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>).</p>
 <p>We simulate 20 single cell datasets in total.</p>
 <div id="plot-roc-for-detecting-non-null-units" class="section level3">
 <h3>Plot ROC for detecting non-null units</h3>
-<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_setting1.pdf">plots</a>.<br />
+<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_setting3.pdf">plots</a>.<br />
 </p>
 </div>
 <div id="plot-roc-for-detecting-non-null-unit-condition-pairs" class="section level3">
 <h3>Plot ROC for detecting non-null unit-condition pairs</h3>
-<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_setting1.pdf">plots</a>.<br />
+<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_setting3.pdf">plots</a>.<br />
 </p>
 </div>
 <div id="summary-of-results-at-a-threshold-of-lfsr0.05-for-each-replicate" class="section level3">
 <h3>Summary of results at a threshold of lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>### load in the ground truth
-load(&quot;output/non_null_sim_setting1/truth.RData&quot;)
-
-### calculate condition-specific deviations from the mean
-J &lt;- nrow(beta)
-R &lt;- ncol(beta)
-C &lt;- diag(R) - (1/R)
-beta.contrast &lt;- beta %*% C
-
-num.effects.pois &lt;- rep(NA, 20)
-num.effects.mash &lt;- rep(NA, 20)
-tpr.pois &lt;- rep(NA, 20)
+<pre class="r"><code>tpr.pois &lt;- rep(NA, 20)
 fpr.pois &lt;- rep(NA, 20)
 tpr.mash &lt;- rep(NA, 20)
 fpr.mash &lt;- rep(NA, 20)
@@ -692,8 +647,15 @@ tpr.pair.mash &lt;- rep(NA, 20)
 fpr.pair.mash &lt;- rep(NA, 20)
 
 for(iter in 1:20){
+  # load in the ground truth
+  load(paste0(&quot;output/non_null_sim_setting3/scdata&quot;, iter, &quot;.RData&quot;))
+  J &lt;- nrow(beta)
+  R &lt;- ncol(beta)
+  C &lt;- diag(R) - (1/R)
+  beta.contrast &lt;- beta %*% C
+  
   # poisson mash
-  post &lt;- readRDS(paste0(&quot;output/non_null_sim_setting1/pois_mash_posterior_rep_&quot;, iter, &quot;.Rds&quot;))
+  post &lt;- readRDS(paste0(&quot;output/non_null_sim_setting3/pois_mash_posterior_rep_&quot;, iter, &quot;.Rds&quot;))
 
   # calculate TPR and FPR for detecting non-null units
   idx.pois &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
@@ -705,12 +667,9 @@ for(iter in 1:20){
   tpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
   fpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
   
-  # number of significant genes identified
-  num.effects.pois[iter] &lt;- length(idx.pois)
-  
   
   # mash
-  mash.fit &lt;- readRDS(paste0(&quot;output/non_null_sim_setting1/mash_fit_rep_&quot;, iter, &quot;.Rds&quot;))
+  mash.fit &lt;- readRDS(paste0(&quot;output/non_null_sim_setting3/mash_fit_rep_&quot;, iter, &quot;.Rds&quot;))
   
   # calculate TPR and FPR for detecting non-null units
   idx.mash &lt;- mashr::get_significant_results(mash.fit, 0.05)
@@ -724,59 +683,48 @@ for(iter in 1:20){
   tpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
   fpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
   
-  num.effects.mash[iter] &lt;- length(idx.mash)
+  rm(X, beta, non.null.idx)
 }</code></pre>
-</div>
-<div id="number-of-significant-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>Number of significant non-null units at lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>num.effects.pois</code></pre>
-<pre><code> [1] 410 408 418 415 412 419 415 416 416 404 406 410 394 420 409 403 414 425 405
-[20] 394</code></pre>
-<pre class="r"><code>num.effects.mash</code></pre>
-<pre><code> [1] 362 356 355 356 365 368 358 357 363 360 371 360 350 382 373 353 378 354 359
-[20] 353</code></pre>
 </div>
 <div id="tpr-and-fpr-for-detecting-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
 <h3>TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate</h3>
 <pre class="r"><code>tpr.pois</code></pre>
-<pre><code> [1] 0.6936620 0.6848592 0.7112676 0.7007042 0.7042254 0.7007042 0.7024648
- [8] 0.7042254 0.7059859 0.6901408 0.6901408 0.6989437 0.6778169 0.7200704
-[15] 0.6848592 0.6901408 0.7059859 0.7147887 0.6954225 0.6742958</code></pre>
+<pre><code> [1] 0.336 0.276 0.352 0.312 0.342 0.310 0.358 0.298 0.312 0.330 0.314 0.278
+[13] 0.350 0.320 0.330 0.378 0.334 0.344 0.332 0.344</code></pre>
 <pre class="r"><code>fpr.pois</code></pre>
-<pre><code> [1] 0.003024003 0.003591004 0.002646003 0.003213003 0.002268002 0.003969004
- [7] 0.003024003 0.003024003 0.002835003 0.002268002 0.002646003 0.002457002
-[13] 0.001701002 0.002079002 0.003780004 0.002079002 0.002457002 0.003591004
-[19] 0.001890002 0.002079002</code></pre>
+<pre><code> [1] 0.0009330099 0.0011196119 0.0009330099 0.0005598059 0.0009330099
+ [6] 0.0005598059 0.0013062138 0.0009330099 0.0003732040 0.0001866020
+[11] 0.0003732040 0.0005598059 0.0003732040 0.0005598059 0.0005598059
+[16] 0.0001866020 0.0009330099 0.0003732040 0.0007464079 0.0005598059</code></pre>
 <pre class="r"><code>tpr.mash</code></pre>
-<pre><code> [1] 0.6338028 0.6250000 0.6197183 0.6232394 0.6355634 0.6443662 0.6302817
- [8] 0.6232394 0.6355634 0.6302817 0.6478873 0.6320423 0.6161972 0.6672535
-[15] 0.6496479 0.6144366 0.6584507 0.6144366 0.6302817 0.6161972</code></pre>
+<pre><code> [1] 0.320 0.326 0.376 0.320 0.352 0.360 0.362 0.334 0.314 0.328 0.326 0.342
+[13] 0.374 0.332 0.354 0.400 0.358 0.364 0.352 0.338</code></pre>
 <pre class="r"><code>fpr.mash</code></pre>
-<pre><code> [1] 0.0003780004 0.0001890002 0.0005670006 0.0003780004 0.0007560008
- [6] 0.0003780004 0.0000000000 0.0005670006 0.0003780004 0.0003780004
-[11] 0.0005670006 0.0001890002 0.0000000000 0.0005670006 0.0007560008
-[16] 0.0007560008 0.0007560008 0.0009450009 0.0001890002 0.0005670006</code></pre>
+<pre><code> [1] 0.0001866020 0.0007464079 0.0003732040 0.0001866020 0.0001866020
+ [6] 0.0001866020 0.0000000000 0.0001866020 0.0001866020 0.0003732040
+[11] 0.0003732040 0.0000000000 0.0001866020 0.0003732040 0.0001866020
+[16] 0.0000000000 0.0003732040 0.0000000000 0.0000000000 0.0001866020</code></pre>
 </div>
 <div id="tpr-and-fpr-for-detecting-non-null-unit-condition-pairs-at-lfsr0.05-for-each-replicate" class="section level3">
 <h3>TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate</h3>
 <pre class="r"><code>tpr.pair.pois</code></pre>
-<pre><code> [1] 0.6267606 0.6246647 0.6270959 0.6253353 0.6349765 0.6244131 0.6260060
- [8] 0.6400067 0.6289403 0.6194668 0.6135144 0.6258384 0.6106640 0.6464621
-[15] 0.6289403 0.6144366 0.6232394 0.6370724 0.6177901 0.6089873</code></pre>
+<pre><code> [1] 0.3029524 0.2404762 0.3391429 0.2896190 0.3207619 0.2900000 0.3220000
+ [8] 0.2689524 0.2900000 0.2873333 0.2976190 0.2599048 0.3284762 0.3031429
+[15] 0.3114286 0.3713333 0.3193333 0.3330476 0.2983810 0.3138095</code></pre>
 <pre class="r"><code>fpr.pair.pois</code></pre>
-<pre><code> [1] 0.002142002 0.002565003 0.001944002 0.002349002 0.001827002 0.002511003
- [7] 0.002070002 0.002196002 0.001980002 0.001539002 0.001881002 0.001863002
-[13] 0.001053001 0.001674002 0.002952003 0.001332001 0.001674002 0.002520003
-[19] 0.000990001 0.001314001</code></pre>
+<pre><code> [1] 0.0008708092 0.0009685531 0.0008885808 0.0004442904 0.0007908370
+ [6] 0.0004531762 0.0012884422 0.0008530376 0.0003732040 0.0001866020
+[11] 0.0003732040 0.0005598059 0.0003732040 0.0005598059 0.0004531762
+[16] 0.0001866020 0.0008530376 0.0003287749 0.0006486640 0.0005598059</code></pre>
 <pre class="r"><code>tpr.pair.mash</code></pre>
-<pre><code> [1] 0.4987425 0.4898558 0.4932931 0.4948021 0.5085513 0.5062877 0.5231388
- [8] 0.5035211 0.4850771 0.5009222 0.5062877 0.5029343 0.4819752 0.5450201
-[15] 0.5304326 0.4863347 0.5197854 0.4830651 0.5076291 0.4926224</code></pre>
+<pre><code> [1] 0.2215238 0.2254286 0.3083810 0.2252381 0.2471429 0.2585714 0.2611429
+ [8] 0.2245714 0.2263810 0.2179048 0.2211429 0.2324762 0.2638095 0.2251429
+[15] 0.2194286 0.2959048 0.2405714 0.2668571 0.2420000 0.2349524</code></pre>
 <pre class="r"><code>fpr.pair.mash</code></pre>
-<pre><code> [1] 2.790003e-04 1.350001e-04 3.510004e-04 4.500005e-05 2.790003e-04
- [6] 1.710002e-04 0.000000e+00 2.520003e-04 1.260001e-04 2.880003e-04
-[11] 4.770005e-04 1.800002e-05 0.000000e+00 3.420003e-04 5.130005e-04
-[16] 3.510004e-04 5.220005e-04 6.030006e-04 4.500005e-05 3.060003e-04</code></pre>
+<pre><code> [1] 1.066297e-04 2.754601e-04 2.043736e-04 1.510587e-04 1.066297e-04
+ [6] 8.885808e-06 0.000000e+00 6.220066e-05 9.774389e-05 7.997228e-05
+[11] 1.155155e-04 0.000000e+00 1.777162e-05 1.332871e-04 8.885808e-06
+[16] 0.000000e+00 3.198891e-04 0.000000e+00 0.000000e+00 8.885808e-06</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

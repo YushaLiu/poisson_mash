@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data with signal (setting 1)</title>
+<title>Examples of genes that are identified by mash with no common baseline only</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data with signal (setting 1)</h1>
+<h1 class="title toc-ignore">Examples of genes that are identified by mash with no common baseline only</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-8-3</h4>
 
@@ -571,7 +571,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_sim_non_null_setting1.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/mash_only_examples.Rmd</code>) and HTML (<code>docs/mash_only_examples.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -600,7 +600,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd" target="_blank">60163cb</a>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/mash_only_examples.Rmd" target="_blank">60163cb</a>
 </td>
 <td>
 yushaliu
@@ -612,40 +612,6 @@ yushaliu
 add simulation results
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/f8284914e71c1069b66bdd41c4725e8f3aae0fae/docs/pois_mash_random_effects_sim_non_null_setting1.html" target="_blank">f828491</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/542307af9297823f6b022a87e8ed56fa5cb251d4/analysis/pois_mash_random_effects_sim_non_null_setting1.Rmd" target="_blank">542307a</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Add simulation results
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -653,130 +619,53 @@ Add simulation results
 </div>
 </div>
 </div>
-<div id="simulation-procedure" class="section level2">
-<h2>Simulation procedure</h2>
-<p>We apply poisson mash and mash to simulated single cell data with differential expression across conditions for a subset of genes using thinning.</p>
-<p>We start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. We first fit poisson mash with random effects to this dataset, and then simulate signals later based on this poisson mash fit.</p>
-<p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels independently for each gene, so that there does not exist association between gene expression levels and conditions. Then we use thinning (<a href="https://cran.r-project.org/web/packages/seqgendiff/index.html" class="uri">https://cran.r-project.org/web/packages/seqgendiff/index.html</a>) to add a known amount of signal to the randomly permuted data. Before thinning, we remove genes that have fewer than 200 total counts over all conditions, so there are 5,859 genes left. Then we add signals to the 568 genes that are identified to be differentially expressed across conditions in the real dataset by poisson mash, at the threshold of lfsr = 0.1. The signals are added in terms of differential effects across conditions on the log scale, based on the posterior mean estimate in the original dataset by poisson mash. The signals are further scaled appropriately to have realistic effect sizes (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>).</p>
-<p>We simulate 20 single cell datasets in total.</p>
-<div id="plot-roc-for-detecting-non-null-units" class="section level3">
-<h3>Plot ROC for detecting non-null units</h3>
-<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_setting1.pdf">plots</a>.<br />
-</p>
-</div>
-<div id="plot-roc-for-detecting-non-null-unit-condition-pairs" class="section level3">
-<h3>Plot ROC for detecting non-null unit-condition pairs</h3>
-<p>See <a href="https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_setting1.pdf">plots</a>.<br />
-</p>
-</div>
-<div id="summary-of-results-at-a-threshold-of-lfsr0.05-for-each-replicate" class="section level3">
-<h3>Summary of results at a threshold of lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>### load in the ground truth
-load(&quot;output/non_null_sim_setting1/truth.RData&quot;)
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now.</p>
+<pre class="r"><code>### load in functions
+source(&quot;code/util_random_effects_v2.R&quot;)
 
-### calculate condition-specific deviations from the mean
-J &lt;- nrow(beta)
-R &lt;- ncol(beta)
-C &lt;- diag(R) - (1/R)
-beta.contrast &lt;- beta %*% C
+### load in data
+load(&quot;data/data_jr.RData&quot;)
+data &lt;- data.jr
+s &lt;- s.r/8
+rm(data.jr, s.r)
+data &lt;- data[,5:50]
+s &lt;- s[5:50]
 
-num.effects.pois &lt;- rep(NA, 20)
-num.effects.mash &lt;- rep(NA, 20)
-tpr.pois &lt;- rep(NA, 20)
-fpr.pois &lt;- rep(NA, 20)
-tpr.mash &lt;- rep(NA, 20)
-fpr.mash &lt;- rep(NA, 20)
-tpr.pair.pois &lt;- rep(NA, 20)
-fpr.pair.pois &lt;- rep(NA, 20)
-tpr.pair.mash &lt;- rep(NA, 20)
-fpr.pair.mash &lt;- rep(NA, 20)
+### remove genes that have fewer than 20 total counts across all 46 treatments
+data &lt;- data[rowSums(data) &gt;= 20,]
 
-for(iter in 1:20){
-  # poisson mash
-  post &lt;- readRDS(paste0(&quot;output/non_null_sim_setting1/pois_mash_posterior_rep_&quot;, iter, &quot;.Rds&quot;))
+### color code for treatments
+library(RColorBrewer)
+cols.all &lt;- c(&quot;blue&quot;, brewer.pal(n=5,name=&quot;Greens&quot;)[3:5], &quot;gray&quot;, brewer.pal(n=9,name=&quot;PuRd&quot;), 
+              brewer.pal(n=9,name=&quot;Reds&quot;), brewer.pal(n=9,name=&quot;Oranges&quot;),
+              brewer.pal(n=9,name=&quot;Purples&quot;), brewer.pal(n=9,name=&quot;YlOrRd&quot;))
+cols.trt &lt;- cols.all[5:50]
 
-  # calculate TPR and FPR for detecting non-null units
-  idx.pois &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
-  tpr.pois[iter] &lt;- sum(names(idx.pois) %in% names(non.null.idx))/length(non.null.idx)
-  fpr.pois[iter] &lt;- sum(!names(idx.pois) %in% names(non.null.idx))/(J-length(non.null.idx))
-    
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
-  sign.pair &lt;- post$PosteriorMean * beta.contrast
-  tpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
-  fpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
-  
-  # number of significant genes identified
-  num.effects.pois[iter] &lt;- length(idx.pois)
-  
-  
-  # mash
-  mash.fit &lt;- readRDS(paste0(&quot;output/non_null_sim_setting1/mash_fit_rep_&quot;, iter, &quot;.Rds&quot;))
-  
-  # calculate TPR and FPR for detecting non-null units
-  idx.mash &lt;- mashr::get_significant_results(mash.fit, 0.05)
-  tpr.mash[iter] &lt;- sum(names(idx.mash) %in% names(non.null.idx))/length(non.null.idx)
-  fpr.mash[iter] &lt;- sum(!names(idx.mash) %in% names(non.null.idx))/(J-length(non.null.idx))
-    
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
-  lfsr.pair &lt;- ashr::get_lfsr(mash.fit)
-  mean.pair &lt;- ashr::get_pm(mash.fit)
-  sign.pair &lt;- mean.pair * beta.contrast
-  tpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
-  fpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
-  
-  num.effects.mash[iter] &lt;- length(idx.mash)
+## load in the ED results
+fit.ed &lt;- readRDS(&quot;output/ed_second_batch_v2_maxiter2000.Rds&quot;)
+
+### load in posterior summary of pois mash
+post &lt;- readRDS(&quot;output/pois_mash_contrast_posterior_second_batch_v2.Rds&quot;)
+idx.pois.mash &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
+
+### load in posterior summary of mash
+mash.fit &lt;- readRDS(&quot;output/mash_fit_second_batch.rds&quot;)
+idx.mash &lt;- mashr::get_significant_results(mash.fit)
+
+## the number of genes that are identified only by mash 
+mash_only &lt;- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
+
+### randomly select 10 genes to plot
+set.seed(100)
+genes.to.plot &lt;- names(mash_only)[sample(1:length(mash_only), 10, replace = FALSE)]</code></pre>
+<p>Now we present some examples of genes that are identified to be differentially expressed across treatments only by mash without common baseline.</p>
+<pre class="r"><code>### a few examples
+for(j in 1:10){
+  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
 }</code></pre>
-</div>
-<div id="number-of-significant-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>Number of significant non-null units at lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>num.effects.pois</code></pre>
-<pre><code> [1] 410 408 418 415 412 419 415 416 416 404 406 410 394 420 409 403 414 425 405
-[20] 394</code></pre>
-<pre class="r"><code>num.effects.mash</code></pre>
-<pre><code> [1] 362 356 355 356 365 368 358 357 363 360 371 360 350 382 373 353 378 354 359
-[20] 353</code></pre>
-</div>
-<div id="tpr-and-fpr-for-detecting-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>tpr.pois</code></pre>
-<pre><code> [1] 0.6936620 0.6848592 0.7112676 0.7007042 0.7042254 0.7007042 0.7024648
- [8] 0.7042254 0.7059859 0.6901408 0.6901408 0.6989437 0.6778169 0.7200704
-[15] 0.6848592 0.6901408 0.7059859 0.7147887 0.6954225 0.6742958</code></pre>
-<pre class="r"><code>fpr.pois</code></pre>
-<pre><code> [1] 0.003024003 0.003591004 0.002646003 0.003213003 0.002268002 0.003969004
- [7] 0.003024003 0.003024003 0.002835003 0.002268002 0.002646003 0.002457002
-[13] 0.001701002 0.002079002 0.003780004 0.002079002 0.002457002 0.003591004
-[19] 0.001890002 0.002079002</code></pre>
-<pre class="r"><code>tpr.mash</code></pre>
-<pre><code> [1] 0.6338028 0.6250000 0.6197183 0.6232394 0.6355634 0.6443662 0.6302817
- [8] 0.6232394 0.6355634 0.6302817 0.6478873 0.6320423 0.6161972 0.6672535
-[15] 0.6496479 0.6144366 0.6584507 0.6144366 0.6302817 0.6161972</code></pre>
-<pre class="r"><code>fpr.mash</code></pre>
-<pre><code> [1] 0.0003780004 0.0001890002 0.0005670006 0.0003780004 0.0007560008
- [6] 0.0003780004 0.0000000000 0.0005670006 0.0003780004 0.0003780004
-[11] 0.0005670006 0.0001890002 0.0000000000 0.0005670006 0.0007560008
-[16] 0.0007560008 0.0007560008 0.0009450009 0.0001890002 0.0005670006</code></pre>
-</div>
-<div id="tpr-and-fpr-for-detecting-non-null-unit-condition-pairs-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate</h3>
-<pre class="r"><code>tpr.pair.pois</code></pre>
-<pre><code> [1] 0.6267606 0.6246647 0.6270959 0.6253353 0.6349765 0.6244131 0.6260060
- [8] 0.6400067 0.6289403 0.6194668 0.6135144 0.6258384 0.6106640 0.6464621
-[15] 0.6289403 0.6144366 0.6232394 0.6370724 0.6177901 0.6089873</code></pre>
-<pre class="r"><code>fpr.pair.pois</code></pre>
-<pre><code> [1] 0.002142002 0.002565003 0.001944002 0.002349002 0.001827002 0.002511003
- [7] 0.002070002 0.002196002 0.001980002 0.001539002 0.001881002 0.001863002
-[13] 0.001053001 0.001674002 0.002952003 0.001332001 0.001674002 0.002520003
-[19] 0.000990001 0.001314001</code></pre>
-<pre class="r"><code>tpr.pair.mash</code></pre>
-<pre><code> [1] 0.4987425 0.4898558 0.4932931 0.4948021 0.5085513 0.5062877 0.5231388
- [8] 0.5035211 0.4850771 0.5009222 0.5062877 0.5029343 0.4819752 0.5450201
-[15] 0.5304326 0.4863347 0.5197854 0.4830651 0.5076291 0.4926224</code></pre>
-<pre class="r"><code>fpr.pair.mash</code></pre>
-<pre><code> [1] 2.790003e-04 1.350001e-04 3.510004e-04 4.500005e-05 2.790003e-04
- [6] 1.710002e-04 0.000000e+00 2.520003e-04 1.260001e-04 2.880003e-04
-[11] 4.770005e-04 1.800002e-05 0.000000e+00 3.420003e-04 5.130005e-04
-[16] 3.510004e-04 5.220005e-04 6.030006e-04 4.500005e-05 3.060003e-04</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-9.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-10.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-11.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-12.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-13.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-14.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-15.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-16.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-17.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-18.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-19.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-20.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -800,20 +689,25 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] RColorBrewer_1.1-2 rmeta_3.0          ggplot2_3.3.0      poilog_0.4        
+[5] psych_1.9.12.31    workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6     knitr_1.28       whisker_0.4      magrittr_1.5    
- [5] SQUAREM_2020.2   lattice_0.20-41  R6_2.4.1         rlang_0.4.6     
- [9] plyr_1.8.6       ashr_2.2-50      stringr_1.4.0    tools_3.6.2     
-[13] grid_3.6.2       xfun_0.13        rmeta_3.0        irlba_2.3.3     
-[17] invgamma_1.1     git2r_0.27.1     htmltools_0.4.0  assertthat_0.2.1
-[21] yaml_2.2.1       abind_1.4-5      digest_0.6.25    rprojroot_1.3-2 
-[25] mixsqp_0.3-43    Matrix_1.2-18    later_1.0.0      promises_1.1.0  
-[29] fs_1.4.1         glue_1.4.1       evaluate_0.14    rmarkdown_2.1   
-[33] stringi_1.4.6    compiler_3.6.2   mashr_0.2.21     backports_1.1.7 
-[37] mvtnorm_1.1-0    truncnorm_1.0-8  httpuv_1.5.2    </code></pre>
-</div>
+ [1] tidyselect_1.1.0 xfun_0.13        purrr_0.3.4      ashr_2.2-50     
+ [5] lattice_0.20-41  colorspace_1.4-1 vctrs_0.3.0      htmltools_0.4.0 
+ [9] yaml_2.2.1       rlang_0.4.6      mixsqp_0.3-43    later_1.0.0     
+[13] pillar_1.4.4     glue_1.4.1       withr_2.2.0      plyr_1.8.6      
+[17] lifecycle_0.2.0  mashr_0.2.21     stringr_1.4.0    munsell_0.5.0   
+[21] gtable_0.3.0     mvtnorm_1.1-0    evaluate_0.14    labeling_0.3    
+[25] knitr_1.28       httpuv_1.5.2     invgamma_1.1     irlba_2.3.3     
+[29] parallel_3.6.2   Rcpp_1.0.4.6     promises_1.1.0   scales_1.1.1    
+[33] backports_1.1.7  truncnorm_1.0-8  abind_1.4-5      farver_2.0.3    
+[37] fs_1.4.1         mnormt_1.5-7     digest_0.6.25    stringi_1.4.6   
+[41] dplyr_0.8.5      grid_3.6.2       rprojroot_1.3-2  tools_3.6.2     
+[45] magrittr_1.5     tibble_3.0.1     crayon_1.3.4     whisker_0.4     
+[49] pkgconfig_2.0.3  ellipsis_0.3.1   Matrix_1.2-18    SQUAREM_2020.2  
+[53] assertthat_0.2.1 rmarkdown_2.1    R6_2.4.1         nlme_3.1-147    
+[57] git2r_0.27.1     compiler_3.6.2  </code></pre>
 </div>
 </div>
 
