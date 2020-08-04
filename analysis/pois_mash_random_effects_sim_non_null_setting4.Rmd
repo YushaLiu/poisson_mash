@@ -1,0 +1,76 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data with signal (setting 4)"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-3"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash and mash to single cell data with differential expression across conditions for a subset of genes, which are simulated under the poisson log normal model (https://yushaliu.github.io/poisson_mash/pois_mash_random_effects.html).
+
+We start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. We first fit poisson mash with random effects to this dataset, and use the estimates of gene-specific $\mu$ and $\tau$, as well as covariance matrices (both canonical and data-driven ones) learned from this poisson mash fit to simulate condition-level count data under the poisson log normal model. There are 3 data-driven covariances (each assigned $30\%$ weight) and 2 canonical covariances modeling condition-specific effects (each assigned $5\%$ weight) in total. The simulated signals are scaled appropriately to have realistic effect sizes (in terms of $\max_r \mid \beta_{jr}\mid$).
+
+We simulate 20 single cell datasets in total. Since we simulate condition-level rather than cell-level count data under this model, we only evaluate the performance of poisson mash with random effects in this setting.
+
+
+### Plot ROC for detecting non-null units
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_units_setting4.pdf). \
+
+
+### Plot ROC for detecting non-null unit-condition pairs
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null_pairs_setting4.pdf). \
+
+
+### Summary of results at a threshold of lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+tpr.pois <- rep(NA, 20)
+fpr.pois <- rep(NA, 20)
+tpr.pair.pois <- rep(NA, 20)
+fpr.pair.pois <- rep(NA, 20)
+
+for(iter in 1:20){
+  # load in the ground truth
+  load(paste0("output/non_null_sim_setting4/count_data", iter, ".RData"))
+  J <- nrow(beta)
+  R <- ncol(beta)
+  C <- diag(R) - (1/R)
+  beta.contrast <- beta %*% C
+  
+  # poisson mash
+  post <- readRDS(paste0("output/non_null_sim_setting4/pois_mash_posterior_rep_", iter, ".Rds"))
+
+  # calculate TPR and FPR for detecting non-null units
+  idx.pois <- which(apply(post$lfsr, 1, min) < 0.05)
+  tpr.pois[iter] <- sum(names(idx.pois) %in% names(non.null.idx))/length(non.null.idx)
+  fpr.pois[iter] <- sum(!names(idx.pois) %in% names(non.null.idx))/(J-length(non.null.idx))
+    
+  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  sign.pair <- post$PosteriorMean * beta.contrast
+  tpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  
+  rm(beta, non.null.idx)
+}
+
+```
+
+
+### TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+tpr.pois
+
+fpr.pois
+
+```
+
+
+### TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+tpr.pair.pois
+
+fpr.pair.pois
+
+```
