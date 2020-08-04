@@ -47,10 +47,6 @@ idx.mash <- mashr::get_significant_results(mash.fit)
 ## the number of genes that are identified only by mash 
 mash_only <- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
 
-### randomly select 10 genes to plot
-set.seed(100)
-genes.to.plot <- names(mash_only)[sample(1:length(mash_only), 10, replace = FALSE)]
-
 ```
 
 
@@ -59,7 +55,7 @@ Now we present some examples of genes that are identified to be differentially e
 ```{r warning=FALSE, message=FALSE}
 ### a few examples
 for(j in 1:10){
-  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
+  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[j], cols.trt=cols.trt)
 }
 ```
 
