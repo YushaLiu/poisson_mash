@@ -2,7 +2,7 @@
 title: "Application of poisson mash with random effects to single cell cytokines data"
 author: "Yusha Liu"
 header-includes:
-date: "2020-7-20"
+date: "2020-8-3"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -31,7 +31,7 @@ We assume $X_{jr} \sim Pois(s_r \lambda_{jr})$, and $\log(\lambda_{jr}) = \mu_j 
 \begin{align}
 & \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g) \\
 \text{where} \quad & \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1 \\
-& \eta_j \sim MVN(0, \: \tau_j^2 I_R). \\
+& \eta_j \sim MVN(0, \: \frac{1}{\tau_j^2} I_R). \\
 \end{align}
 
 
