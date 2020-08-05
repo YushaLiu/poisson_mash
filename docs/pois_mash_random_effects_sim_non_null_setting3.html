@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-08-04
+<strong>Last updated:</strong> 2020-08-05
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree60163cb3932643bb9d1e2d2784010122e3a157f2targetblank60163cba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/60163cb3932643bb9d1e2d2784010122e3a157f2" target="_blank">60163cb</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreee287f376cdcc5e1d5ebb718678b30c63a0248f39targetblanke287f37a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/e287f376cdcc5e1d5ebb718678b30c63a0248f39" target="_blank">e287f37</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree60163cb3932643bb9d1e2d2784010122e3a157f2targetblank60163cba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreee287f376cdcc5e1d5ebb718678b30c63a0248f39targetblanke287f37a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/60163cb3932643bb9d1e2d2784010122e3a157f2" target="_blank">60163cb</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/e287f376cdcc5e1d5ebb718678b30c63a0248f39" target="_blank">e287f37</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -600,6 +600,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/e287f376cdcc5e1d5ebb718678b30c63a0248f39/analysis/pois_mash_random_effects_sim_non_null_setting3.Rmd" target="_blank">e287f37</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-05
+</td>
+<td>
+Update plots and add FDR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/pois_mash_random_effects_sim_non_null_setting3.html" target="_blank">85cfd1d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/pois_mash_random_effects_sim_non_null_setting3.Rmd" target="_blank">60163cb</a>
 </td>
 <td>
@@ -639,12 +673,16 @@ add simulation results
 <h3>Summary of results at a threshold of lfsr=0.05 for each replicate</h3>
 <pre class="r"><code>tpr.pois &lt;- rep(NA, 20)
 fpr.pois &lt;- rep(NA, 20)
+fdr.pois &lt;- rep(NA, 20)
 tpr.mash &lt;- rep(NA, 20)
 fpr.mash &lt;- rep(NA, 20)
+fdr.mash &lt;- rep(NA, 20)
 tpr.pair.pois &lt;- rep(NA, 20)
 fpr.pair.pois &lt;- rep(NA, 20)
+fsr.pair.pois &lt;- rep(NA, 20)
 tpr.pair.mash &lt;- rep(NA, 20)
 fpr.pair.mash &lt;- rep(NA, 20)
+fsr.pair.mash &lt;- rep(NA, 20)
 
 for(iter in 1:20){
   # load in the ground truth
@@ -657,37 +695,41 @@ for(iter in 1:20){
   # poisson mash
   post &lt;- readRDS(paste0(&quot;output/non_null_sim_setting3/pois_mash_posterior_rep_&quot;, iter, &quot;.Rds&quot;))
 
-  # calculate TPR and FPR for detecting non-null units
+  # calculate TPR, FPR and FDR for detecting non-null units
   idx.pois &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
   tpr.pois[iter] &lt;- sum(names(idx.pois) %in% names(non.null.idx))/length(non.null.idx)
   fpr.pois[iter] &lt;- sum(!names(idx.pois) %in% names(non.null.idx))/(J-length(non.null.idx))
+  fdr.pois[iter] &lt;- sum(!names(idx.pois) %in% names(non.null.idx))/length(idx.pois)
     
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
   sign.pair &lt;- post$PosteriorMean * beta.contrast
   tpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
   fpr.pair.pois[iter] &lt;- sum(post$lfsr &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.pois[iter] &lt;- 1 - sum(post$lfsr &lt; 0.05 &amp; sign.pair &gt; 0)/sum(post$lfsr &lt; 0.05)
   
   
   # mash
   mash.fit &lt;- readRDS(paste0(&quot;output/non_null_sim_setting3/mash_fit_rep_&quot;, iter, &quot;.Rds&quot;))
   
-  # calculate TPR and FPR for detecting non-null units
+  # calculate TPR, FPR and FDR for detecting non-null units
   idx.mash &lt;- mashr::get_significant_results(mash.fit, 0.05)
   tpr.mash[iter] &lt;- sum(names(idx.mash) %in% names(non.null.idx))/length(non.null.idx)
   fpr.mash[iter] &lt;- sum(!names(idx.mash) %in% names(non.null.idx))/(J-length(non.null.idx))
+  fdr.mash[iter] &lt;- sum(!names(idx.mash) %in% names(non.null.idx))/length(idx.mash)
     
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
   lfsr.pair &lt;- ashr::get_lfsr(mash.fit)
   mean.pair &lt;- ashr::get_pm(mash.fit)
   sign.pair &lt;- mean.pair * beta.contrast
   tpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; sign.pair &gt; 0)/sum(beta.contrast!=0)
   fpr.pair.mash[iter] &lt;- sum(lfsr.pair &lt; 0.05 &amp; beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.mash[iter] &lt;- 1 - sum(lfsr.pair &lt; 0.05 &amp; sign.pair &gt; 0)/sum(lfsr.pair &lt; 0.05) 
   
   rm(X, beta, non.null.idx)
 }</code></pre>
 </div>
-<div id="tpr-and-fpr-for-detecting-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate</h3>
+<div id="tpr-fpr-and-fdr-for-detecting-non-null-units-at-lfsr0.05-for-each-replicate" class="section level3">
+<h3>TPR, FPR and FDR for detecting non-null units at lfsr=0.05 for each replicate</h3>
 <pre class="r"><code>tpr.pois</code></pre>
 <pre><code> [1] 0.336 0.276 0.352 0.312 0.342 0.310 0.358 0.298 0.312 0.330 0.314 0.278
 [13] 0.350 0.320 0.330 0.378 0.334 0.344 0.332 0.344</code></pre>
@@ -696,6 +738,11 @@ for(iter in 1:20){
  [6] 0.0005598059 0.0013062138 0.0009330099 0.0003732040 0.0001866020
 [11] 0.0003732040 0.0005598059 0.0003732040 0.0005598059 0.0005598059
 [16] 0.0001866020 0.0009330099 0.0003732040 0.0007464079 0.0005598059</code></pre>
+<pre class="r"><code>fdr.pois</code></pre>
+<pre><code> [1] 0.028901734 0.041666667 0.027624309 0.018867925 0.028409091 0.018987342
+ [7] 0.037634409 0.032467532 0.012658228 0.006024096 0.012578616 0.021126761
+[13] 0.011299435 0.018404908 0.017857143 0.005263158 0.029069767 0.011494253
+[19] 0.023529412 0.017142857</code></pre>
 <pre class="r"><code>tpr.mash</code></pre>
 <pre><code> [1] 0.320 0.326 0.376 0.320 0.352 0.360 0.362 0.334 0.314 0.328 0.326 0.342
 [13] 0.374 0.332 0.354 0.400 0.358 0.364 0.352 0.338</code></pre>
@@ -704,9 +751,14 @@ for(iter in 1:20){
  [6] 0.0001866020 0.0000000000 0.0001866020 0.0001866020 0.0003732040
 [11] 0.0003732040 0.0000000000 0.0001866020 0.0003732040 0.0001866020
 [16] 0.0000000000 0.0003732040 0.0000000000 0.0000000000 0.0001866020</code></pre>
+<pre class="r"><code>fdr.mash</code></pre>
+<pre><code> [1] 0.006211180 0.023952096 0.010526316 0.006211180 0.005649718 0.005524862
+ [7] 0.000000000 0.005952381 0.006329114 0.012048193 0.012121212 0.000000000
+[13] 0.005319149 0.011904762 0.005617978 0.000000000 0.011049724 0.000000000
+[19] 0.000000000 0.005882353</code></pre>
 </div>
-<div id="tpr-and-fpr-for-detecting-non-null-unit-condition-pairs-at-lfsr0.05-for-each-replicate" class="section level3">
-<h3>TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate</h3>
+<div id="tpr-fpr-and-fsr-for-detecting-non-null-unit-condition-pairs-at-lfsr0.05-for-each-replicate" class="section level3">
+<h3>TPR, FPR and FSR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate</h3>
 <pre class="r"><code>tpr.pair.pois</code></pre>
 <pre><code> [1] 0.3029524 0.2404762 0.3391429 0.2896190 0.3207619 0.2900000 0.3220000
  [8] 0.2689524 0.2900000 0.2873333 0.2976190 0.2599048 0.3284762 0.3031429
@@ -716,6 +768,11 @@ for(iter in 1:20){
  [6] 0.0004531762 0.0012884422 0.0008530376 0.0003732040 0.0001866020
 [11] 0.0003732040 0.0005598059 0.0003732040 0.0005598059 0.0004531762
 [16] 0.0001866020 0.0008530376 0.0003287749 0.0006486640 0.0005598059</code></pre>
+<pre class="r"><code>fsr.pair.pois</code></pre>
+<pre><code> [1] 0.07903880 0.09074541 0.03391210 0.03704877 0.06052999 0.03517110
+ [7] 0.08522727 0.06675479 0.04873477 0.07567402 0.03549383 0.04713687
+[13] 0.02790304 0.05211435 0.02823180 0.01961277 0.03732415 0.02563388
+[19] 0.05660945 0.07183099</code></pre>
 <pre class="r"><code>tpr.pair.mash</code></pre>
 <pre><code> [1] 0.2215238 0.2254286 0.3083810 0.2252381 0.2471429 0.2585714 0.2611429
  [8] 0.2245714 0.2263810 0.2179048 0.2211429 0.2324762 0.2638095 0.2251429
@@ -725,6 +782,11 @@ for(iter in 1:20){
  [6] 8.885808e-06 0.000000e+00 6.220066e-05 9.774389e-05 7.997228e-05
 [11] 1.155155e-04 0.000000e+00 1.777162e-05 1.332871e-04 8.885808e-06
 [16] 0.000000e+00 3.198891e-04 0.000000e+00 0.000000e+00 8.885808e-06</code></pre>
+<pre class="r"><code>fsr.pair.mash</code></pre>
+<pre><code> [1] 0.02104377 0.05922099 0.03802733 0.04056795 0.02918070 0.03449502
+ [7] 0.02834869 0.01750000 0.04653028 0.04387798 0.01901141 0.01810137
+[13] 0.01106748 0.02030667 0.01538462 0.02264863 0.02282398 0.04008222
+[19] 0.01205288 0.02797478</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

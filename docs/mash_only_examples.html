@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-08-04
+<strong>Last updated:</strong> 2020-08-05
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree174ef2de5d0f22399a912dd532f49bc60af2b850targetblank174ef2da"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/174ef2de5d0f22399a912dd532f49bc60af2b850" target="_blank">174ef2d</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreee287f376cdcc5e1d5ebb718678b30c63a0248f39targetblanke287f37a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/e287f376cdcc5e1d5ebb718678b30c63a0248f39" target="_blank">e287f37</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree174ef2de5d0f22399a912dd532f49bc60af2b850targetblank174ef2da" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreee287f376cdcc5e1d5ebb718678b30c63a0248f39targetblanke287f37a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/174ef2de5d0f22399a912dd532f49bc60af2b850" target="_blank">174ef2d</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/e287f376cdcc5e1d5ebb718678b30c63a0248f39" target="_blank">e287f37</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -595,6 +595,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/e287f376cdcc5e1d5ebb718678b30c63a0248f39/analysis/mash_only_examples.Rmd" target="_blank">e287f37</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-05
+</td>
+<td>
+Update plots and add FDR
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/b2f0b59ab3160a3e2cca396fb8616157db7e3e2f/docs/mash_only_examples.html" target="_blank">b2f0b59</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-04
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -691,10 +725,7 @@ idx.mash &lt;- mashr::get_significant_results(mash.fit)
 ## the number of genes that are identified only by mash 
 mash_only &lt;- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]</code></pre>
 <p>Now we present some examples of genes that are identified to be differentially expressed across treatments only by mash without common baseline.</p>
-<pre class="r"><code>### a few examples
-for(j in 1:10){
-  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[j], cols.trt=cols.trt)
-}</code></pre>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[1], cols.trt=cols.trt)</code></pre>
 <p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
@@ -718,6 +749,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b2f0b59ab3160a3e2cca396fb8616157db7e3e2f/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-1.png" target="_blank">b2f0b59</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-04
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-1.png" target="_blank">85cfd1d</a>
@@ -758,6 +800,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b2f0b59ab3160a3e2cca396fb8616157db7e3e2f/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-2.png" target="_blank">b2f0b59</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-08-04
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-2.png" target="_blank">85cfd1d</a>
 </td>
 <td>
@@ -771,690 +824,24 @@ yushaliu
 </table>
 </div>
 </div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-3">
-Past versions of unnamed-chunk-2-3.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-3" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-3.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-4">
-Past versions of unnamed-chunk-2-4.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-4" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-4.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-5.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-5">
-Past versions of unnamed-chunk-2-5.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-5" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-5.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-6.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-6">
-Past versions of unnamed-chunk-2-6.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-6" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-6.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-7.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-7">
-Past versions of unnamed-chunk-2-7.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-7" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-7.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-8.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-8">
-Past versions of unnamed-chunk-2-8.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-8" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-8.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-9.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-9">
-Past versions of unnamed-chunk-2-9.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-9" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-9.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-10.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-10">
-Past versions of unnamed-chunk-2-10.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-10" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-10.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-11.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-11">
-Past versions of unnamed-chunk-2-11.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-11" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-11.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-12.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-12">
-Past versions of unnamed-chunk-2-12.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-12" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-12.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-13.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-13">
-Past versions of unnamed-chunk-2-13.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-13" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-13.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-14.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-14">
-Past versions of unnamed-chunk-2-14.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-14" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-14.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-15.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-15">
-Past versions of unnamed-chunk-2-15.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-15" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-15.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-16.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-16">
-Past versions of unnamed-chunk-2-16.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-16" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-16.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-17.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-17">
-Past versions of unnamed-chunk-2-17.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-17" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-17.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-18.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-18">
-Past versions of unnamed-chunk-2-18.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-18" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-18.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-19.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-19">
-Past versions of unnamed-chunk-2-19.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-19" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-19.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-2-20.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-20">
-Past versions of unnamed-chunk-2-20.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-2-20" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/figure/mash_only_examples.Rmd/unnamed-chunk-2-20.png" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[2], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[3], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[4], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[5], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[6], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[7], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[8], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[9], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[10], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1487,16 +874,15 @@ loaded via a namespace (and not attached):
  [9] yaml_2.2.1       rlang_0.4.6      mixsqp_0.3-43    later_1.0.0     
 [13] pillar_1.4.4     glue_1.4.1       withr_2.2.0      plyr_1.8.6      
 [17] lifecycle_0.2.0  mashr_0.2.21     stringr_1.4.0    munsell_0.5.0   
-[21] gtable_0.3.0     mvtnorm_1.1-0    evaluate_0.14    labeling_0.3    
-[25] knitr_1.28       httpuv_1.5.2     invgamma_1.1     irlba_2.3.3     
-[29] parallel_3.6.2   Rcpp_1.0.4.6     promises_1.1.0   scales_1.1.1    
-[33] backports_1.1.7  truncnorm_1.0-8  abind_1.4-5      farver_2.0.3    
-[37] fs_1.4.1         mnormt_1.5-7     digest_0.6.25    stringi_1.4.6   
-[41] dplyr_0.8.5      grid_3.6.2       rprojroot_1.3-2  tools_3.6.2     
-[45] magrittr_1.5     tibble_3.0.1     crayon_1.3.4     whisker_0.4     
-[49] pkgconfig_2.0.3  ellipsis_0.3.1   Matrix_1.2-18    SQUAREM_2020.2  
-[53] assertthat_0.2.1 rmarkdown_2.1    R6_2.4.1         nlme_3.1-147    
-[57] git2r_0.27.1     compiler_3.6.2  </code></pre>
+[21] gtable_0.3.0     mvtnorm_1.1-0    evaluate_0.14    knitr_1.28      
+[25] httpuv_1.5.2     invgamma_1.1     irlba_2.3.3      parallel_3.6.2  
+[29] Rcpp_1.0.4.6     promises_1.1.0   scales_1.1.1     backports_1.1.7 
+[33] truncnorm_1.0-8  abind_1.4-5      fs_1.4.1         mnormt_1.5-7    
+[37] digest_0.6.25    stringi_1.4.6    dplyr_0.8.5      grid_3.6.2      
+[41] rprojroot_1.3-2  tools_3.6.2      magrittr_1.5     tibble_3.0.1    
+[45] crayon_1.3.4     whisker_0.4      pkgconfig_2.0.3  ellipsis_0.3.1  
+[49] Matrix_1.2-18    SQUAREM_2020.2   assertthat_0.2.1 rmarkdown_2.1   
+[53] R6_2.4.1         nlme_3.1-147     git2r_0.27.1     compiler_3.6.2  </code></pre>
 </div>
 </div>
 
