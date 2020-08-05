@@ -30,12 +30,16 @@ See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/non_null
 ```{r warning=FALSE, message=FALSE}
 tpr.pois <- rep(NA, 20)
 fpr.pois <- rep(NA, 20)
+fdr.pois <- rep(NA, 20)
 tpr.mash <- rep(NA, 20)
 fpr.mash <- rep(NA, 20)
+fdr.mash <- rep(NA, 20)
 tpr.pair.pois <- rep(NA, 20)
 fpr.pair.pois <- rep(NA, 20)
+fsr.pair.pois <- rep(NA, 20)
 tpr.pair.mash <- rep(NA, 20)
 fpr.pair.mash <- rep(NA, 20)
+fsr.pair.mash <- rep(NA, 20)
 
 for(iter in 1:20){
   # load in the ground truth
@@ -48,31 +52,35 @@ for(iter in 1:20){
   # poisson mash
   post <- readRDS(paste0("output/non_null_sim_setting3/pois_mash_posterior_rep_", iter, ".Rds"))
 
-  # calculate TPR and FPR for detecting non-null units
+  # calculate TPR, FPR and FDR for detecting non-null units
   idx.pois <- which(apply(post$lfsr, 1, min) < 0.05)
   tpr.pois[iter] <- sum(names(idx.pois) %in% names(non.null.idx))/length(non.null.idx)
   fpr.pois[iter] <- sum(!names(idx.pois) %in% names(non.null.idx))/(J-length(non.null.idx))
+  fdr.pois[iter] <- sum(!names(idx.pois) %in% names(non.null.idx))/length(idx.pois)
     
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
   sign.pair <- post$PosteriorMean * beta.contrast
   tpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
   fpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.pois[iter] <- 1 - sum(post$lfsr < 0.05 & sign.pair > 0)/sum(post$lfsr < 0.05)
   
   
   # mash
   mash.fit <- readRDS(paste0("output/non_null_sim_setting3/mash_fit_rep_", iter, ".Rds"))
   
-  # calculate TPR and FPR for detecting non-null units
+  # calculate TPR, FPR and FDR for detecting non-null units
   idx.mash <- mashr::get_significant_results(mash.fit, 0.05)
   tpr.mash[iter] <- sum(names(idx.mash) %in% names(non.null.idx))/length(non.null.idx)
   fpr.mash[iter] <- sum(!names(idx.mash) %in% names(non.null.idx))/(J-length(non.null.idx))
+  fdr.mash[iter] <- sum(!names(idx.mash) %in% names(non.null.idx))/length(idx.mash)
     
-  # calculate TPR and FPR for detecting non-null unit-condition pairs
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
   lfsr.pair <- ashr::get_lfsr(mash.fit)
   mean.pair <- ashr::get_pm(mash.fit)
   sign.pair <- mean.pair * beta.contrast
   tpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
   fpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.mash[iter] <- 1 - sum(lfsr.pair < 0.05 & sign.pair > 0)/sum(lfsr.pair < 0.05) 
   
   rm(X, beta, non.null.idx)
 }
@@ -80,27 +88,35 @@ for(iter in 1:20){
 ```
 
 
-### TPR and FPR for detecting non-null units at lfsr=0.05 for each replicate
+### TPR, FPR and FDR for detecting non-null units at lfsr=0.05 for each replicate
 ```{r warning=FALSE, message=FALSE}
 tpr.pois
 
 fpr.pois
 
+fdr.pois
+
 tpr.mash
 
 fpr.mash
 
+fdr.mash
+
 ```
 
 
-### TPR and FPR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate
+### TPR, FPR and FSR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate
 ```{r warning=FALSE, message=FALSE}
 tpr.pair.pois
 
 fpr.pair.pois
 
+fsr.pair.pois
+
 tpr.pair.mash
 
 fpr.pair.mash
+
+fsr.pair.mash
 
 ```

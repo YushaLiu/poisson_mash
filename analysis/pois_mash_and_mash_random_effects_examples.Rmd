@@ -2,7 +2,7 @@
 title: "Examples of genes that are identified by both poisson mash with random effects and mash"
 author: "Yusha Liu"
 header-includes:
-date: "2020-7-20"
+date: "2020-8-3"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
@@ -53,9 +53,41 @@ genes.to.plot <- names(idx.both)[sample(1:length(idx.both), 10, replace = FALSE)
 
 
 ```{r warning=FALSE, message=FALSE}
-### a few examples
-for(j in 1:10){
-  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[j], cols.trt=cols.trt)
-}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[1], cols.trt=cols.trt)
+```
 
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[2], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[3], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[4], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[5], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[6], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[7], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[8], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[9], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=genes.to.plot[10], cols.trt=cols.trt)
 ```

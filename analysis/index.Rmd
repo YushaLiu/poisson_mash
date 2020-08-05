@@ -19,7 +19,5 @@ Click on this [link](mash_only_examples.html) to see some examples of genes that
 
 ## Application to simulated data
 Click on this [link](pois_mash_random_effects_sim_null.html) to see results to single cell data simulated under the null. <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_setting1.html) to see results to single cell data simulated with signal by thinning (setting 1). <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_setting2.html) to see results to single cell data simulated with signal by thinning (setting 2). <br/>
 Click on this [link](pois_mash_random_effects_sim_non_null_setting3.html) to see results to single cell data simulated with signal by thinning (setting 3). <br/>
 Click on this [link](pois_mash_random_effects_sim_non_null_setting4.html) to see results to single cell data simulated with signal under poisson log normal model (setting 4).

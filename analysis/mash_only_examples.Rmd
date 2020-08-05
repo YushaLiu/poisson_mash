@@ -53,10 +53,43 @@ mash_only <- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
 Now we present some examples of genes that are identified to be differentially expressed across treatments only by mash without common baseline. 
 
 ```{r warning=FALSE, message=FALSE}
-### a few examples
-for(j in 1:10){
-  create.plot(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[j], cols.trt=cols.trt)
-}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[1], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[2], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[3], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[4], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[5], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[6], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[7], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[8], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[9], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+create.plot.v2(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(mash_only)[10], cols.trt=cols.trt)
 ```
 
 
