@@ -2,43 +2,40 @@
 title: "Application of poisson mash and mash to simulated single cell data under the null"
 author: "Yusha Liu"
 header-includes:
-date: "2020-7-31"
+date: "2020-8-19"
 output: workflowr::wflow_html
 editor_options:
   chunk_output_type: console
 ---
 
 ## Simulation procedure
-We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 6,038 cells from 21 conditions from the second batch, and 2) 7,492 genes that have at least 100 total counts over these 21 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. We simulate 20 single cell datasets in total.
+We apply poisson mash and fixed effects-based mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 7,146 cells from 25 conditions from the second batch, and 2) 7,869 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. 
+
+We consider two different ways to randomly permute the data: 1) the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset; 2) independent and different permutation to each gene. For each type of permutation, we simulate 20 single cell datasets. 
 
 
-## Poisson mash with random effects
+## The same permutation to all genes
 ```{r warning=FALSE, message=FALSE}
-### poisson mash results
+### poisson mash with random effects
 num_effects_pois <- rep(NA, 20)
 
 for(i in 1:20){
-  post <- readRDS(paste0("output/null_sim/pois_mash_posterior_rep_", i, ".Rds"))
-  idx.pois.mash <- which(apply(post$lfsr, 1, min) < 0.05)
-  num_effects_pois[i] <- length(idx.pois.mash)
+  post <- readRDS(paste0("output/simulations/null/pois_mash_posterior_rep_", i, ".Rds"))
+  num_effects_pois[i] <- sum(apply(post$lfsr, 1, min) < 0.05)
 }
 
 ### number of false positives
 num_effects_pois
 
 ### false positive rates
-num_effects_pois/7492
-
-```
+num_effects_pois/nrow(post$lfsr)
 
 
-### Mash with no common baseline
-```{r warning=FALSE, message=FALSE}
-##  mash results
+### fixed effect-based mash with no common baseline
 num_effects_mash <- rep(NA, 20)
 
 for(i in 1:20){
-  mash.fit <- readRDS(paste0("output/null_sim/mash_fit_rep_", i, ".Rds"))
+  mash.fit <- readRDS(paste0("output/simulations/null/mash_fit_rep_", i, ".Rds"))
   num_effects_mash[i] <- length(mashr::get_significant_results(mash.fit))
 }
 
@@ -46,7 +43,46 @@ for(i in 1:20){
 num_effects_mash
 
 ### false positive rates
-num_effects_mash/7492
+num_effects_mash/nrow(mash.fit$result$lfsr)
 
 ```
 
+
+
+## Independent and different permutation to all genes
+```{r warning=FALSE, message=FALSE}
+### poisson mash with random effects
+num_effects_pois <- rep(NA, 20)
+
+for(i in 1:20){
+  post <- readRDS(paste0("output/simulations/null_v2/pois_mash_posterior_rep_", i, ".Rds"))
+  num_effects_pois[i] <- sum(apply(post$lfsr, 1, min) < 0.05)
+}
+
+### number of false positives
+num_effects_pois
+
+### false positive rates
+num_effects_pois/nrow(post$lfsr)
+
+
+### fixed effect-based mash with no common baseline
+num_effects_mash <- rep(NA, 20)
+
+for(i in 1:20){
+  mash.fit <- readRDS(paste0("output/simulations/null_v2/mash_fit_rep_", i, ".Rds"))
+  num_effects_mash[i] <- length(mashr::get_significant_results(mash.fit))
+}
+
+### number of false positives
+num_effects_mash
+
+### false positive rates
+num_effects_mash/nrow(mash.fit$result$lfsr)
+
+```
+
+
+
+## Conclusion
+The number of false positives for fixed effects-based mash is always smaller, and is not sensitive to the type of random permutation performed. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting. For poisson mash with random effects, the number of false positives is greatly reduced if we apply independent and different permutation to each gene. 

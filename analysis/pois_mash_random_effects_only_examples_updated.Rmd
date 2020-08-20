@@ -1,0 +1,158 @@
+---
+title: "Examples of genes that are identified by poisson mash with random effects only (updated)"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Summary
+We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. 
+
+```{r warning=FALSE, message=FALSE}
+### load in functions
+source("code/code_random_effects.R")
+
+### load in data
+load("data/data_jr.RData")
+data <- data.jr
+s <- s.r/8
+rm(data.jr, s.r)
+data <- data[,5:50]
+s <- s[5:50]
+
+### remove genes that have fewer than 20 total counts across all 46 treatments
+data <- data[rowSums(data) >= 20,]
+
+### color code for treatments
+library(RColorBrewer)
+cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9,name="PuRd"), 
+              brewer.pal(n=9,name="Reds"), brewer.pal(n=9,name="Oranges"),
+              brewer.pal(n=9,name="Purples"), brewer.pal(n=9,name="YlOrRd"))
+cols.trt <- cols.all[5:50]
+
+## load in the ED results
+fit.ed <- readRDS("output/realdata/pois_mash_ed_maxiter2000.Rds")
+
+## load in the poisson mash fit results
+res <- readRDS("output/realdata/pois_mash_fit.Rds")
+post <- readRDS("output/realdata/pois_mash_posterior.Rds")
+idx.pois.mash <- which(apply(post$lfsr, 1, min) < 0.05)
+
+### load in posterior summary of fixed effects-based mash
+mash.fit <- readRDS("output/realdata/mash_fit.rds")
+idx.mash <- mashr::get_significant_results(mash.fit)
+
+## the list of genes that are identified only by poisson mash (in 7,429 genes tested by both)
+genes <- idx.pois.mash[!(names(idx.pois.mash) %in% names(idx.mash)) & (names(idx.pois.mash) %in% rownames(mash.fit$result$lfsr))]
+length(genes)
+
+### find the prior covarince compoenent with the highest posterior probability for this subset of genes
+wlist <- c(1e-4, 4e-4, 1e-3, 4e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16)
+Ulist <- c("tPCA", "Emp_cov", paste0("e_", 1:46), paste0("PC_", 1:26), "u_0")
+zeta.max <- rep(NA, length(genes))
+
+for(j in 1:length(genes)){
+  zeta <- matrix(res$Ez[genes[j],], ncol=length(wlist), byrow = TRUE)
+  zeta.max[j] <- Ulist[which.max(rowSums(zeta))]
+}
+
+table(zeta.max)
+
+```
+
+
+Now we present some examples of genes that are identified to be differentially expressed across treatments only by poisson mash with random effects, but also get tested in mash. 
+
+Examples for which the data-driven PC_23 has the largest weight:
+```{r warning=FALSE, message=FALSE}
+v <- fit.ed$ulist[[23]]
+barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.6,
+          las = 2, main = paste0("PC_23: weight ", round(fit.ed$pi[23+2],3)), col = cols.trt)
+
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Mcm3", cols.trt=cols.trt)
+
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Nop58", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Atic", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Mcm6", cols.trt=cols.trt)
+```
+
+
+Examples for which the data-driven PC_24 has the largest weight:
+```{r warning=FALSE, message=FALSE}
+v <- fit.ed$ulist[[24]]
+barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.6,
+          las = 2, main = paste0("PC_24: weight ", round(fit.ed$pi[24+2],3)), col = cols.trt)
+
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Eif4g3", cols.trt=cols.trt)
+
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Pten", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Hnrnph1", cols.trt=cols.trt)
+```
+
+
+Examples for which the data-driven PC_2 has the largest weight:
+```{r warning=FALSE, message=FALSE}
+v <- fit.ed$ulist[[2]]
+barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.6,
+          las = 2, main = paste0("PC_2: weight ", round(fit.ed$pi[2+2],3)), col = cols.trt)
+
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Tmem245", cols.trt=cols.trt)
+
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Nrip1", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Minpp1", cols.trt=cols.trt)
+```
+
+
+Examples for which the data-driven PC_7 has the largest weight:
+```{r warning=FALSE, message=FALSE}
+v <- fit.ed$ulist[[7]]
+barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.6,
+          las = 2, main = paste0("PC_7: weight ", round(fit.ed$pi[7+2],3)), col = cols.trt)
+
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Tsc22d4", cols.trt=cols.trt)
+
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Abi3", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Spns1", cols.trt=cols.trt)
+```
+
+
+Examples for which a condition-specific effect has the largest weight:
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Vgll4", cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename="Rexo2", cols.trt=cols.trt)
+```
+
+

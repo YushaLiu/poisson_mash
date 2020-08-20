@@ -17,7 +17,15 @@ Click on this [link](pois_mash_and_mash_random_effects_examples.html) to see som
 Click on this [link](mash_only_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by mash only.
 
 
+
+## Application to a subset of the cytokines dataset (updated analysis)
+Click on this [link](pois_mash_random_effects_updated.html) to see how to fit poisson mash with random effects to a subset of cytokines data. <br/>
+Click on this [link](pois_mash_random_effects_only_examples_updated.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/>
+Click on this [link](mash_only_examples_updated.html) to see some examples of genes that are identified to be differentially expressed across treatments by fixed effects-based mash only.
+
+
+
 ## Application to simulated data
-Click on this [link](pois_mash_random_effects_sim_null.html) to see results to single cell data simulated under the null. <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_setting3.html) to see results to single cell data simulated with signal by thinning (setting 3). <br/>
-Click on this [link](pois_mash_random_effects_sim_non_null_setting4.html) to see results to single cell data simulated with signal under poisson log normal model (setting 4).
+Click on this [link](pois_mash_random_effects_sim_null.html) to see results based on single cell data simulated under the null. <br/>
+Click on this [link](pois_mash_random_effects_sim_null_random_effects.html) to see results based on single cell data simulated under the null with random effects added by thinning. <br/>
+Click on this [link](pois_mash_random_effects_sim_non_null.html) to see results based on single cell data simulated with both fixed and random effects added by thinning. <br/>

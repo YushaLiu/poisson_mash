@@ -1,0 +1,171 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data with signal"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash, fixed effects-based mash and mixed effects-based mash to simulated single cell data with differential expression across conditions in a subset of genes. 
+
+We start with a subset of the single cell cytokines data, which include 1) 7,146 cells from $R=25$ conditions from the second batch, and 2) 5,152 genes that have at least 300 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning. 
+
+Starting with the real dataset, we randomly permute the cells with respect to the condition labels, so that there does not exist association between gene expression levels and conditions. Then we use thinning to add 1) fixed effects $\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)$ to a randomly chosen subset of 500 genes ($\approx 10\%$ of all genes), and 2) random effects $\eta_j \sim MVN(0, \: \tau_j^2 I_R)$ to all genes. For fixed effects, the prior covariances $U_k$'s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of $\max_r \mid \beta_{jr}\mid$) further scaled to be realistic. For random effects, we simulate $\tau_j$ such that its distribution resembles the empirical distribution of $\tau_j$ we see from the poisson mash fit to the original dataset.
+
+We apply the same permutation to all the genes for each replicate dataset. We simulate 20 single cell datasets in total.
+
+
+### Plot ROC for detecting non-null units
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/sim_non_null_units.pdf). \
+
+
+### Plot ROC for detecting non-null unit-condition pairs
+See [plots](https://github.com/YushaLiu/poisson_mash/blob/master/output/sim_non_null_pairs.pdf). \
+
+
+### Results at a threshold of lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+# poisson mash with random effects
+tpr.pois <- rep(NA, 20)
+fpr.pois <- rep(NA, 20)
+fdr.pois <- rep(NA, 20)
+tpr.pair.pois <- rep(NA, 20)
+fpr.pair.pois <- rep(NA, 20)
+fsr.pair.pois <- rep(NA, 20)
+
+# mash based on bhat and shat obtained by fitting fixed effects model
+tpr.mash <- rep(NA, 20)
+fpr.mash <- rep(NA, 20)
+fdr.mash <- rep(NA, 20)
+tpr.pair.mash <- rep(NA, 20)
+fpr.pair.mash <- rep(NA, 20)
+fsr.pair.mash <- rep(NA, 20)
+
+# mash based on bhat and shat obtained by fitting mixed effects model
+tpr.dream <- rep(NA, 20)
+fpr.dream <- rep(NA, 20)
+fdr.dream <- rep(NA, 20)
+tpr.pair.dream <- rep(NA, 20)
+fpr.pair.dream <- rep(NA, 20)
+fsr.pair.dream <- rep(NA, 20)
+
+for(iter in 1:20){
+  # load in the ground truth
+  data <- readRDS(paste0("output/simulations/non_null/raw_data", iter, ".Rds"))
+  beta <- data$beta
+  non.null.idx <- data$non.null.idx
+  J <- nrow(beta)
+  R <- ncol(beta)
+  C <- diag(R) - (1/R)
+  beta.contrast <- beta %*% C
+  
+  # poisson mash
+  post <- readRDS(paste0("output/simulations/non_null/pois_mash_posterior_rep_", iter, ".Rds"))
+
+  # calculate TPR, FPR and FDR for detecting non-null units
+  idx.pois <- which(apply(post$lfsr, 1, min) < 0.05)
+  tpr.pois[iter] <- sum(idx.pois %in% non.null.idx)/length(non.null.idx)
+  fpr.pois[iter] <- sum(!idx.pois %in% non.null.idx)/(J-length(non.null.idx))
+  fdr.pois[iter] <- sum(!idx.pois %in% non.null.idx)/length(idx.pois)
+    
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
+  sign.pair <- post$PosteriorMean * beta.contrast
+  tpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.pois[iter] <- sum(post$lfsr < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.pois[iter] <- sum(post$lfsr < 0.05 & sign.pair <= 0)/sum(post$lfsr < 0.05)
+  
+  
+  ### mash based on bhat and shat obtained by fitting fixed effects model
+  mash.fit <- readRDS(paste0("output/simulations/non_null/mash_fit_rep_", iter, ".Rds"))
+  
+  # calculate TPR, FPR and FDR for detecting non-null units
+  idx.mash <- mashr::get_significant_results(mash.fit, 0.05)
+  tpr.mash[iter] <- sum(idx.mash %in% non.null.idx)/length(non.null.idx)
+  fpr.mash[iter] <- sum(!idx.mash %in% non.null.idx)/(J-length(non.null.idx))
+  fdr.mash[iter] <- sum(!idx.mash %in% non.null.idx)/length(idx.mash)
+    
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
+  lfsr.pair <- ashr::get_lfsr(mash.fit)
+  mean.pair <- ashr::get_pm(mash.fit)
+  sign.pair <- mean.pair * beta.contrast
+  tpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.mash[iter] <- sum(lfsr.pair < 0.05 & sign.pair <= 0)/sum(lfsr.pair < 0.05) 
+  
+  
+  ### mash based on bhat and shat obtained by fitting mixed effects model
+  mash.dream.fit <- readRDS(paste0("output/simulations/non_null/mash_dream_fit_rep_", iter, ".Rds"))
+  
+  # calculate TPR, FPR and FDR for detecting non-null units
+  idx.dream <- mashr::get_significant_results(mash.dream.fit, 0.05)
+  tpr.dream[iter] <- sum(idx.dream %in% non.null.idx)/length(non.null.idx)
+  fpr.dream[iter] <- sum(!idx.dream %in% non.null.idx)/(J-length(non.null.idx))
+  fdr.dream[iter] <- sum(!idx.dream %in% non.null.idx)/length(idx.dream)
+    
+  # calculate TPR, FPR and FSR for detecting non-null unit-condition pairs
+  lfsr.pair <- ashr::get_lfsr(mash.dream.fit)
+  mean.pair <- ashr::get_pm(mash.dream.fit)
+  sign.pair <- mean.pair * beta.contrast
+  tpr.pair.dream[iter] <- sum(lfsr.pair < 0.05 & sign.pair > 0)/sum(beta.contrast!=0)
+  fpr.pair.dream[iter] <- sum(lfsr.pair < 0.05 & beta.contrast==0)/sum(beta.contrast==0)
+  fsr.pair.dream[iter] <- sum(lfsr.pair < 0.05 & sign.pair <= 0)/sum(lfsr.pair < 0.05) 
+  
+  rm(data, beta, beta.contrast, non.null.idx, post, mash.fit, mash.dream.fit)
+}
+
+```
+
+
+### TPR, FPR and FDR for detecting non-null units at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+# poisson mash with random effects
+tpr.pois
+
+fpr.pois
+
+fdr.pois
+
+# fixed effects-based mash
+tpr.mash
+
+fpr.mash
+
+fdr.mash
+
+# mixed effects-based mash
+tpr.dream
+
+fpr.dream
+
+fdr.dream
+
+```
+
+
+### TPR, FPR and FSR for detecting non-null unit-condition pairs at lfsr=0.05 for each replicate
+```{r warning=FALSE, message=FALSE}
+# poisson mash with random effects
+tpr.pair.pois
+
+fpr.pair.pois
+
+fsr.pair.pois
+
+# fixed effects-based mash
+tpr.pair.mash
+
+fpr.pair.mash
+
+fsr.pair.mash
+
+# mixed effects-based mash
+tpr.pair.dream
+
+fpr.pair.dream
+
+fsr.pair.dream
+
+```

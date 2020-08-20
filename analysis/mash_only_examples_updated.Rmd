@@ -1,0 +1,96 @@
+---
+title: "Examples of genes that are identified by mash with no common baseline only (updated)"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Summary
+We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. 
+
+```{r warning=FALSE, message=FALSE}
+### load in functions
+source("code/code_random_effects.R")
+
+### load in data
+load("data/data_jr.RData")
+data <- data.jr
+s <- s.r/8
+rm(data.jr, s.r)
+data <- data[,5:50]
+s <- s[5:50]
+
+### remove genes that have fewer than 20 total counts across all 46 treatments
+data <- data[rowSums(data) >= 20,]
+
+### color code for treatments
+library(RColorBrewer)
+cols.all <- c("blue", brewer.pal(n=5,name="Greens")[3:5], "gray", brewer.pal(n=9,name="PuRd"), 
+              brewer.pal(n=9,name="Reds"), brewer.pal(n=9,name="Oranges"),
+              brewer.pal(n=9,name="Purples"), brewer.pal(n=9,name="YlOrRd"))
+cols.trt <- cols.all[5:50]
+
+## load in the ED results
+fit.ed <- readRDS("output/realdata/pois_mash_ed_maxiter2000.Rds")
+
+## load in the poisson mash fit results
+post <- readRDS("output/realdata/pois_mash_posterior.Rds")
+idx.pois.mash <- which(apply(post$lfsr, 1, min) < 0.05)
+
+### load in posterior summary of fixed effects-based mash
+mash.fit <- readRDS("output/realdata/mash_fit.rds")
+idx.mash <- mashr::get_significant_results(mash.fit)
+
+## the list of genes that are identified only by fixed effects-based mash 
+genes <- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
+length(genes)
+
+```
+
+
+Now we present some examples of genes that are identified to be differentially expressed across treatments only by mash without common baseline, where $\hat{b}_{jr}$ and $\hat{s}_{jr}$ are obtained by fitting a linear fixed effects model to each gene.   
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[1], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[2], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[3], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[4], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[5], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[6], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[7], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[8], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[9], cols.trt=cols.trt)
+```
+
+```{r warning=FALSE, message=FALSE}
+plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[10], cols.trt=cols.trt)
+```
+
+

@@ -1,0 +1,71 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data under the null with added random effects"
+author: "Yusha Liu"
+header-includes:
+date: "2020-8-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash, fixed effects-based mash and mixed effects-based mash to single cell data simulated under the null with added random effects. More specifically, we start with a subset of the single cell cytokines data, which include 1) 7,146 cells from $R=25$ conditions from the second batch, and 2) 6,346 genes that have at least 200 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions, and add random effects $\eta_j \sim MVN(0, \: \tau_j^2 I_R)$ via thinning to the randomly permuted data (https://cran.r-project.org/web/packages/seqgendiff/index.html). We choose $\tau_j$, which controls the gene-specific random effect size, from the set $\log_2(\exp(1))*\{0.01, 0.05, 0.1, 0.2\}$ with probability $\{0.4, 0.4, 0.1, 0.1\}$, so that it resembles the empirical distribution of $\tau_j$ we see from the poisson mash fit to the real data.   
+
+We apply the same permutation to all the genes for each replicate dataset. We simulate 20 single cell datasets in total.
+
+
+## Poisson mash
+```{r warning=FALSE, message=FALSE}
+num_effects_pois <- rep(NA, 20)
+
+for(i in 1:20){
+  post <- readRDS(paste0("output/simulations/null_random_effects/pois_mash_posterior_rep_", i, ".Rds"))
+  num_effects_pois[i] <- sum(apply(post$lfsr, 1, min) < 0.05)
+}
+
+### number of false positives
+num_effects_pois
+
+### false positive rates
+num_effects_pois/nrow(post$lfsr)
+
+```
+
+
+
+### Fixed effect-based mash with no common baseline
+```{r warning=FALSE, message=FALSE}
+num_effects_mash_fixed <- rep(NA, 20)
+
+for(i in 1:20){
+  mash.fixed <- readRDS(paste0("output/simulations/null_random_effects/mash_fit_rep_", i, ".Rds"))
+  num_effects_mash_fixed[i] <- length(mashr::get_significant_results(mash.fixed))
+}
+
+### number of false positives
+num_effects_mash_fixed
+
+### false positive rates
+num_effects_mash_fixed/nrow(mash.fixed$result$lfsr)
+
+```
+
+
+
+### Mixed effect-based mash with no common baseline
+```{r warning=FALSE, message=FALSE}
+num_effects_mash_mixed <- rep(NA, 20)
+
+for(i in 1:20){
+  mash.mixed <- readRDS(paste0("output/simulations/null_random_effects/mash_dream_fit_rep_", i, ".Rds"))
+  num_effects_mash_mixed[i] <- length(mashr::get_significant_results(mash.mixed))
+}
+
+### number of false positives
+num_effects_mash_mixed
+
+### false positive rates
+num_effects_mash_mixed/nrow(mash.mixed$result$lfsr)
+
+```
+
