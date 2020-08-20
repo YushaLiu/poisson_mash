@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data under the null</title>
+<title>Application of poisson mash with random effects to single cell cytokines data (updated)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data under the null</h1>
+<h1 class="title toc-ignore">Application of poisson mash with random effects to single cell cytokines data (updated)</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-8-19</h4>
 
@@ -576,7 +576,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_sim_null.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_sim_null.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_updated.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_updated.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -605,7 +605,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/2bf72bbbf6490c2fc9d712096c1cc40d7e4f5258/analysis/pois_mash_random_effects_sim_null.Rmd" target="_blank">2bf72bb</a>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/2bf72bbbf6490c2fc9d712096c1cc40d7e4f5258/analysis/pois_mash_random_effects_updated.Rmd" target="_blank">2bf72bb</a>
 </td>
 <td>
 yushaliu
@@ -617,40 +617,6 @@ yushaliu
 Add more results
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/7a03022d9ed2c4629502eed397851fed01b355f1/docs/pois_mash_random_effects_sim_null.html" target="_blank">7a03022</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/dd66b6cc4bfabf1c77b2b8a3023e7234670a6fd4/analysis/pois_mash_random_effects_sim_null.Rmd" target="_blank">dd66b6c</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Add simulation results
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -658,89 +624,163 @@ Add simulation results
 </div>
 </div>
 </div>
-<div id="simulation-procedure" class="section level2">
-<h2>Simulation procedure</h2>
-<p>We apply poisson mash and fixed effects-based mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 7,146 cells from 25 conditions from the second batch, and 2) 7,869 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions.</p>
-<p>We consider two different ways to randomly permute the data: 1) the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset; 2) independent and different permutation to each gene. For each type of permutation, we simulate 20 single cell datasets.</p>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>We apply poisson mash with random effects to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now. The count data matrix <span class="math inline">\(X\)</span> is <span class="math inline">\(14,853 \times 46\)</span>, where <span class="math inline">\(X_{jr}\)</span> represents the total read counts of gene <span class="math inline">\(j\)</span> in all cells from condition <span class="math inline">\(r\)</span>.</p>
+<pre class="r"><code>load(&quot;data/data_jr.RData&quot;)
+source(&quot;code/code_random_effects.R&quot;)
+
+data &lt;- data.jr
+s &lt;- s.r/8
+rm(data.jr, s.r)
+
+data &lt;- data[,5:50]
+s &lt;- s[5:50]
+
+dim(data)</code></pre>
+<pre><code>[1] 14853    46</code></pre>
+<div id="model" class="section level3">
+<h3>Model</h3>
+<p>We assume <span class="math inline">\(X_{jr} \sim Pois(s_r \lambda_{jr})\)</span>, and <span class="math inline">\(\log(\lambda_{jr}) = \mu_j + \beta_{jr} + \eta_{jr}\)</span>, where <span class="math inline">\(s_r\)</span> accounts for the different sequencing depth of each condition, <span class="math inline">\(\mu_j\)</span> is the gene-specific mean on the log scale shared by all conditions, <span class="math inline">\(\beta_{jr}\)</span> models the condition-specific treatment effect, and <span class="math inline">\(\eta_{jr}\)</span> models the random effect. We are mainly interested in estimation and inference on <span class="math inline">\(\beta_{jr}\)</span>. The following priors are assumed in our model: <span class="math display">\[\begin{align}
+&amp; \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u&#39;_g) \\
+\text{where} \quad &amp; \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1 \\
+&amp; \eta_j \sim MVN(0, \: \tau_j^2 I_R). \\
+\end{align}\]</span></p>
 </div>
-<div id="the-same-permutation-to-all-genes" class="section level2">
-<h2>The same permutation to all genes</h2>
-<pre class="r"><code>### poisson mash with random effects
-num_effects_pois &lt;- rep(NA, 20)
+<div id="ed-step" class="section level3">
+<h3>ED step</h3>
+<p>To estimate the data-driven prior covariances <span class="math inline">\(U_h\)</span> and <span class="math inline">\(u_g u&#39;_g\)</span>, we fit the poisson mash model without scaling parameters <span class="math inline">\(w_l\)</span> to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test. To capture as many effect-sharing patterns as possible, we choose to set the number of principal components in the ED step to be large.</p>
+<pre class="r"><code>##  identify the subset of differentially expressed genes and initialize the data-driven prior covariances
+res.pca &lt;- pois_cov_init(data, s, npc=26)
+subset &lt;- res.pca$subset
+data.ed &lt;- data[subset,]
 
-for(i in 1:20){
-  post &lt;- readRDS(paste0(&quot;output/simulations/null/pois_mash_posterior_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_pois[i] &lt;- sum(apply(post$lfsr, 1, min) &lt; 0.05)
-}
+## the number of differentially expressed genes identified by the multinomial goodness-of-fit test
+dim(data.ed)</code></pre>
+<pre><code>[1] 2481   46</code></pre>
+<pre class="r"><code>## load in the ED results
+fit.ed &lt;- readRDS(&quot;output/realdata/pois_mash_ed_maxiter2000.Rds&quot;)
 
-### number of false positives
-num_effects_pois</code></pre>
-<pre><code> [1]  96  43 112  90  76  67 104  85  52  74  90  56  96  59  92  68  55  88  88
-[20]  51</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_pois/nrow(post$lfsr)</code></pre>
-<pre><code> [1] 0.012199771 0.005464481 0.014233066 0.011437286 0.009658152 0.008514424
- [7] 0.013216419 0.010801881 0.006608209 0.009403990 0.011437286 0.007116533
-[13] 0.012199771 0.007497776 0.011691447 0.008641505 0.006989452 0.011183124
-[19] 0.011183124 0.006481128</code></pre>
-<pre class="r"><code>### fixed effect-based mash with no common baseline
-num_effects_mash &lt;- rep(NA, 20)
-
-for(i in 1:20){
-  mash.fit &lt;- readRDS(paste0(&quot;output/simulations/null/mash_fit_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_mash[i] &lt;- length(mashr::get_significant_results(mash.fit))
-}
-
-### number of false positives
-num_effects_mash</code></pre>
-<pre><code> [1] 2 2 3 2 4 1 2 3 2 5 2 3 3 4 3 2 3 4 3 3</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_mash/nrow(mash.fit$result$lfsr)</code></pre>
-<pre><code> [1] 0.0002541619 0.0002541619 0.0003812429 0.0002541619 0.0005083238
- [6] 0.0001270810 0.0002541619 0.0003812429 0.0002541619 0.0006354048
-[11] 0.0002541619 0.0003812429 0.0003812429 0.0005083238 0.0003812429
-[16] 0.0002541619 0.0003812429 0.0005083238 0.0003812429 0.0003812429</code></pre>
+## running time per iteration in ED
+fit.ed$runtime/length(fit.ed$ELBO)</code></pre>
+<pre><code>     user    system   elapsed 
+37.879193  0.058182 37.951517 </code></pre>
+<pre class="r"><code>## estimated weights for different candidate data-driven prior covariances
+names(fit.ed$pi) &lt;- c(names(res.pca$Ulist), names(res.pca$ulist), &quot;u_0&quot;)
+fit.ed$pi</code></pre>
+<pre><code>       tPCA     Emp_cov        PC_1        PC_2        PC_3        PC_4 
+0.010433158 0.001241230 0.100145969 0.052509367 0.058669542 0.076081041 
+       PC_5        PC_6        PC_7        PC_8        PC_9       PC_10 
+0.043761883 0.011665023 0.047405971 0.020133862 0.009708747 0.006999201 
+      PC_11       PC_12       PC_13       PC_14       PC_15       PC_16 
+0.050142317 0.027939154 0.038560296 0.008186151 0.099139253 0.040466414 
+      PC_17       PC_18       PC_19       PC_20       PC_21       PC_22 
+0.002053865 0.072518077 0.003674665 0.001178986 0.001849840 0.002125615 
+      PC_23       PC_24       PC_25       PC_26         u_0 
+0.102451143 0.057934033 0.044352513 0.008671866 0.000001000 </code></pre>
+<pre class="r"><code>## look at the ELBO
+plot(fit.ed$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;fitting ED step&quot;)</code></pre>
+<p><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="independent-and-different-permutation-to-all-genes" class="section level2">
-<h2>Independent and different permutation to all genes</h2>
-<pre class="r"><code>### poisson mash with random effects
-num_effects_pois &lt;- rep(NA, 20)
+<div id="estimate-of-data-driven-covariances-from-ed-step" class="section level3">
+<h3>Estimate of data-driven covariances from ED step</h3>
+<pre class="r"><code>library(RColorBrewer)
 
-for(i in 1:20){
-  post &lt;- readRDS(paste0(&quot;output/simulations/null_v2/pois_mash_posterior_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_pois[i] &lt;- sum(apply(post$lfsr, 1, min) &lt; 0.05)
-}
+cols.all &lt;- c(&quot;blue&quot;, brewer.pal(n=5,name=&quot;Greens&quot;)[3:5], &quot;gray&quot;, brewer.pal(n=9,name=&quot;PuRd&quot;), 
+              brewer.pal(n=9,name=&quot;Reds&quot;), brewer.pal(n=9,name=&quot;Oranges&quot;),
+              brewer.pal(n=9,name=&quot;Purples&quot;), brewer.pal(n=9,name=&quot;YlOrRd&quot;))
 
-### number of false positives
-num_effects_pois</code></pre>
-<pre><code> [1] 23 24 26 23 27 26 21 31 26 30 22 25 24 25 21 27 20 34 21 25</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_pois/nrow(post$lfsr)</code></pre>
-<pre><code> [1] 0.002922862 0.003049943 0.003304105 0.002922862 0.003431186 0.003304105
- [7] 0.002668700 0.003939509 0.003304105 0.003812429 0.002795781 0.003177024
-[13] 0.003049943 0.003177024 0.002668700 0.003431186 0.002541619 0.004320752
-[19] 0.002668700 0.003177024</code></pre>
-<pre class="r"><code>### fixed effect-based mash with no common baseline
-num_effects_mash &lt;- rep(NA, 20)
+cols.trt &lt;- cols.all[5:50]
 
-for(i in 1:20){
-  mash.fit &lt;- readRDS(paste0(&quot;output/simulations/null_v2/mash_fit_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_mash[i] &lt;- length(mashr::get_significant_results(mash.fit))
-}
+par(mfrow=c(2,2))
 
-### number of false positives
-num_effects_mash</code></pre>
-<pre><code> [1] 3 2 4 3 2 4 3 2 4 2 3 2 4 4 2 2 2 0 2 4</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_mash/nrow(mash.fit$result$lfsr)</code></pre>
-<pre><code> [1] 0.0003812429 0.0002541619 0.0005083238 0.0003812429 0.0002541619
- [6] 0.0005083238 0.0003812429 0.0002541619 0.0005083238 0.0002541619
-[11] 0.0003812429 0.0002541619 0.0005083238 0.0005083238 0.0002541619
-[16] 0.0002541619 0.0002541619 0.0000000000 0.0002541619 0.0005083238</code></pre>
+pi.g &lt;- fit.ed$pi[-c(1:2)]
+ulist &lt;- fit.ed$ulist
+names(ulist) &lt;- names(fit.ed$pi[-c(1:2)])
+
+### plot the data-driven u_g&#39;s with estimated weights larger than or equal to 2%
+ulist &lt;- ulist[pi.g &gt;= 2e-2]
+pi.g &lt;- pi.g[pi.g &gt;= 2e-2]
+
+for (k in 1:length(ulist)){
+  v &lt;- ulist[[k]]
+  
+  barplot(v/v[which.max(abs(v))], names = names(s), cex.names = 0.4, las = 2, 
+          main = paste0(names(ulist)[k], &quot;: weight &quot;, round(pi.g[k],3)), col = cols.trt)
+  
+}</code></pre>
+<p><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>The number of false positives for fixed effects-based mash is always smaller, and is not sensitive to the type of random permutation performed. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting. For poisson mash with random effects, the number of false positives is greatly reduced if we apply independent and different permutation to each gene.</p>
+<div id="running-poisson-mash" class="section level3">
+<h3>Running poisson mash</h3>
+<p>We then fit the poisson mash model to all the genes in <span class="math inline">\(X\)</span> which have at least 20 total read counts in all conditions. There are 10,733 such genes.</p>
+<pre class="r"><code>## remove genes that have fewer than 20 total read counts in all 46 conditions
+data &lt;- data[rowSums(data) &gt;= 20,]
+dim(data)</code></pre>
+<pre><code>[1] 10733    46</code></pre>
+<pre class="r"><code>## load in the poisson mash fit results
+res &lt;- readRDS(&quot;output/realdata/pois_mash_fit.Rds&quot;)
+res$runtime</code></pre>
+<pre><code>     user    system   elapsed 
+37090.804   335.217 37441.977 </code></pre>
+<pre class="r"><code>## look at ELBO
+plot(res$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;Fitting poisson mash with random effects&quot;)</code></pre>
+<p><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## look at the estimated weights of prior covariance matrices
+library(pheatmap)
+library(gridExtra)
+
+wlist &lt;- c(1e-4, 4e-4, 1e-3, 4e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16)
+
+pi.mat &lt;- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
+
+rownames(pi.mat) &lt;- c(&quot;tPCA&quot;, &quot;Emp_cov&quot;, paste0(&quot;e_&quot;, 1:46), paste0(&quot;PC_&quot;, 1:26), &quot;u_0&quot;)
+colnames(pi.mat) &lt;- paste0(&quot;w=&quot;, wlist)
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=4, fontsize_col=6, main=&quot;Estimated weights of prior covariances in poisson mash fit&quot;)</code></pre>
+<p><img src="figure/pois_mash_random_effects_updated.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comparison-to-fixed-effects-based-mash" class="section level3">
+<h3>Comparison to fixed effects-based mash</h3>
+<p>We calculate posterior summaries of <span class="math inline">\(\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R\)</span> from the poisson mash fit, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from fixed effects-based mash. In particular, we fit a linear fixed effects model separately to each gene <span class="math inline">\(j\)</span>, using the single-cell level normalized gene expression data as the response and the condition assignment of each cell as the predictor, to obtain <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> for each gene <span class="math inline">\(j\)</span> and condition <span class="math inline">\(r\)</span>. When fitting this model, we assume that the Gaussian observation noise is constant over conditions for each gene <span class="math inline">\(j\)</span>. We then feed <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> to mash without common baseline. We consider only the 7,429 genes that have reads in at least <span class="math inline">\(46*5=230\)</span> cells.</p>
+<pre class="r"><code>## load in the posterior summaries from poisson mash fit
+post &lt;- readRDS(&quot;output/realdata/pois_mash_posterior.Rds&quot;)
+
+## load in the mash fit based on bhat and shat obtained by fitting fixed effects model
+mash.fixed &lt;- readRDS(&quot;output/realdata/mash_fit.rds&quot;)
+
+## the number of significant genes identified by poisson mash (in 10,733 genes tested by poisson mash)
+idx.pois.mash &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
+length(idx.pois.mash)</code></pre>
+<pre><code>[1] 1341</code></pre>
+<pre class="r"><code>## the number of significant genes identified by fixed effects-based mash (in 7,429 genes tested by mash)
+idx.mash.fixed &lt;- mashr::get_significant_results(mash.fixed)
+length(idx.mash.fixed)</code></pre>
+<pre><code>[1] 768</code></pre>
+<pre class="r"><code>## the number of genes that are identified by both poisson mash and fixed effects-based mash
+sum(names(idx.mash.fixed) %in% names(idx.pois.mash))</code></pre>
+<pre><code>[1] 604</code></pre>
+<pre class="r"><code>## the number of genes that are identified only by poisson mash (in 7,429 genes tested by both)
+pois_mash_only &lt;- idx.pois.mash[!(names(idx.pois.mash) %in% names(idx.mash.fixed)) &amp; (names(idx.pois.mash) %in% rownames(mash.fixed$result$lfsr))]
+length(pois_mash_only)</code></pre>
+<pre><code>[1] 612</code></pre>
+<pre class="r"><code>## the number of genes that are identified only by mash 
+mash_fixed_only &lt;- idx.mash.fixed[!(names(idx.mash.fixed) %in% names(idx.pois.mash))]
+length(mash_fixed_only)</code></pre>
+<pre><code>[1] 164</code></pre>
+</div>
+<div id="comparison-to-mixed-effects-based-mash" class="section level3">
+<h3>Comparison to mixed effects-based mash</h3>
+<p>We then compare results from the poisson mash to the results from mixed effects-based mash. In particular, we fit a linear mixed effects model separately to each gene <span class="math inline">\(j\)</span>, using the single-cell level normalized gene expression data as the response and the condition assignment of each cell as the design matrix for both fixed and random effects, to obtain <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> for each gene <span class="math inline">\(j\)</span> and condition <span class="math inline">\(r\)</span>. We use the dream function in the R package variancePartition to fit this mixed effects model (<a href="https://www.bioconductor.org/packages/release/bioc/html/variancePartition.html" class="uri">https://www.bioconductor.org/packages/release/bioc/html/variancePartition.html</a>). We then feed <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> to mash without common baseline. Again, we consider only the 7,429 genes that have reads in at least <span class="math inline">\(46*5=230\)</span> cells.</p>
+<pre class="r"><code>## load in the mash fit based on bhat and shat obtained by fitting mixed effects model
+mash.mixed &lt;- readRDS(&quot;output/realdata/mash_dream_fit.Rds&quot;)
+
+## the number of significant genes identified by mixed effects-based mash (in 7,429 genes tested by mash)
+idx.mash.mixed &lt;- mashr::get_significant_results(mash.mixed)
+length(idx.mash.mixed)</code></pre>
+<pre><code>[1] 68</code></pre>
+<pre class="r"><code>## the number of genes that are identified by both poisson mash and mixed effects-based mash
+sum(names(idx.mash.mixed) %in% names(idx.pois.mash))</code></pre>
+<pre><code>[1] 65</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -764,19 +804,27 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] gridExtra_2.3      pheatmap_1.0.12    RColorBrewer_1.1-2 rmeta_3.0         
+[5] ggplot2_3.3.0      poilog_0.4         psych_1.9.12.31    flashr_0.6-7      
+[9] workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6     knitr_1.28       whisker_0.4      magrittr_1.5    
- [5] SQUAREM_2020.2   lattice_0.20-41  R6_2.4.1         rlang_0.4.6     
- [9] plyr_1.8.6       ashr_2.2-50      stringr_1.4.0    tools_3.6.2     
-[13] grid_3.6.2       xfun_0.13        rmeta_3.0        irlba_2.3.3     
-[17] invgamma_1.1     git2r_0.27.1     htmltools_0.4.0  assertthat_0.2.1
-[21] yaml_2.2.1       abind_1.4-5      digest_0.6.25    rprojroot_1.3-2 
-[25] mixsqp_0.3-43    Matrix_1.2-18    later_1.0.0      promises_1.1.0  
-[29] fs_1.4.1         glue_1.4.1       evaluate_0.14    rmarkdown_2.1   
-[33] stringi_1.4.6    compiler_3.6.2   mashr_0.2.21     backports_1.1.7 
-[37] mvtnorm_1.1-0    truncnorm_1.0-8  httpuv_1.5.2    </code></pre>
+ [1] softImpute_1.4   tidyselect_1.1.0 xfun_0.13        ashr_2.2-50     
+ [5] purrr_0.3.4      reshape2_1.4.4   lattice_0.20-41  colorspace_1.4-1
+ [9] vctrs_0.3.0      htmltools_0.4.0  yaml_2.2.1       rlang_0.4.6     
+[13] mixsqp_0.3-43    later_1.0.0      pillar_1.4.4     withr_2.2.0     
+[17] glue_1.4.1       mashr_0.2.21     lifecycle_0.2.0  plyr_1.8.6      
+[21] stringr_1.4.0    munsell_0.5.0    gtable_0.3.0     mvtnorm_1.1-0   
+[25] evaluate_0.14    knitr_1.28       httpuv_1.5.2     invgamma_1.1    
+[29] irlba_2.3.3      parallel_3.6.2   Rcpp_1.0.4.6     promises_1.1.0  
+[33] scales_1.1.1     backports_1.1.7  abind_1.4-5      truncnorm_1.0-8 
+[37] fs_1.4.1         mnormt_1.5-7     digest_0.6.25    stringi_1.4.6   
+[41] dplyr_0.8.5      grid_3.6.2       rprojroot_1.3-2  tools_3.6.2     
+[45] magrittr_1.5     tibble_3.0.1     crayon_1.3.4     whisker_0.4     
+[49] pkgconfig_2.0.3  ellipsis_0.3.1   Matrix_1.2-18    SQUAREM_2020.2  
+[53] assertthat_0.2.1 rmarkdown_2.1    R6_2.4.1         nlme_3.1-147    
+[57] git2r_0.27.1     compiler_3.6.2  </code></pre>
+</div>
 </div>
 </div>
 

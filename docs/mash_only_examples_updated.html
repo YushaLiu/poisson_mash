@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data under the null</title>
+<title>Examples of genes that are identified by mash with no common baseline only (updated)</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data under the null</h1>
+<h1 class="title toc-ignore">Examples of genes that are identified by mash with no common baseline only (updated)</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-8-19</h4>
 
@@ -576,7 +576,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/pois_mash_random_effects_sim_null.Rmd</code>) and HTML (<code>docs/pois_mash_random_effects_sim_null.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/mash_only_examples_updated.Rmd</code>) and HTML (<code>docs/mash_only_examples_updated.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -605,7 +605,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/2bf72bbbf6490c2fc9d712096c1cc40d7e4f5258/analysis/pois_mash_random_effects_sim_null.Rmd" target="_blank">2bf72bb</a>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/2bf72bbbf6490c2fc9d712096c1cc40d7e4f5258/analysis/mash_only_examples_updated.Rmd" target="_blank">2bf72bb</a>
 </td>
 <td>
 yushaliu
@@ -617,40 +617,6 @@ yushaliu
 Add more results
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/7a03022d9ed2c4629502eed397851fed01b355f1/docs/pois_mash_random_effects_sim_null.html" target="_blank">7a03022</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/dd66b6cc4bfabf1c77b2b8a3023e7234670a6fd4/analysis/pois_mash_random_effects_sim_null.Rmd" target="_blank">dd66b6c</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Add simulation results
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -658,89 +624,66 @@ Add simulation results
 </div>
 </div>
 </div>
-<div id="simulation-procedure" class="section level2">
-<h2>Simulation procedure</h2>
-<p>We apply poisson mash and fixed effects-based mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 7,146 cells from 25 conditions from the second batch, and 2) 7,869 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions.</p>
-<p>We consider two different ways to randomly permute the data: 1) the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset; 2) independent and different permutation to each gene. For each type of permutation, we simulate 20 single cell datasets.</p>
-</div>
-<div id="the-same-permutation-to-all-genes" class="section level2">
-<h2>The same permutation to all genes</h2>
-<pre class="r"><code>### poisson mash with random effects
-num_effects_pois &lt;- rep(NA, 20)
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>We apply both poisson mash and mash to CD4 T cells of the single cell cytokines data. The four conditions from the first batch (Ctrl_1, IFNa, IFNb, TNF) are removed from analysis for now.</p>
+<pre class="r"><code>### load in functions
+source(&quot;code/code_random_effects.R&quot;)
 
-for(i in 1:20){
-  post &lt;- readRDS(paste0(&quot;output/simulations/null/pois_mash_posterior_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_pois[i] &lt;- sum(apply(post$lfsr, 1, min) &lt; 0.05)
-}
+### load in data
+load(&quot;data/data_jr.RData&quot;)
+data &lt;- data.jr
+s &lt;- s.r/8
+rm(data.jr, s.r)
+data &lt;- data[,5:50]
+s &lt;- s[5:50]
 
-### number of false positives
-num_effects_pois</code></pre>
-<pre><code> [1]  96  43 112  90  76  67 104  85  52  74  90  56  96  59  92  68  55  88  88
-[20]  51</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_pois/nrow(post$lfsr)</code></pre>
-<pre><code> [1] 0.012199771 0.005464481 0.014233066 0.011437286 0.009658152 0.008514424
- [7] 0.013216419 0.010801881 0.006608209 0.009403990 0.011437286 0.007116533
-[13] 0.012199771 0.007497776 0.011691447 0.008641505 0.006989452 0.011183124
-[19] 0.011183124 0.006481128</code></pre>
-<pre class="r"><code>### fixed effect-based mash with no common baseline
-num_effects_mash &lt;- rep(NA, 20)
+### remove genes that have fewer than 20 total counts across all 46 treatments
+data &lt;- data[rowSums(data) &gt;= 20,]
 
-for(i in 1:20){
-  mash.fit &lt;- readRDS(paste0(&quot;output/simulations/null/mash_fit_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_mash[i] &lt;- length(mashr::get_significant_results(mash.fit))
-}
+### color code for treatments
+library(RColorBrewer)
+cols.all &lt;- c(&quot;blue&quot;, brewer.pal(n=5,name=&quot;Greens&quot;)[3:5], &quot;gray&quot;, brewer.pal(n=9,name=&quot;PuRd&quot;), 
+              brewer.pal(n=9,name=&quot;Reds&quot;), brewer.pal(n=9,name=&quot;Oranges&quot;),
+              brewer.pal(n=9,name=&quot;Purples&quot;), brewer.pal(n=9,name=&quot;YlOrRd&quot;))
+cols.trt &lt;- cols.all[5:50]
 
-### number of false positives
-num_effects_mash</code></pre>
-<pre><code> [1] 2 2 3 2 4 1 2 3 2 5 2 3 3 4 3 2 3 4 3 3</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_mash/nrow(mash.fit$result$lfsr)</code></pre>
-<pre><code> [1] 0.0002541619 0.0002541619 0.0003812429 0.0002541619 0.0005083238
- [6] 0.0001270810 0.0002541619 0.0003812429 0.0002541619 0.0006354048
-[11] 0.0002541619 0.0003812429 0.0003812429 0.0005083238 0.0003812429
-[16] 0.0002541619 0.0003812429 0.0005083238 0.0003812429 0.0003812429</code></pre>
-</div>
-<div id="independent-and-different-permutation-to-all-genes" class="section level2">
-<h2>Independent and different permutation to all genes</h2>
-<pre class="r"><code>### poisson mash with random effects
-num_effects_pois &lt;- rep(NA, 20)
+## load in the ED results
+fit.ed &lt;- readRDS(&quot;output/realdata/pois_mash_ed_maxiter2000.Rds&quot;)
 
-for(i in 1:20){
-  post &lt;- readRDS(paste0(&quot;output/simulations/null_v2/pois_mash_posterior_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_pois[i] &lt;- sum(apply(post$lfsr, 1, min) &lt; 0.05)
-}
+## load in the poisson mash fit results
+post &lt;- readRDS(&quot;output/realdata/pois_mash_posterior.Rds&quot;)
+idx.pois.mash &lt;- which(apply(post$lfsr, 1, min) &lt; 0.05)
 
-### number of false positives
-num_effects_pois</code></pre>
-<pre><code> [1] 23 24 26 23 27 26 21 31 26 30 22 25 24 25 21 27 20 34 21 25</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_pois/nrow(post$lfsr)</code></pre>
-<pre><code> [1] 0.002922862 0.003049943 0.003304105 0.002922862 0.003431186 0.003304105
- [7] 0.002668700 0.003939509 0.003304105 0.003812429 0.002795781 0.003177024
-[13] 0.003049943 0.003177024 0.002668700 0.003431186 0.002541619 0.004320752
-[19] 0.002668700 0.003177024</code></pre>
-<pre class="r"><code>### fixed effect-based mash with no common baseline
-num_effects_mash &lt;- rep(NA, 20)
+### load in posterior summary of fixed effects-based mash
+mash.fit &lt;- readRDS(&quot;output/realdata/mash_fit.rds&quot;)
+idx.mash &lt;- mashr::get_significant_results(mash.fit)
 
-for(i in 1:20){
-  mash.fit &lt;- readRDS(paste0(&quot;output/simulations/null_v2/mash_fit_rep_&quot;, i, &quot;.Rds&quot;))
-  num_effects_mash[i] &lt;- length(mashr::get_significant_results(mash.fit))
-}
-
-### number of false positives
-num_effects_mash</code></pre>
-<pre><code> [1] 3 2 4 3 2 4 3 2 4 2 3 2 4 4 2 2 2 0 2 4</code></pre>
-<pre class="r"><code>### false positive rates
-num_effects_mash/nrow(mash.fit$result$lfsr)</code></pre>
-<pre><code> [1] 0.0003812429 0.0002541619 0.0005083238 0.0003812429 0.0002541619
- [6] 0.0005083238 0.0003812429 0.0002541619 0.0005083238 0.0002541619
-[11] 0.0003812429 0.0002541619 0.0005083238 0.0005083238 0.0002541619
-[16] 0.0002541619 0.0002541619 0.0000000000 0.0002541619 0.0005083238</code></pre>
-</div>
-<div id="conclusion" class="section level2">
-<h2>Conclusion</h2>
-<p>The number of false positives for fixed effects-based mash is always smaller, and is not sensitive to the type of random permutation performed. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting. For poisson mash with random effects, the number of false positives is greatly reduced if we apply independent and different permutation to each gene.</p>
+## the list of genes that are identified only by fixed effects-based mash 
+genes &lt;- idx.mash[!(names(idx.mash) %in% names(idx.pois.mash))]
+length(genes)</code></pre>
+<pre><code>[1] 164</code></pre>
+<p>Now we present some examples of genes that are identified to be differentially expressed across treatments only by mash without common baseline, where <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> are obtained by fitting a linear fixed effects model to each gene.</p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[1], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-2-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-2-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[2], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[3], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[4], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[5], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-6-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[6], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[7], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-8-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[8], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-9-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[9], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_by_gene(data=data, s=s, res.pois.mash=post, res.mash=mash.fit$result, genename=names(genes)[10], cols.trt=cols.trt)</code></pre>
+<p><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/mash_only_examples_updated.Rmd/unnamed-chunk-11-3.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -764,19 +707,25 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] workflowr_1.6.2
+[1] RColorBrewer_1.1-2 rmeta_3.0          ggplot2_3.3.0      poilog_0.4        
+[5] psych_1.9.12.31    flashr_0.6-7       workflowr_1.6.2   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_1.0.4.6     knitr_1.28       whisker_0.4      magrittr_1.5    
- [5] SQUAREM_2020.2   lattice_0.20-41  R6_2.4.1         rlang_0.4.6     
- [9] plyr_1.8.6       ashr_2.2-50      stringr_1.4.0    tools_3.6.2     
-[13] grid_3.6.2       xfun_0.13        rmeta_3.0        irlba_2.3.3     
-[17] invgamma_1.1     git2r_0.27.1     htmltools_0.4.0  assertthat_0.2.1
-[21] yaml_2.2.1       abind_1.4-5      digest_0.6.25    rprojroot_1.3-2 
-[25] mixsqp_0.3-43    Matrix_1.2-18    later_1.0.0      promises_1.1.0  
-[29] fs_1.4.1         glue_1.4.1       evaluate_0.14    rmarkdown_2.1   
-[33] stringi_1.4.6    compiler_3.6.2   mashr_0.2.21     backports_1.1.7 
-[37] mvtnorm_1.1-0    truncnorm_1.0-8  httpuv_1.5.2    </code></pre>
+ [1] softImpute_1.4   tidyselect_1.1.0 xfun_0.13        ashr_2.2-50     
+ [5] purrr_0.3.4      reshape2_1.4.4   lattice_0.20-41  colorspace_1.4-1
+ [9] vctrs_0.3.0      htmltools_0.4.0  yaml_2.2.1       rlang_0.4.6     
+[13] mixsqp_0.3-43    later_1.0.0      pillar_1.4.4     withr_2.2.0     
+[17] glue_1.4.1       mashr_0.2.21     lifecycle_0.2.0  plyr_1.8.6      
+[21] stringr_1.4.0    munsell_0.5.0    gtable_0.3.0     mvtnorm_1.1-0   
+[25] evaluate_0.14    labeling_0.3     knitr_1.28       httpuv_1.5.2    
+[29] invgamma_1.1     irlba_2.3.3      parallel_3.6.2   Rcpp_1.0.4.6    
+[33] promises_1.1.0   scales_1.1.1     backports_1.1.7  abind_1.4-5     
+[37] truncnorm_1.0-8  farver_2.0.3     fs_1.4.1         mnormt_1.5-7    
+[41] digest_0.6.25    stringi_1.4.6    dplyr_0.8.5      grid_3.6.2      
+[45] rprojroot_1.3-2  tools_3.6.2      magrittr_1.5     tibble_3.0.1    
+[49] crayon_1.3.4     whisker_0.4      pkgconfig_2.0.3  ellipsis_0.3.1  
+[53] Matrix_1.2-18    SQUAREM_2020.2   assertthat_0.2.1 rmarkdown_2.1   
+[57] R6_2.4.1         nlme_3.1-147     git2r_0.27.1     compiler_3.6.2  </code></pre>
 </div>
 </div>
 
