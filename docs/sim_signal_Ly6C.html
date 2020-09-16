@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data (Ly6C-) with signal</title>
+<title>Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) with signal</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data (Ly6C-) with signal</h1>
+<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) with signal</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-9-16</h4>
 
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -535,6 +535,8 @@ Untracked files:
     Untracked:  code/util_random_effects_v2.R
     Untracked:  data/data_jr.RData
     Untracked:  output/B_cells/
+    Untracked:  output/Ctrl2/
+    Untracked:  output/IL12p70/
     Untracked:  output/Ly6C-/
     Untracked:  output/ed_all_trts_maxiter1500.Rds
     Untracked:  output/ed_second_batch_maxiter1500.Rds
@@ -607,6 +609,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/7cf873e10d241fe0bf689d5c469e6d8b7189f129/analysis/sim_signal_Ly6C.Rmd" target="_blank">7cf873e</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Add more application and simulation results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/sim_signal_Ly6C.html" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/c80f9539eb01534801e46e9601f55df1679687fc/analysis/sim_signal_Ly6C.Rmd" target="_blank">c80f953</a>
 </td>
 <td>
@@ -629,7 +665,7 @@ Add more application and simulation results for other cell types
 <div id="simulation-procedure" class="section level2">
 <h2>Simulation procedure</h2>
 <p>We apply poisson mash, fixed effects-based mash and mixed effects-based mash to simulated single cell data with differential expression across conditions in a subset of genes.</p>
-<p>We start with a subset of the single cell cytokines data, which include 1) 1,879 cells from <span class="math inline">\(R=25\)</span> conditions from the second batch, and 2) 5,007 genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning.</p>
+<p>We start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from <span class="math inline">\(R=25\)</span> conditions from the second batch, and 2) <span class="math inline">\(J=5,007\)</span> genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning.</p>
 <p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels (the same permutation to all the genes), so that there does not exist association between gene expression levels and conditions. Then we use thinning to add 1) fixed effects <span class="math inline">\(\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)\)</span> to a subset of genes, and 2) random effects <span class="math inline">\(\eta_j \sim MVN(0, \: \tau_j^2 I_R)\)</span> to all genes. For fixed effects, the prior covariances <span class="math inline">\(U_k\)</span>’s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>) further scaled to be realistic. For random effects, we simulate <span class="math inline">\(\tau_j\)</span> such that its distribution resembles the empirical distribution of <span class="math inline">\(\tau_j\)</span> we see from the poisson mash fit to the original dataset.</p>
 <p>We consider four different ways to add fixed effects to a subset of genes:</p>
 <ol style="list-style-type: decimal">
@@ -688,6 +724,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-1-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### plot ROC for detecting non-null pairs 
 par(mfrow=c(2,3))
 
@@ -703,6 +776,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-2-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="results-for-scenario-2-signals-added-to-genes-with-high-expression-levels" class="section level3">
 <h3>Results for scenario 2 (signals added to genes with high expression levels):</h3>
@@ -753,6 +863,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-3-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### plot ROC for detecting non-null pairs 
 par(mfrow=c(2,3))
 
@@ -768,6 +915,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-4-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="results-for-scenario-3-signals-added-to-genes-with-medium-expression-levels" class="section level3">
 <h3>Results for scenario 3 (signals added to genes with medium expression levels):</h3>
@@ -818,6 +1002,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-5-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### plot ROC for detecting non-null pairs 
 par(mfrow=c(2,3))
 
@@ -833,6 +1054,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-6-1">
+Past versions of unnamed-chunk-6-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-6-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-6-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="results-for-scenario-4-signals-added-to-genes-with-low-expression-levels" class="section level3">
 <h3>Results for scenario 4 (signals added to genes with low expression levels):</h3>
@@ -883,6 +1141,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-7-1">
+Past versions of unnamed-chunk-7-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-7-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-7-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### plot ROC for detecting non-null pairs 
 par(mfrow=c(2,3))
 
@@ -898,6 +1193,43 @@ for (iter in 1:5){
   }
 }</code></pre>
 <p><img src="figure/sim_signal_Ly6C.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_signal_Ly6C.Rmd/unnamed-chunk-8-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">

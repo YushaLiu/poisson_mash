@@ -12,7 +12,7 @@
 <meta name="author" content="Yusha Liu" />
 
 
-<title>Application of poisson mash and mash to simulated single cell data (Ly6C-) under the null</title>
+<title>Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) under the null</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -385,7 +385,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data (Ly6C-) under the null</h1>
+<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) under the null</h1>
 <h4 class="author">Yusha Liu</h4>
 <h4 class="date">2020-9-16</h4>
 
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -535,6 +535,8 @@ Untracked files:
     Untracked:  code/util_random_effects_v2.R
     Untracked:  data/data_jr.RData
     Untracked:  output/B_cells/
+    Untracked:  output/Ctrl2/
+    Untracked:  output/IL12p70/
     Untracked:  output/Ly6C-/
     Untracked:  output/ed_all_trts_maxiter1500.Rds
     Untracked:  output/ed_second_batch_maxiter1500.Rds
@@ -607,6 +609,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/7cf873e10d241fe0bf689d5c469e6d8b7189f129/analysis/sim_null_Ly6C.Rmd" target="_blank">7cf873e</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Add more application and simulation results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/sim_null_Ly6C.html" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/c80f9539eb01534801e46e9601f55df1679687fc/analysis/sim_null_Ly6C.Rmd" target="_blank">c80f953</a>
 </td>
 <td>
@@ -628,7 +664,7 @@ Add more application and simulation results for other cell types
 </div>
 <div id="simulation-procedure" class="section level2">
 <h2>Simulation procedure</h2>
-<p>We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions.</p>
+<p>We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions.</p>
 <p>We consider three different methods to simulate null data based on the real dataset:</p>
 <p>1). apply the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset;</p>
 <p>2). apply independent and different permutation to each gene;</p>
@@ -674,6 +710,43 @@ corr.sub &lt;- cor(t(data.sub))
 
 pheatmap(corr.sub, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=4, fontsize_col=4, main=&quot;Gene-wise correlation for the identified genes \n (largest weight: tPCA)&quot;)</code></pre>
 <p><img src="figure/sim_null_Ly6C.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-1">
+Past versions of unnamed-chunk-1-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_null_Ly6C.Rmd/unnamed-chunk-1-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### for a randomly chosen subset of genes of the same size, compute the gene-wise correlation across all cells
 set.seed(100)
 data.tmp &lt;- as.matrix(data[sample(1:nrow(data), length(gene.list), replace=FALSE),])
@@ -681,6 +754,43 @@ corr.tmp &lt;- cor(t(as.matrix(data.tmp)))
 
 pheatmap(corr.tmp, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=4, fontsize_col=4, main=&quot;Gene-wise correlation for a randomly chosen set of genes&quot;)</code></pre>
 <p><img src="figure/sim_null_Ly6C.Rmd/unnamed-chunk-1-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-1-2">
+Past versions of unnamed-chunk-1-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-1-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/sim_null_Ly6C.Rmd/unnamed-chunk-1-2.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>

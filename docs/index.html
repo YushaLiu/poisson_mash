@@ -364,16 +364,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -396,6 +396,8 @@ Untracked files:
     Untracked:  code/util_random_effects_v2.R
     Untracked:  data/data_jr.RData
     Untracked:  output/B_cells/
+    Untracked:  output/Ctrl2/
+    Untracked:  output/IL12p70/
     Untracked:  output/Ly6C-/
     Untracked:  output/ed_all_trts_maxiter1500.Rds
     Untracked:  output/ed_second_batch_maxiter1500.Rds
@@ -463,6 +465,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/7cf873e10d241fe0bf689d5c469e6d8b7189f129/analysis/index.Rmd" target="_blank">7cf873e</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Add more application and simulation results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/index.html" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -942,13 +978,21 @@ Start workflowr project.
 <h2>Application to simulated data based on CD4 T cells</h2>
 <p>Click on this <a href="pois_mash_random_effects_sim_null.html">link</a> to see results based on single cell data simulated under the null. <br/> Click on this <a href="pois_mash_random_effects_sim_null_random_effects.html">link</a> to see results based on single cell data simulated under the null with random effects added by thinning. <br/> Click on this <a href="pois_mash_random_effects_sim_non_null.html">link</a> to see results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
 </div>
-<div id="application-and-simulation-based-cytokines-dataset-from-b-cells" class="section level2">
-<h2>Application and simulation based cytokines dataset from B cells</h2>
+<div id="application-and-simulation-based-on-cytokines-dataset-from-b-cells" class="section level2">
+<h2>Application and simulation based on cytokines dataset from B cells</h2>
 <p>Click on this <a href="application_B_cells.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/> Click on this <a href="sim_null_B_cells.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_B_cells.html">link</a> to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
 </div>
-<div id="application-and-simulation-based-cytokines-dataset-from-ly6c--cells" class="section level2">
-<h2>Application and simulation based cytokines dataset from Ly6C- cells</h2>
-<p>Click on this <a href="application_Ly6C.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from Ly6C- cells. <br/> Click on this <a href="sim_null_Ly6C.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_Ly6C.html">link</a> to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
+<div id="application-and-simulation-based-on-cytokines-dataset-from-ly6c--monocytes" class="section level2">
+<h2>Application and simulation based on cytokines dataset from Ly6C- monocytes</h2>
+<p>Click on this <a href="application_Ly6C.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from Ly6C- monocytes. <br/> Click on this <a href="sim_null_Ly6C.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_Ly6C.html">link</a> to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
+</div>
+<div id="application-and-simulation-based-on-cytokines-dataset-from-il12p70" class="section level2">
+<h2>Application and simulation based on cytokines dataset from IL12p70</h2>
+<p>Click on this <a href="application_IL12p70.html">link</a> to see application and simulation of poisson mash and mash based on a subset of single cell data treated by IL12p70. <br/></p>
+</div>
+<div id="application-and-simulation-based-on-cytokines-dataset-from-ctrl2" class="section level2">
+<h2>Application and simulation based on cytokines dataset from Ctrl2</h2>
+<p>Click on this <a href="application_Ctrl2.html">link</a> to see application and simulation of poisson mash and mash based on a subset of single cell data from control 2. <br/></p>
 </div>
 
 
