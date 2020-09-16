@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree9a932867deb1e979172deb8350d4ab6051570dd4targetblank9a93286a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/9a932867deb1e979172deb8350d4ab6051570dd4" target="_blank">9a93286</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree9a932867deb1e979172deb8350d4ab6051570dd4targetblank9a93286a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/9a932867deb1e979172deb8350d4ab6051570dd4" target="_blank">9a93286</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -607,6 +607,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/9a932867deb1e979172deb8350d4ab6051570dd4/analysis/application_B_cells.Rmd" target="_blank">9a93286</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Update more application and simulation results for other cell types
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/application_B_cells.html" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/c80f9539eb01534801e46e9601f55df1679687fc/analysis/application_B_cells.Rmd" target="_blank">c80f953</a>
 </td>
 <td>
@@ -629,8 +663,11 @@ Add more application and simulation results for other cell types
 <div id="summary" class="section level2">
 <h2>Summary</h2>
 <p>We apply both poisson mash and mash to a subset of B cells from the cytokines data, treated by one of 25 selected conditions from the second batch. We apply both methods to the <span class="math inline">\(8,568\)</span> genes with at least <span class="math inline">\(100\)</span> reads across all cells, so the count data matrix <span class="math inline">\(X\)</span> is <span class="math inline">\(8,568 \times 25\)</span>, where <span class="math inline">\(X_{jr}\)</span> represents the total read counts of gene <span class="math inline">\(j\)</span> in all cells from condition <span class="math inline">\(r\)</span>.</p>
-<p>Recall the <a href="https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/B_cells_barplots.pdf">barplot and enrichment-depletion plot</a> which display condition-wise loadings based on topic modeling of single cell data from B cells (the number of topics <span class="math inline">\(K=12\)</span>).</p>
-<pre class="r"><code>cols.trt &lt;- readRDS(&quot;output/B_cells/condition_colors.Rds&quot;)
+<p>Recall the <a href="https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/B_cells_barplots.pdf">barplot and enrichment-depletion plot</a> which display single cell-specific loadings grouped by conditions, based on topic modeling of single cell data from B cells (the number of topics <span class="math inline">\(K=12\)</span>).</p>
+<pre class="r"><code>library(pheatmap)
+library(gridExtra)
+
+cols.trt &lt;- readRDS(&quot;output/B_cells/condition_colors.Rds&quot;)
 trts &lt;- names(cols.trt)</code></pre>
 <div id="model" class="section level3">
 <h3>Model</h3>
@@ -658,6 +695,43 @@ round(fit.ed$pi, 3)</code></pre>
 <pre class="r"><code>## look at the ELBO
 plot(fit.ed$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;fitting ED step&quot;)</code></pre>
 <p><img src="figure/application_B_cells.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-2-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="estimate-of-data-driven-covariances-from-ed-step" class="section level3">
 <h3>Estimate of data-driven covariances from ED step</h3>
@@ -674,7 +748,158 @@ for (k in 1:4){
           las = 2, main = paste0(names(fit.ed$Ulist)[1], &quot;: weight &quot;, round(fit.ed$pi[1],3), 
                                  &quot;:\nEigenvector &quot;, k, &quot; (pve = &quot;, round(pve.tPCA[k],3), &quot;)&quot;), col = cols.trt)
 }</code></pre>
-<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-2.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-3">
+Past versions of unnamed-chunk-3-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-3.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-4">
+Past versions of unnamed-chunk-3-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-4.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>### Estimate of eigenvectors of rank-1 data-driven covariance matrices
 for (k in 1:4){
   v &lt;- fit.ed$ulist[[k]]
@@ -682,7 +907,158 @@ for (k in 1:4){
   barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4,
           las = 2, main = paste0(names(fit.ed$ulist)[k], &quot;: weight &quot;, round(fit.ed$pi[2+k],3)), col = cols.trt)
 }</code></pre>
-<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-7.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-5">
+Past versions of unnamed-chunk-3-5.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-5.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-6.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-6">
+Past versions of unnamed-chunk-3-6.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-6" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-6.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-7.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-7">
+Past versions of unnamed-chunk-3-7.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-7" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-7.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-3-8.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-8">
+Past versions of unnamed-chunk-3-8.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-8" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-3-8.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="running-poisson-mash" class="section level3">
 <h3>Running poisson mash</h3>
@@ -693,9 +1069,46 @@ res$runtime</code></pre>
 <pre><code>    user   system  elapsed 
 13175.58    87.37 13267.73 </code></pre>
 <pre class="r"><code>## look at ELBO
-plot(res$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;Fitting poisson mash with random effects&quot;)
-
-## look at distribution of random effect size (in terms of standard deviation on the log scale)
+plot(res$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;Fitting poisson mash with random effects&quot;)</code></pre>
+<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-4-1.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>## look at distribution of random effect size (in terms of standard deviation on the log scale)
 quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))</code></pre>
 <pre><code>        5%        10%        15%        20%        25%        30%        35% 
 0.00100000 0.00100000 0.00100000 0.00100000 0.00100000 0.00100000 0.02236068 
@@ -704,10 +1117,6 @@ quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))</code></pre>
        75%        80%        85%        90%        95% 
 0.10000000 0.12228619 0.14113440 0.17267517 0.22337263 </code></pre>
 <pre class="r"><code>## look at the estimated weights of prior covariance matrices
-library(pheatmap)</code></pre>
-<p><img src="figure/application_B_cells.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>library(gridExtra)
-
 wlist &lt;- c(1e-3, 2.5e-3, 5e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16, 25, 36, 50)
 
 pi.mat &lt;- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
@@ -726,6 +1135,43 @@ round(rowSums(pi.mat),3)</code></pre>
 <pre class="r"><code>pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=5, fontsize_col=6, 
          main=&quot;Estimated weights of prior covariances in poisson mash fit&quot;)</code></pre>
 <p><img src="figure/application_B_cells.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-2">
+Past versions of unnamed-chunk-4-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/figure/application_B_cells.Rmd/unnamed-chunk-4-2.png" target="_blank">fceb44f</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="comparison-to-fixed-effects-based-mash" class="section level3">
 <h3>Comparison to fixed effects-based mash</h3>
