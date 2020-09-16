@@ -11,8 +11,11 @@ editor_options:
 ## Summary
 We apply both poisson mash and mash to a subset of B cells from the cytokines data, treated by one of 25 selected conditions from the second batch. We apply both methods to the $8,568$ genes with at least $100$ reads across all cells, so the count data matrix $X$ is $8,568 \times 25$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from condition $r$. 
 
-Recall the [barplot and enrichment-depletion plot](https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/B_cells_barplots.pdf) which display condition-wise loadings based on topic modeling of single cell data from B cells (the number of topics $K=12$).
+Recall the [barplot and enrichment-depletion plot](https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/B_cells_barplots.pdf) which display single cell-specific loadings grouped by conditions, based on topic modeling of single cell data from B cells (the number of topics $K=12$).
 ```{r warning=FALSE, message=FALSE}
+library(pheatmap)
+library(gridExtra)
+
 cols.trt <- readRDS("output/B_cells/condition_colors.Rds")
 trts <- names(cols.trt)
 
@@ -93,9 +96,6 @@ plot(res$ELBO, xlab = "niter", ylab = "elbo", main="Fitting poisson mash with ra
 quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))
 
 ## look at the estimated weights of prior covariance matrices
-library(pheatmap)
-library(gridExtra)
-
 wlist <- c(1e-3, 2.5e-3, 5e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16, 25, 36, 50)
 
 pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
