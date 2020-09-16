@@ -10,7 +10,7 @@ editor_options:
 
 Welcome to my research website.
 
-## Application to a subset of the cytokines dataset
+## Application to a subset of the cytokines dataset from CD4 T cells
 Click on this [link](pois_mash_random_effects.html) to see how to fit poisson mash with random effects to a subset of cytokines data. <br/>
 Click on this [link](pois_mash_random_effects_only_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/>
 Click on this [link](pois_mash_and_mash_random_effects_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash. <br/>
@@ -18,14 +18,28 @@ Click on this [link](mash_only_examples.html) to see some examples of genes that
 
 
 
-## Application to a subset of the cytokines dataset (updated analysis)
+## Application to a subset of the cytokines dataset from CD4 T cells (updated analysis)
 Click on this [link](pois_mash_random_effects_updated.html) to see how to fit poisson mash with random effects to a subset of cytokines data. <br/>
 Click on this [link](pois_mash_random_effects_only_examples_updated.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/>
 Click on this [link](mash_only_examples_updated.html) to see some examples of genes that are identified to be differentially expressed across treatments by fixed effects-based mash only.
 
 
 
-## Application to simulated data
+## Application to simulated data based on CD4 T cells
 Click on this [link](pois_mash_random_effects_sim_null.html) to see results based on single cell data simulated under the null. <br/>
 Click on this [link](pois_mash_random_effects_sim_null_random_effects.html) to see results based on single cell data simulated under the null with random effects added by thinning. <br/>
 Click on this [link](pois_mash_random_effects_sim_non_null.html) to see results based on single cell data simulated with both fixed and random effects added by thinning. <br/>
+
+
+
+## Application and simulation based cytokines dataset from B cells
+Click on this [link](application_B_cells.html) to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/>
+Click on this [link](sim_null_B_cells.html) to see simulation results based on single cell data simulated under the null. <br/>
+Click on this [link](sim_signal_B_cells.html) to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/>
+
+
+
+## Application and simulation based cytokines dataset from Ly6C- cells
+Click on this [link](application_Ly6C.html) to see application of poisson mash and mash to a subset of cytokines data from Ly6C- cells. <br/>
+Click on this [link](sim_null_Ly6C.html) to see simulation results based on single cell data simulated under the null. <br/>
+Click on this [link](sim_signal_Ly6C.html) to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/>

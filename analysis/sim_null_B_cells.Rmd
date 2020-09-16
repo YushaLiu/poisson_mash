@@ -1,0 +1,37 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data (B cells) under the null"
+author: "Yusha Liu"
+header-includes:
+date: "2020-9-16"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 9,902 cells from 25 conditions from the second batch, and 2) 8,568 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. 
+
+We consider three different methods to simulate null data based on the real dataset: 
+
+1). apply the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset; 
+
+2). apply independent and different permutation to each gene; 
+
+3). apply 1) followed by gene-wise addition of random effects via thinning to the randomly permuted data.
+
+For each of the three simulation methods described above, we simulate 5 single cell datasets. 
+
+For method 1), the number of false positives are $46, 15, 28, 22, 56$ for poisson mash, and $6, 3, 12, 5, 6$ for fixed effects-based mash.
+
+For method 2), the number of false positives are $12, 9, 13, 11, 17$ for poisson mash, and $2, 4, 2, 8, 3$ for fixed effects-based mash.
+
+For method 3), the number of false positives are $20, 9, 9, 10, 8$ for poisson mash, $338, 348, 329, 310, 310$ for fixed effects-based mash, and $36, 34, 29, 30, 35$ for mixed effects-based mash. 
+
+
+
+## Conclusions
+1. For poisson mash, the number of false positives is greatly reduced if we apply method 2) rather than method 1). 
+
+2. When random effects are not present, the number of false positives found by fixed effects-based mash is always smaller than that of poisson mash. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting.
+
+3. When random effects are present, the number of false positives found by fixed effects-based mash is much larger than that of poisson mash, which finds the smallest number of false positives among the three methods. 
