@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Yusha Liu" />
+
+
+<title>Application of poisson mash and mash to simulated single cell data (B cells) with signal</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">poisson_mash</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/YushaLiu/poisson_mash">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data (B cells) with signal</h1>
+<h4 class="author">Yusha Liu</h4>
+<h4 class="date">2020-9-16</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-09-16
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>poisson_mash/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200618code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200618code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200618)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreec80f9539eb01534801e46e9601f55df1679687fctargetblankc80f953a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/c80f9539eb01534801e46e9601f55df1679687fc" target="_blank">c80f953</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    code/.DS_Store
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  code/code_random_effects.R
+    Untracked:  code/examples.R
+    Untracked:  code/examples_updated.R
+    Untracked:  code/util6.R
+    Untracked:  code/util8.R
+    Untracked:  code/util_ed.R
+    Untracked:  code/util_random_effects.R
+    Untracked:  code/util_random_effects_v2.R
+    Untracked:  data/data_jr.RData
+    Untracked:  output/B_cells/
+    Untracked:  output/Ly6C-/
+    Untracked:  output/ed_all_trts_maxiter1500.Rds
+    Untracked:  output/ed_second_batch_maxiter1500.Rds
+    Untracked:  output/ed_second_batch_v2_maxiter2000.Rds
+    Untracked:  output/ed_v1_maxiter1000.Rds
+    Untracked:  output/ed_v2_maxiter1000.Rds
+    Untracked:  output/examples.pdf
+    Untracked:  output/examples/
+    Untracked:  output/examples_mash.pdf
+    Untracked:  output/mash_data_limma.rds
+    Untracked:  output/mash_data_second_batch.rds
+    Untracked:  output/mash_fit_limma.rds
+    Untracked:  output/mash_fit_limma_all_trts.rds
+    Untracked:  output/mash_fit_second_batch.rds
+    Untracked:  output/non_null_sim_setting1/
+    Untracked:  output/non_null_sim_setting2/
+    Untracked:  output/non_null_sim_setting3/
+    Untracked:  output/non_null_sim_setting4/
+    Untracked:  output/null_sim/
+    Untracked:  output/pois_mash_contrast_posterior_all_trts.Rds
+    Untracked:  output/pois_mash_contrast_posterior_second_batch.Rds
+    Untracked:  output/pois_mash_contrast_posterior_second_batch_v2.Rds
+    Untracked:  output/pois_mash_fit_all_trts.Rds
+    Untracked:  output/pois_mash_fit_second_batch.Rds
+    Untracked:  output/pois_mash_fit_second_batch_v2.Rds
+    Untracked:  output/poisson_mash_fit.Rds
+    Untracked:  output/poisson_mash_fit_contrast_posterior.Rds
+    Untracked:  output/realdata/
+    Untracked:  output/simulations/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/sim_signal_B_cells.Rmd</code>) and HTML (<code>docs/sim_signal_B_cells.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/c80f9539eb01534801e46e9601f55df1679687fc/analysis/sim_signal_B_cells.Rmd" target="_blank">c80f953</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Add more application and simulation results for other cell types
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="simulation-procedure" class="section level2">
+<h2>Simulation procedure</h2>
+<p>We apply poisson mash, fixed effects-based mash and mixed effects-based mash to simulated single cell data with differential expression across conditions in a subset of genes.</p>
+<p>We start with a subset of the single cell cytokines data, which include 1) 9,902 cells from <span class="math inline">\(R=25\)</span> conditions from the second batch, and 2) 6,849 genes that have at least 250 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning.</p>
+<p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels (the same permutation to all the genes), so that there does not exist association between gene expression levels and conditions. Then we use thinning to add 1) fixed effects <span class="math inline">\(\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)\)</span> to a subset of genes, and 2) random effects <span class="math inline">\(\eta_j \sim MVN(0, \: \tau_j^2 I_R)\)</span> to all genes. For fixed effects, the prior covariances <span class="math inline">\(U_k\)</span>’s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>) further scaled to be realistic. For random effects, we simulate <span class="math inline">\(\tau_j\)</span> such that its distribution resembles the empirical distribution of <span class="math inline">\(\tau_j\)</span> we see from the poisson mash fit to the original dataset.</p>
+<p>We consider four different ways to add fixed effects to a subset of genes:</p>
+<ol style="list-style-type: decimal">
+<li>add fixed effects to <span class="math inline">\(800\)</span> genes randomly chosen from all the genes;</li>
+<li>add fixed effects to <span class="math inline">\(500\)</span> genes randomly chosen from the genes with relatively high expression (&gt; 80 percentile);</li>
+<li>add fixed effects to <span class="math inline">\(500\)</span> genes randomly chosen from the genes with medium expression levels (50 ~ 75 percentile);</li>
+<li>add fixed effects to <span class="math inline">\(500\)</span> genes randomly chosen from the genes with relatively low expression (25 ~ 50 percentile).</li>
+</ol>
+<p>We simulate 5 single cell datasets for each scenario.</p>
+<div id="results-for-scenario-1" class="section level3">
+<h3>Results for scenario 1:</h3>
+<pre class="r"><code>load(&quot;output/B_cells/sim_signal_summary.RData&quot;)
+
+### look at the number of identified genes at alpha=0.05
+# poisson mash
+num.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 423 406 439 437 391</code></pre>
+<pre class="r"><code># fixed effects-based mash
+num.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 802 772 804 842 790</code></pre>
+<pre class="r"><code># mixed effects-based mash
+num.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 75 61 90 96 94</code></pre>
+<pre class="r"><code>### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.007092199 0.004926108 0.004555809 0.009153318 0.017902813</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fdr.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.3740648 0.3691710 0.3743781 0.3978622 0.3810127</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fdr.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.4133333 0.5081967 0.3555556 0.3541667 0.3617021</code></pre>
+<pre class="r"><code>### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.04692522 0.05463774 0.04282407 0.07905687 0.07611016</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.2907733 0.2861839 0.2638682 0.2835246 0.2960343</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.3854289 0.4110276 0.2555380 0.2816501 0.3261218</code></pre>
+<pre class="r"><code>### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting units:\n iter&quot;, iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting unit-condition pairs:\n iter&quot;, iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="results-for-scenario-2-signals-added-to-genes-with-high-expression-levels" class="section level3">
+<h3>Results for scenario 2 (signals added to genes with high expression levels):</h3>
+<pre class="r"><code>load(&quot;output/B_cells/sim_signal_high_expr_summary.RData&quot;)
+
+### look at the number of identified genes at alpha=0.05
+# poisson mash
+num.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 420 417 447 423 436</code></pre>
+<pre class="r"><code># fixed effects-based mash
+num.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 714 724 704 729 732</code></pre>
+<pre class="r"><code># mixed effects-based mash
+num.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 139 121 131 143 130</code></pre>
+<pre class="r"><code>### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.01666667 0.01678657 0.01342282 0.01182033 0.04128440</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fdr.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.3291317 0.3370166 0.3267045 0.3511660 0.3497268</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fdr.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.1366906 0.1570248 0.2061069 0.1468531 0.1461538</code></pre>
+<pre class="r"><code>### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.05224025 0.07461382 0.02927814 0.08586247 0.07538865</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.2354426 0.2270950 0.2113545 0.2237392 0.2327977</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.1629191 0.1461538 0.1739499 0.1238570 0.1333049</code></pre>
+<pre class="r"><code>### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting units:\n iter&quot;, iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting unit-condition pairs:\n iter&quot;, iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="results-for-scenario-3-signals-added-to-genes-with-medium-expression-levels" class="section level3">
+<h3>Results for scenario 3 (signals added to genes with medium expression levels):</h3>
+<pre class="r"><code>load(&quot;output/B_cells/sim_signal_medium_expr_summary.RData&quot;)
+
+### look at the number of identified genes at alpha=0.05
+# poisson mash
+num.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 290 261 293 295 267</code></pre>
+<pre class="r"><code># fixed effects-based mash
+num.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 636 606 590 648 580</code></pre>
+<pre class="r"><code># mixed effects-based mash
+num.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 64 60 48 50 56</code></pre>
+<pre class="r"><code>### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.01724138 0.01149425 0.01706485 0.01355932 0.02247191</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fdr.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.5738994 0.5825083 0.5711864 0.5432099 0.5810345</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fdr.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.5781250 0.6166667 0.4583333 0.5600000 0.6964286</code></pre>
+<pre class="r"><code>### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.07498609 0.09211969 0.09273079 0.08009278 0.10543131</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.6326973 0.6554099 0.6460280 0.6114136 0.6414918</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.7007576 0.7409420 0.5157385 0.6810552 0.7714808</code></pre>
+<pre class="r"><code>### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting units:\n iter&quot;, iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting unit-condition pairs:\n iter&quot;, iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="results-for-scenario-4-signals-added-to-genes-with-low-expression-levels" class="section level3">
+<h3>Results for scenario 4 (signals added to genes with low expression levels):</h3>
+<pre class="r"><code>load(&quot;output/B_cells/sim_signal_low_expr_summary.RData&quot;)
+
+### look at the number of identified genes at alpha=0.05
+# poisson mash
+num.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 147 190 129 173 130</code></pre>
+<pre class="r"><code># fixed effects-based mash
+num.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 516 529 469 518 479</code></pre>
+<pre class="r"><code># mixed effects-based mash
+num.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 45 39 40 33 47</code></pre>
+<pre class="r"><code>### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.01360544 0.05789474 0.03100775 0.02312139 0.05384615</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fdr.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.7034884 0.6805293 0.7420043 0.7258687 0.6826722</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fdr.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.8444444 0.8461538 0.9000000 0.9090909 0.7872340</code></pre>
+<pre class="r"><code>### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.08923885 0.07731844 0.10359801 0.05701647 0.12965261</code></pre>
+<pre class="r"><code># fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.8248557 0.7766990 0.8419498 0.8282158 0.8046159</code></pre>
+<pre class="r"><code># mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]</code></pre>
+<pre><code>[1] 0.9371728 0.9205882 0.9595238 0.9413580 0.8852041</code></pre>
+<pre class="r"><code>### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting units:\n iter&quot;, iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;detecting unit-condition pairs:\n iter&quot;, iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col=&quot;blue&quot;)
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col=&quot;magenta&quot;)
+  if(iter %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;poisson mash&quot;, &quot;mash + fixed&quot;, &quot;mash + mixed&quot;), text.col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), 
+           col=c(&quot;black&quot;, &quot;blue&quot;, &quot;magenta&quot;), lty=c(1,2,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_signal_B_cells.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.6
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.0.0    
+ [5] R6_2.4.1        backports_1.1.7 git2r_0.27.1    magrittr_1.5   
+ [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.6     fs_1.4.1       
+[13] promises_1.1.0  whisker_0.4     rmarkdown_2.1   tools_3.6.2    
+[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.2    xfun_0.13      
+[21] yaml_2.2.1      compiler_3.6.2  htmltools_0.4.0 knitr_1.28     </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
