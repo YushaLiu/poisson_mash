@@ -1,5 +1,5 @@
 ---
-title: "Application of poisson mash and mash to simulated single cell data (Ly6C-) with signal"
+title: "Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) with signal"
 author: "Yusha Liu"
 header-includes:
 date: "2020-9-16"
@@ -11,7 +11,7 @@ editor_options:
 ## Simulation procedure
 We apply poisson mash, fixed effects-based mash and mixed effects-based mash to simulated single cell data with differential expression across conditions in a subset of genes. 
 
-We start with a subset of the single cell cytokines data, which include 1) 1,879 cells from $R=25$ conditions from the second batch, and 2) 5,007 genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning. 
+We start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from $R=25$ conditions from the second batch, and 2) $J=5,007$ genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning. 
 
 Starting with the real dataset, we randomly permute the cells with respect to the condition labels (the same permutation to all the genes), so that there does not exist association between gene expression levels and conditions. Then we use thinning to add 1) fixed effects $\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)$ to a subset of genes, and 2) random effects $\eta_j \sim MVN(0, \: \tau_j^2 I_R)$ to all genes. For fixed effects, the prior covariances $U_k$'s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of $\max_r \mid \beta_{jr}\mid$) further scaled to be realistic. For random effects, we simulate $\tau_j$ such that its distribution resembles the empirical distribution of $\tau_j$ we see from the poisson mash fit to the original dataset.
 

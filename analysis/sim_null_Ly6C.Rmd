@@ -1,5 +1,5 @@
 ---
-title: "Application of poisson mash and mash to simulated single cell data (Ly6C-) under the null"
+title: "Application of poisson mash and mash to simulated single cell data (Ly6C- monocytes) under the null"
 author: "Yusha Liu"
 header-includes:
 date: "2020-9-16"
@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ## Simulation procedure
-We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. 
+We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. 
 
 We consider three different methods to simulate null data based on the real dataset: 
 

@@ -32,14 +32,24 @@ Click on this [link](pois_mash_random_effects_sim_non_null.html) to see results 
 
 
 
-## Application and simulation based cytokines dataset from B cells
+## Application and simulation based on cytokines dataset from B cells
 Click on this [link](application_B_cells.html) to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/>
 Click on this [link](sim_null_B_cells.html) to see simulation results based on single cell data simulated under the null. <br/>
 Click on this [link](sim_signal_B_cells.html) to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/>
 
 
 
-## Application and simulation based cytokines dataset from Ly6C- cells
-Click on this [link](application_Ly6C.html) to see application of poisson mash and mash to a subset of cytokines data from Ly6C- cells. <br/>
+## Application and simulation based on cytokines dataset from Ly6C- monocytes
+Click on this [link](application_Ly6C.html) to see application of poisson mash and mash to a subset of cytokines data from Ly6C- monocytes. <br/>
 Click on this [link](sim_null_Ly6C.html) to see simulation results based on single cell data simulated under the null. <br/>
 Click on this [link](sim_signal_Ly6C.html) to see simulations results based on single cell data simulated with both fixed and random effects added by thinning. <br/>
+
+
+
+## Application and simulation based on cytokines dataset from IL12p70
+Click on this [link](application_IL12p70.html) to see application and simulation of poisson mash and mash based on a subset of single cell data treated by IL12p70. <br/>
+
+
+
+## Application and simulation based on cytokines dataset from Ctrl2
+Click on this [link](application_Ctrl2.html) to see application and simulation of poisson mash and mash based on a subset of single cell data from control 2. <br/>

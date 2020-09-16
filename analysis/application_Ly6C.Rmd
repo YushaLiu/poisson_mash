@@ -1,5 +1,5 @@
 ---
-title: "Application of poisson mash and mash to single cell cytokines data (Ly6C- cells)"
+title: "Application of poisson mash and mash to single cell cytokines data (Ly6C- monocytes)"
 author: "Yusha Liu"
 header-includes:
 date: "2020-9-16"
@@ -9,9 +9,9 @@ editor_options:
 ---
 
 ## Summary
-We apply both poisson mash and mash to a subset of Ly6C- cells from the cytokines data, treated by one of 25 selected conditions from the second batch. We apply both methods to the $6,794$ genes with at least $100$ reads across all cells, so the count data matrix $X$ is $6,794 \times 25$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from condition $r$. 
+We apply both poisson mash and mash to a subset of Ly6C- monocytes from the cytokines data, treated by one of 25 selected conditions from the second batch. We apply both methods to the $6,794$ genes with at least $100$ reads across all cells, so the count data matrix $X$ is $6,794 \times 25$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from condition $r$. 
 
-Recall the [barplot and enrichment-depletion plot](https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/Ly6C-_Monocytes_barplots.pdf) which display single cell-specific loadings grouped by conditions, based on topic modeling of Ly6C- single cell data (the number of topics $K=12$).
+Recall the [barplot and enrichment-depletion plot](https://github.com/stephenslab/single-cell-cytokines/blob/master/output/results_by_cell_type/Ly6C-_Monocytes_barplots.pdf) which display single cell-specific loadings grouped by conditions, based on topic modeling of single cell data from Ly6C- monocytes (the number of topics $K=12$).
 ```{r warning=FALSE, message=FALSE}
 library(pheatmap)
 library(gridExtra)

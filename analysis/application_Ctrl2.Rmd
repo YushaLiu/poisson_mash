@@ -1,0 +1,145 @@
+---
+title: "Application of poisson mash and mash to single cell cytokines data (Ctrl2)"
+author: "Yusha Liu"
+header-includes:
+date: "2020-9-16"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+### Application to single cell data from Ctrl2
+We apply poisson mash and mash to a subset of single cell data from Control 2, to identify the genes that are differentially expressed across cell types. We consider 7 cell types in total: B_cells, CD4 T cells, CD8 T cells, Ly6C- monocytes, Ly6C+ monocytes, neutrophils and NK cells. We apply both methods to the $7,860$ genes with at least $35$ reads over all cells, so the count data matrix $X$ is $7,860 \times 7$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from cell type $r$. 
+
+```{r warning=FALSE, message=FALSE}
+library(RColorBrewer)
+library(pheatmap)
+library(gridExtra)
+
+cell_types <- c("B_cells", "CD4_T_cells", "CD8_T_cells", "Ly6C-_Monocytes", "Ly6C+_Monocytes", "Neutrophils", "NK_cells")
+cols <- brewer.pal(n=8,name="Accent")
+cols <- cols[c(1:3,5:8)]
+
+```
+
+
+
+### ED step
+To estimate the data-driven prior covariances $U_h$ and $u_g u'_g$, we fit the poisson mash model without scaling parameters $w_l$ to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test. 
+```{r warning=FALSE, message=FALSE}
+## load in the ED results
+fit.ed <- readRDS("output/Ctrl2/ed_orig_data.Rds")
+
+## running time per iteration in ED
+fit.ed$runtime/length(fit.ed$ELBO)
+
+## estimated weights for different data-driven prior covariances
+names(fit.ed$pi) <- c(names(fit.ed$Ulist), names(fit.ed$ulist))
+round(fit.ed$pi, 3)
+
+## look at the ELBO
+plot(fit.ed$ELBO, xlab = "niter", ylab = "elbo", main="fitting ED step")
+
+```
+
+
+
+### Estimate of data-driven covariances from ED step
+```{r warning=F}
+par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of rank-1 data-driven covariance matrices
+for (k in 1:2){
+  v <- fit.ed$ulist[[k]]
+  
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
+        las = 2, main = paste0(names(fit.ed$ulist)[k], ": weight ", round(fit.ed$pi[2+k],3)), col = cols)
+}
+
+
+```
+
+```{r warning=F}
+par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of data-driven covariance initialized by empirical covariance
+eig.Empcov <- eigen(fit.ed$Ulist[[2]])
+pve.Empcov <- eig.Empcov$values/sum(eig.Empcov$values)
+
+for (k in 1:4){
+  v <- eig.Empcov$vectors[,k]
+  
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
+          las = 2, main = paste0(names(fit.ed$Ulist)[2], ": weight ", round(fit.ed$pi[2],3), 
+                                 ":\nEigenvector ", k, " (pve = ", round(pve.Empcov[k],3), ")"), col = cols)
+}
+
+```
+
+
+
+### Running poisson mash
+We then look at the poisson mash fit to the entire dataset. 
+```{r warning=FALSE, message=FALSE}
+## load in the poisson mash fit results
+res <- readRDS("output/Ctrl2/pois_mash_fit_orig_data.Rds")
+res$runtime
+
+## look at ELBO
+plot(res$ELBO, xlab = "niter", ylab = "elbo", main="Fitting poisson mash with random effects")
+
+## look at distribution of random effect size (in terms of standard deviation on the log scale)
+quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))
+
+## look at the estimated weights of prior covariance matrices
+wlist <- c(1e-3, 2.5e-3, 5e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16, 25, 36, 50)
+
+pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
+rownames(pi.mat) <- c(names(fit.ed$Ulist), paste0("e_", 1:7), names(fit.ed$ulist))
+colnames(pi.mat) <- paste0("w=", wlist)
+
+round(rowSums(pi.mat),3)
+
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
+         main="Estimated weights of prior covariances in poisson mash fit")
+
+```
+
+
+
+### Comparison to fixed effects-based mash
+We calculate posterior summaries of $\delta_{jr} = \beta_{jr} - \sum_{r=1}^R \beta_{jr}/R$ from the poisson mash fit, i.e., the condition-specific deviation from the mean across all conditions, and compare to the results from fixed effects-based mash. 
+```{r warning=FALSE, message=FALSE}
+## load in the posterior summaries from poisson mash fit
+post <- readRDS("output/Ctrl2/pois_mash_posterior_orig_data.Rds")
+
+## load in the mash fit
+mash.fit <- readRDS("output/Ctrl2/mash_fit_orig_data.rds")
+
+## the number of significant genes identified by poisson mash 
+idx.pois.mash <- which(apply(post$lfsr, 1, min) < 0.05)
+length(idx.pois.mash)
+
+## the number of significant genes identified by mash
+idx.mash <- mashr::get_significant_results(mash.fit)
+length(idx.mash)
+
+## the number of genes that are identified by both 
+sum(names(idx.mash) %in% names(idx.pois.mash))
+
+## the number of genes that are identified only by poisson mash 
+pois_mash_only <- idx.pois.mash[!names(idx.pois.mash) %in% names(idx.mash)]
+length(pois_mash_only)
+
+## the number of genes that are identified only by mash 
+mash_only <- idx.mash[!names(idx.mash) %in% names(idx.pois.mash)]
+length(mash_only)
+
+```
+
+
+
+## Simulations under the null
+We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with the original $7,860 \times 1,667$ single cell count data matrix, then randomly permute the cells with respect to the conditions (cell types) so that there no longer exists association between gene expression levels and conditions. We apply the same permutation to all the genes, so the correlation among genes is preserved on the permuted dataset.
+
+We simulate 5 single cell datasets. The number of false positives are $21, 7, 24, 34, 10$ for poisson mash, and $10, 1, 3, 3, 4$ for fixed effects-based mash.
