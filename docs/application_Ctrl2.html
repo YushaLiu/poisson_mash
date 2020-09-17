@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-16
+<strong>Last updated:</strong> 2020-09-17
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree75109de64746c840258c8e2e7a674e6a7cc3c232targetblank75109dea"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/75109de64746c840258c8e2e7a674e6a7cc3c232" target="_blank">75109de</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree7cf873e10d241fe0bf689d5c469e6d8b7189f129targetblank7cf873ea" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree75109de64746c840258c8e2e7a674e6a7cc3c232targetblank75109dea" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/7cf873e10d241fe0bf689d5c469e6d8b7189f129" target="_blank">7cf873e</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/75109de64746c840258c8e2e7a674e6a7cc3c232" target="_blank">75109de</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -609,6 +609,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/75109de64746c840258c8e2e7a674e6a7cc3c232/analysis/application_Ctrl2.Rmd" target="_blank">75109de</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-17
+</td>
+<td>
+Update some results
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/b78793d2ec7549acf771155d13a764537735f9b7/docs/application_Ctrl2.html" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/YushaLiu/poisson_mash/blob/7cf873e10d241fe0bf689d5c469e6d8b7189f129/analysis/application_Ctrl2.Rmd" target="_blank">7cf873e</a>
 </td>
 <td>
@@ -630,7 +664,7 @@ Add more application and simulation results
 </div>
 <div id="application-to-single-cell-data-from-ctrl2" class="section level3">
 <h3>Application to single cell data from Ctrl2</h3>
-<p>We apply poisson mash and mash to a subset of single cell data from Control 2, to identify the genes that are differentially expressed across cell types. We consider 7 cell types in total: B_cells, CD4 T cells, CD8 T cells, Ly6C- monocytes, Ly6C+ monocytes, neutrophils and NK cells. We apply both methods to the <span class="math inline">\(7,860\)</span> genes with at least <span class="math inline">\(35\)</span> reads over all cells, so the count data matrix <span class="math inline">\(X\)</span> is <span class="math inline">\(7,860 \times 7\)</span>, where <span class="math inline">\(X_{jr}\)</span> represents the total read counts of gene <span class="math inline">\(j\)</span> in all cells from cell type <span class="math inline">\(r\)</span>.</p>
+<p>We apply poisson mash and mash to a subset of single cell data from control 2, to identify the genes that are differentially expressed across cell types. We consider 7 cell types in total: B_cells, CD4 T cells, CD8 T cells, Ly6C- monocytes, Ly6C+ monocytes, neutrophils and NK cells. We apply both methods to the <span class="math inline">\(7,860\)</span> genes with at least <span class="math inline">\(35\)</span> reads over all cells, so the count data matrix <span class="math inline">\(X\)</span> is <span class="math inline">\(7,860 \times 7\)</span>, where <span class="math inline">\(X_{jr}\)</span> represents the total read counts of gene <span class="math inline">\(j\)</span> in all cells from cell type <span class="math inline">\(r\)</span>.</p>
 <pre class="r"><code>library(RColorBrewer)
 library(pheatmap)
 library(gridExtra)
@@ -649,45 +683,50 @@ fit.ed &lt;- readRDS(&quot;output/Ctrl2/ed_orig_data.Rds&quot;)
 fit.ed$runtime/length(fit.ed$ELBO)</code></pre>
 <pre><code>     user    system   elapsed 
 21.875898  0.015724 21.903334 </code></pre>
-<pre class="r"><code>## estimated weights for different data-driven prior covariances
-names(fit.ed$pi) &lt;- c(names(fit.ed$Ulist), names(fit.ed$ulist))
-round(fit.ed$pi, 3)</code></pre>
-<pre><code>   tPCA Emp_cov    PC_1    PC_2     u_0 
-  0.002   0.192   0.106   0.032   0.669 </code></pre>
 <pre class="r"><code>## look at the ELBO
 plot(fit.ed$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;fitting ED step&quot;)</code></pre>
 <p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b78793d2ec7549acf771155d13a764537735f9b7/docs/figure/application_Ctrl2.Rmd/unnamed-chunk-2-1.png" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="estimate-of-data-driven-covariances-from-ed-step" class="section level3">
-<h3>Estimate of data-driven covariances from ED step</h3>
-<pre class="r"><code>par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
-
-### Estimate of eigenvectors of rank-1 data-driven covariance matrices
-for (k in 1:2){
-  v &lt;- fit.ed$ulist[[k]]
-  
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
-        las = 2, main = paste0(names(fit.ed$ulist)[k], &quot;: weight &quot;, round(fit.ed$pi[2+k],3)), col = cols)
-}</code></pre>
-<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
-
-### Estimate of eigenvectors of data-driven covariance initialized by empirical covariance
-eig.Empcov &lt;- eigen(fit.ed$Ulist[[2]])
-pve.Empcov &lt;- eig.Empcov$values/sum(eig.Empcov$values)
-
-for (k in 1:4){
-  v &lt;- eig.Empcov$vectors[,k]
-  
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
-          las = 2, main = paste0(names(fit.ed$Ulist)[2], &quot;: weight &quot;, round(fit.ed$pi[2],3), 
-                                 &quot;:\nEigenvector &quot;, k, &quot; (pve = &quot;, round(pve.Empcov[k],3), &quot;)&quot;), col = cols)
-}</code></pre>
-<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
 </div>
 <div id="running-poisson-mash" class="section level3">
 <h3>Running poisson mash</h3>
-<p>We then look at the poisson mash fit to the entire dataset.</p>
+<p>We then fit the poisson mash model to the entire dataset.</p>
 <pre class="r"><code>## load in the poisson mash fit results
 res &lt;- readRDS(&quot;output/Ctrl2/pois_mash_fit_orig_data.Rds&quot;)
 res$runtime</code></pre>
@@ -695,7 +734,44 @@ res$runtime</code></pre>
 19040.635    22.678 19072.351 </code></pre>
 <pre class="r"><code>## look at ELBO
 plot(res$ELBO, xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=&quot;Fitting poisson mash with random effects&quot;)</code></pre>
-<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b78793d2ec7549acf771155d13a764537735f9b7/docs/figure/application_Ctrl2.Rmd/unnamed-chunk-3-1.png" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## look at distribution of random effect size (in terms of standard deviation on the log scale)
 quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))</code></pre>
 <pre><code>        5%        10%        15%        20%        25%        30%        35% 
@@ -711,14 +787,149 @@ pi.mat &lt;- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
 rownames(pi.mat) &lt;- c(names(fit.ed$Ulist), paste0(&quot;e_&quot;, 1:7), names(fit.ed$ulist))
 colnames(pi.mat) &lt;- paste0(&quot;w=&quot;, wlist)
 
-round(rowSums(pi.mat),3)</code></pre>
-<pre><code>   tPCA Emp_cov     e_1     e_2     e_3     e_4     e_5     e_6     e_7    PC_1 
-  0.000   0.065   0.003   0.000   0.000   0.000   0.000   0.227   0.014   0.333 
-   PC_2     u_0 
-  0.015   0.342 </code></pre>
+pi.post &lt;- round(rowSums(pi.mat),3)</code></pre>
+</div>
+<div id="estimate-of-data-driven-covariances-from-ed-step" class="section level3">
+<h3>Estimate of data-driven covariances from ED step</h3>
+<pre class="r"><code>par(mfrow=c(1,1), mar=c(6.1, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of rank-1 data-driven covariance matrices
+v &lt;- fit.ed$ulist[[1]]
+barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+        main = paste0(names(fit.ed$ulist)[1], &quot;: weight &quot;, pi.post[10]))</code></pre>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b78793d2ec7549acf771155d13a764537735f9b7/docs/figure/application_Ctrl2.Rmd/unnamed-chunk-4-1.png" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<pre class="r"><code>par(mfrow=c(1,1), mar=c(6.1, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of data-driven covariance initialized by empirical covariance
+eig.Empcov &lt;- eigen(fit.ed$Ulist[[2]])
+pve.Empcov &lt;- eig.Empcov$values/sum(eig.Empcov$values)
+
+for (k in 1:4){
+  v &lt;- eig.Empcov$vectors[,k]
+  
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+          main = paste0(names(fit.ed$Ulist)[2], &quot;: weight &quot;, pi.post[2], &quot;:\nEigenvector &quot;, k, &quot; (pve = &quot;, round(pve.Empcov[k],3), &quot;)&quot;))
+}</code></pre>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b78793d2ec7549acf771155d13a764537735f9b7/docs/figure/application_Ctrl2.Rmd/unnamed-chunk-5-1.png" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
+Past versions of unnamed-chunk-5-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/b78793d2ec7549acf771155d13a764537735f9b7/docs/figure/application_Ctrl2.Rmd/unnamed-chunk-5-2.png" target="_blank">b78793d</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-16
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="look-at-the-posterior-weights-of-prior-covariance-matrices" class="section level3">
+<h3>Look at the posterior weights of prior covariance matrices</h3>
 <pre class="r"><code>pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
          main=&quot;Estimated weights of prior covariances in poisson mash fit&quot;)</code></pre>
-<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="comparison-to-fixed-effects-based-mash" class="section level3">
 <h3>Comparison to fixed effects-based mash</h3>
