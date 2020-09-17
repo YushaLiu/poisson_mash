@@ -9,7 +9,7 @@ editor_options:
 ---
 
 ### Application to single cell data from Ctrl2
-We apply poisson mash and mash to a subset of single cell data from Control 2, to identify the genes that are differentially expressed across cell types. We consider 7 cell types in total: B_cells, CD4 T cells, CD8 T cells, Ly6C- monocytes, Ly6C+ monocytes, neutrophils and NK cells. We apply both methods to the $7,860$ genes with at least $35$ reads over all cells, so the count data matrix $X$ is $7,860 \times 7$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from cell type $r$. 
+We apply poisson mash and mash to a subset of single cell data from control 2, to identify the genes that are differentially expressed across cell types. We consider 7 cell types in total: B_cells, CD4 T cells, CD8 T cells, Ly6C- monocytes, Ly6C+ monocytes, neutrophils and NK cells. We apply both methods to the $7,860$ genes with at least $35$ reads over all cells, so the count data matrix $X$ is $7,860 \times 7$, where $X_{jr}$ represents the total read counts of gene $j$ in all cells from cell type $r$. 
 
 ```{r warning=FALSE, message=FALSE}
 library(RColorBrewer)
@@ -33,10 +33,6 @@ fit.ed <- readRDS("output/Ctrl2/ed_orig_data.Rds")
 ## running time per iteration in ED
 fit.ed$runtime/length(fit.ed$ELBO)
 
-## estimated weights for different data-driven prior covariances
-names(fit.ed$pi) <- c(names(fit.ed$Ulist), names(fit.ed$ulist))
-round(fit.ed$pi, 3)
-
 ## look at the ELBO
 plot(fit.ed$ELBO, xlab = "niter", ylab = "elbo", main="fitting ED step")
 
@@ -44,42 +40,8 @@ plot(fit.ed$ELBO, xlab = "niter", ylab = "elbo", main="fitting ED step")
 
 
 
-### Estimate of data-driven covariances from ED step
-```{r warning=F}
-par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
-
-### Estimate of eigenvectors of rank-1 data-driven covariance matrices
-for (k in 1:2){
-  v <- fit.ed$ulist[[k]]
-  
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
-        las = 2, main = paste0(names(fit.ed$ulist)[k], ": weight ", round(fit.ed$pi[2+k],3)), col = cols)
-}
-
-
-```
-
-```{r warning=F}
-par(mfrow=c(1,1), mar=c(6.6, 4.1, 4.1, 2.1))
-
-### Estimate of eigenvectors of data-driven covariance initialized by empirical covariance
-eig.Empcov <- eigen(fit.ed$Ulist[[2]])
-pve.Empcov <- eig.Empcov$values/sum(eig.Empcov$values)
-
-for (k in 1:4){
-  v <- eig.Empcov$vectors[,k]
-  
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.66,
-          las = 2, main = paste0(names(fit.ed$Ulist)[2], ": weight ", round(fit.ed$pi[2],3), 
-                                 ":\nEigenvector ", k, " (pve = ", round(pve.Empcov[k],3), ")"), col = cols)
-}
-
-```
-
-
-
 ### Running poisson mash
-We then look at the poisson mash fit to the entire dataset. 
+We then fit the poisson mash model to the entire dataset. 
 ```{r warning=FALSE, message=FALSE}
 ## load in the poisson mash fit results
 res <- readRDS("output/Ctrl2/pois_mash_fit_orig_data.Rds")
@@ -98,8 +60,43 @@ pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
 rownames(pi.mat) <- c(names(fit.ed$Ulist), paste0("e_", 1:7), names(fit.ed$ulist))
 colnames(pi.mat) <- paste0("w=", wlist)
 
-round(rowSums(pi.mat),3)
+pi.post <- round(rowSums(pi.mat),3)
 
+```
+
+
+
+### Estimate of data-driven covariances from ED step
+```{r warning=F}
+par(mfrow=c(1,1), mar=c(6.1, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of rank-1 data-driven covariance matrices
+v <- fit.ed$ulist[[1]]
+barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+        main = paste0(names(fit.ed$ulist)[1], ": weight ", pi.post[10]))
+
+```
+
+```{r warning=F}
+par(mfrow=c(1,1), mar=c(6.1, 4.1, 4.1, 2.1))
+
+### Estimate of eigenvectors of data-driven covariance initialized by empirical covariance
+eig.Empcov <- eigen(fit.ed$Ulist[[2]])
+pve.Empcov <- eig.Empcov$values/sum(eig.Empcov$values)
+
+for (k in 1:4){
+  v <- eig.Empcov$vectors[,k]
+  
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+          main = paste0(names(fit.ed$Ulist)[2], ": weight ", pi.post[2], ":\nEigenvector ", k, " (pve = ", round(pve.Empcov[k],3), ")"))
+}
+
+```
+
+
+
+### Look at the posterior weights of prior covariance matrices
+```{r warning=F}
 pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
          main="Estimated weights of prior covariances in poisson mash fit")
 
