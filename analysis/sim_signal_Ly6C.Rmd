@@ -260,11 +260,6 @@ for (iter in 1:5){
        xlab="False positive rate", ylab="True positive rate", main=paste0("detecting units:\n iter", iter))
   lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col="blue")
   lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col="magenta")
-  if(iter %% 5 ==1)
-  {
-    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
-           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
-  }
 }
 
 ```
@@ -278,11 +273,6 @@ for (iter in 1:5){
        xlab="False positive rate", ylab="True positive rate", main=paste0("detecting unit-condition pairs:\n iter", iter))
   lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col="blue")
   lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col="magenta")
-  if(iter %% 5 ==1)
-  {
-    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
-           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
-  }
 }
 
 ```

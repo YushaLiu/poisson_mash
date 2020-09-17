@@ -26,9 +26,8 @@ trts <- names(cols.trt)
 ### Model
 We assume $X_{jr} \sim Pois(s_r \lambda_{jr})$, and $\log(\lambda_{jr}) = \mu_j + \beta_{jr} + \eta_{jr}$, where $s_r$ accounts for the different sequencing depth of each condition, $\mu_j$ is the gene-specific mean on the log scale shared by all conditions, $\beta_{jr}$ models the condition-specific treatment effect, and $\eta_{jr}$ models the random effect. We are mainly interested in estimation and inference on $\beta_{jr}$. The following priors are assumed in our model:
 \begin{align}
-& \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g) \\
-\text{where} \quad & \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1 \\
-& \eta_j \sim MVN(0, \: \tau_j^2 I_R). \\
+& \beta_j  =  \sum_{h, l} \pi_{h, l} \: MVN(0, \: w_l U_h) + \sum_{g, l} \pi_{g, l} \: MVN(0, \: w_l u_g u'_g)  \quad  \text{where} \;\; \sum_{h, l} \pi_{h, l} + \sum_{g, l} \pi_{g, l} = 1,  \\
+\text{and} \;\; & \eta_j \sim MVN(0, \: \tau_j^2 I_R). \\
 \end{align}
 
 
@@ -41,49 +40,15 @@ fit.ed <- readRDS("output/B_cells/ed_orig_data.Rds")
 
 ## running time per iteration in ED
 fit.ed$runtime/length(fit.ed$ELBO)
-
-## estimated weights for different data-driven prior covariances
-names(fit.ed$pi) <- c(names(fit.ed$Ulist), names(fit.ed$ulist))
-round(fit.ed$pi, 3)
-
+                      
 ## look at the ELBO
 plot(fit.ed$ELBO, xlab = "niter", ylab = "elbo", main="fitting ED step")
 
 ```
 
 
-
-### Estimate of data-driven covariances from ED step
-```{r warning=F}
-par(mfrow=c(1,1))
-
-### Estimate of eigenvectors of the data-driven covariance initialized by rank-5 PCA
-eig.tPCA <- eigen(fit.ed$Ulist[[1]])
-pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
-
-for (k in 1:4){
-  v <- eig.tPCA$vectors[,k]
-  
-  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4,
-          las = 2, main = paste0(names(fit.ed$Ulist)[1], ": weight ", round(fit.ed$pi[1],3), 
-                                 ":\nEigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"), col = cols.trt)
-}
-
-
-### Estimate of eigenvectors of rank-1 data-driven covariance matrices
-for (k in 1:4){
-  v <- fit.ed$ulist[[k]]
-  
-  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4,
-          las = 2, main = paste0(names(fit.ed$ulist)[k], ": weight ", round(fit.ed$pi[2+k],3)), col = cols.trt)
-}
-
-```
-
-
-
 ### Running poisson mash
-We then look at the poisson mash fit to the entire dataset. 
+We then fit the poisson mash model to the entire dataset. 
 ```{r warning=FALSE, message=FALSE}
 ## load in the poisson mash fit results
 res <- readRDS("output/B_cells/pois_mash_fit_orig_data.Rds")
@@ -95,16 +60,47 @@ plot(res$ELBO, xlab = "niter", ylab = "elbo", main="Fitting poisson mash with ra
 ## look at distribution of random effect size (in terms of standard deviation on the log scale)
 quantile(sqrt(res$tau2), seq(0.05, 0.95, 0.05))
 
-## look at the estimated weights of prior covariance matrices
 wlist <- c(1e-3, 2.5e-3, 5e-3, 1e-2, 2e-2, 4e-2, 8e-2, 0.16, 0.32, 0.64, 1, 2, 4, 8, 16, 25, 36, 50)
 
 pi.mat <- matrix(res$pi, ncol=length(wlist), byrow=TRUE)
 rownames(pi.mat) <- c(names(fit.ed$Ulist), paste0("e_", 1:25), names(fit.ed$ulist))
 colnames(pi.mat) <- paste0("w=", wlist)
 
-round(rowSums(pi.mat),3)
+pi.post <- round(rowSums(pi.mat),3)
 
-pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=5, fontsize_col=6, 
+```
+
+
+
+### Estimate of data-driven covariances from ED step
+```{r warning=FALSE, message=FALSE}
+### Estimate of eigenvectors of the data-driven covariance initialized by rank-5 PCA
+eig.tPCA <- eigen(fit.ed$Ulist[[1]])
+pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
+
+for (k in 1:2){
+  v <- eig.tPCA$vectors[,k]
+  
+  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4, las = 2, col = cols.trt,
+          main = paste0(names(fit.ed$Ulist)[1], ": weight ", pi.post[1],  ":\nEigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"))
+}
+
+
+### Estimate of eigenvectors of rank-1 data-driven covariance matrices
+for (k in 1:4){
+  v <- fit.ed$ulist[[k]]
+  
+  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4, las = 2, col = cols.trt,
+          main = paste0(names(fit.ed$ulist)[k], ": weight ", pi.post[27+k]))
+}
+
+```
+
+
+
+### Look at the posterior weights of prior covariance matrices
+```{r warning=F}
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
          main="Estimated weights of prior covariances in poisson mash fit")
 
 ```

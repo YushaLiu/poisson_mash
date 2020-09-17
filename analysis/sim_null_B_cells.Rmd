@@ -30,8 +30,8 @@ For method 3), the number of false positives are $20, 9, 9, 10, 8$ for poisson m
 
 
 ## Conclusions
-1. For poisson mash, the number of false positives is greatly reduced if we apply method 2) rather than method 1). 
+\noindent 1. For poisson mash, the number of false positives is greatly reduced if we apply method 2) rather than method 1). 
 
-2. When random effects are not present, the number of false positives found by fixed effects-based mash is always smaller than that of poisson mash. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting.
+\noindent 2. When random effects are not present, the number of false positives found by fixed effects-based mash is always smaller than that of poisson mash. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting.
 
-3. When random effects are present, the number of false positives found by fixed effects-based mash is much larger than that of poisson mash, which finds the smallest number of false positives among the three methods. 
+\noindent 3. When random effects are present, the number of false positives found by fixed effects-based mash is much larger than that of poisson mash, which finds the smallest number of false positives among the three methods (poisson mash, fixed effects-based mash, and mixed effects-based mash).
