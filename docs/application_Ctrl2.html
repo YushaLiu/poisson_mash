@@ -412,7 +412,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-09-17
+<strong>Last updated:</strong> 2020-09-18
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -503,16 +503,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree1950e56709d7bcbdb5a1ce06fdd51de1a16767dbtargetblank1950e56a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/1950e56709d7bcbdb5a1ce06fdd51de1a16767db" target="_blank">1950e56</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreef18d7d1ce7fabad1c141f066d3ae0bf16ddf7fedtargetblankf18d7d1a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/f18d7d1ce7fabad1c141f066d3ae0bf16ddf7fed" target="_blank">f18d7d1</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree1950e56709d7bcbdb5a1ce06fdd51de1a16767dbtargetblank1950e56a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtreef18d7d1ce7fabad1c141f066d3ae0bf16ddf7fedtargetblankf18d7d1a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/1950e56709d7bcbdb5a1ce06fdd51de1a16767db" target="_blank">1950e56</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/f18d7d1ce7fabad1c141f066d3ae0bf16ddf7fed" target="_blank">f18d7d1</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -604,6 +604,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/f18d7d1ce7fabad1c141f066d3ae0bf16ddf7fed/analysis/application_Ctrl2.Rmd" target="_blank">f18d7d1</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-18
+</td>
+<td>
+Update the treatment labels of plots
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/7cc8fcda055c7ee8f1ea531d6ea27217bfdbfd76/docs/application_Ctrl2.html" target="_blank">7cc8fcd</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-09-17
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -707,8 +741,8 @@ cell_types &lt;- c(&quot;B_cells&quot;, &quot;CD4_T_cells&quot;, &quot;CD8_T_cel
 cols &lt;- brewer.pal(n=8,name=&quot;Accent&quot;)
 cols &lt;- cols[c(1:3,5:8)]</code></pre>
 </div>
-<div id="ed-step" class="section level3">
-<h3>ED step</h3>
+<div id="running-ed-step" class="section level3">
+<h3>Running ED step</h3>
 <p>To estimate the data-driven prior covariances <span class="math inline">\(U_h\)</span> and <span class="math inline">\(u_g u&#39;_g\)</span>, we fit the poisson mash model without scaling parameters <span class="math inline">\(w_l\)</span> to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test.</p>
 <pre class="r"><code>## load in the ED results
 fit.ed &lt;- readRDS(&quot;output/Ctrl2/ed_orig_data.Rds&quot;)
@@ -840,7 +874,7 @@ pi.post &lt;- round(rowSums(pi.mat),3)</code></pre>
 
 ### Estimate of eigenvectors of rank-1 data-driven covariance matrices
 v &lt;- fit.ed$ulist[[1]]
-barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.7, las = 2, col = cols,
         main = paste0(names(fit.ed$ulist)[1], &quot;: weight &quot;, pi.post[10]))</code></pre>
 <p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -900,7 +934,7 @@ pve.Empcov &lt;- eig.Empcov$values/sum(eig.Empcov$values)
 for (k in 1:4){
   v &lt;- eig.Empcov$vectors[,k]
   
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.7, las = 2, col = cols,
           main = paste0(names(fit.ed$Ulist)[2], &quot;: weight &quot;, pi.post[2], &quot;:\nEigenvector &quot;, k, &quot; (pve = &quot;, round(pve.Empcov[k],3), &quot;)&quot;))
 }</code></pre>
 <p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -1080,7 +1114,7 @@ yushaliu
 </div>
 <div id="look-at-the-posterior-weights-of-prior-covariance-matrices" class="section level3">
 <h3>Look at the posterior weights of prior covariance matrices</h3>
-<pre class="r"><code>pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
+<pre class="r"><code>pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=9, fontsize_col=9, 
          main=&quot;Estimated weights of prior covariances in poisson mash fit&quot;)</code></pre>
 <p><img src="figure/application_Ctrl2.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
