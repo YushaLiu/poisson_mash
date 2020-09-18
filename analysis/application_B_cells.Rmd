@@ -32,7 +32,7 @@ We assume $X_{jr} \sim Pois(s_r \lambda_{jr})$, and $\log(\lambda_{jr}) = \mu_j 
 
 
 
-### ED step
+### Running ED step
 To estimate the data-driven prior covariances $U_h$ and $u_g u'_g$, we fit the poisson mash model without scaling parameters $w_l$ to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test. 
 ```{r warning=FALSE, message=FALSE}
 ## load in the ED results
@@ -80,18 +80,20 @@ pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
 
 for (k in 1:2){
   v <- eig.tPCA$vectors[,k]
-  
-  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4, las = 2, col = cols.trt,
-          main = paste0(names(fit.ed$Ulist)[1], ": weight ", pi.post[1],  ":\nEigenvector ", k, " (pve = ", round(pve.tPCA[k],3), ")"))
+  v <- v/v[which.max(abs(v))]
+  ed.plot <- barplot(v, col = cols.trt, xlab="", ylim = range(v + 0.25*sign(v)),
+                     main = paste0(names(fit.ed$Ulist)[1], ": weight ", pi.post[1],  ":\nEigenvector ", k, " (pve = ",round(pve.tPCA[k],3),")"))
+  text(x = ed.plot, y = v + ifelse(v >= 0, 0.07, -0.22),  label = names(cols.trt), pos = 3, cex = 0.7, col = "black", srt=90)
 }
 
 
 ### Estimate of eigenvectors of rank-1 data-driven covariance matrices
 for (k in 1:4){
   v <- fit.ed$ulist[[k]]
-  
-  barplot(v/v[which.max(abs(v))], names = names(cols.trt), cex.names = 0.4, las = 2, col = cols.trt,
-          main = paste0(names(fit.ed$ulist)[k], ": weight ", pi.post[27+k]))
+  v <- v/v[which.max(abs(v))]
+  ed.plot <- barplot(v, col = cols.trt, xlab="", ylim = range(v + 0.25*sign(v)),
+                     main = paste0(names(fit.ed$ulist)[k], ": weight ", pi.post[27+k]))
+  text(x = ed.plot, y = v + ifelse(v >= 0, 0.07, -0.22),  label = names(cols.trt), pos = 3, cex = 0.7, col = "black", srt=90)
 }
 
 ```
@@ -100,7 +102,7 @@ for (k in 1:4){
 
 ### Look at the posterior weights of prior covariance matrices
 ```{r warning=F}
-pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=8, fontsize_col=8, 
          main="Estimated weights of prior covariances in poisson mash fit")
 
 ```

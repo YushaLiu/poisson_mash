@@ -23,7 +23,7 @@ cols <- brewer.pal(n=8,name="Accent")
 
 
 
-### ED step
+### Running ED step
 To estimate the data-driven prior covariances $U_h$ and $u_g u'_g$, we fit the poisson mash model without scaling parameters $w_l$ to a subset of genes that are differentially expressed across conditions, which are identified based on a conditional multinomial goodness-of-fit test. 
 ```{r warning=FALSE, message=FALSE}
 ## load in the ED results
@@ -74,12 +74,12 @@ eig.tPCA <- eigen(fit.ed$Ulist[[1]])
 pve.tPCA <- eig.tPCA$values/sum(eig.tPCA$values)
 
 v <- eig.tPCA$vectors[,1]
-barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.7, las = 2, col = cols,
         main = paste0(names(fit.ed$Ulist)[1], ": weight ", pi.post[1], ":\nEigenvector ", 1, " (pve = ", round(pve.tPCA[1],3), ")"))
 
 ### Estimate of eigenvectors of rank-1 data-driven covariance matrices
 v <- fit.ed$ulist[[1]]
-barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.7, las = 2, col = cols,
         main = paste0(names(fit.ed$ulist)[1], ": weight ", pi.post[11]))
 
 ```
@@ -94,7 +94,7 @@ pve.Empcov <- eig.Empcov$values/sum(eig.Empcov$values)
 for (k in 1:4){
   v <- eig.Empcov$vectors[,k]
   
-  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.6, las = 2, col = cols,
+  barplot(v/v[which.max(abs(v))], names = cell_types, cex.names = 0.7, las = 2, col = cols,
           main = paste0(names(fit.ed$Ulist)[2], ": weight ", pi.post[2], ":\nEigenvector ", k, " (pve = ", round(pve.Empcov[k],3), ")"))
 }
 
@@ -104,7 +104,7 @@ for (k in 1:4){
 
 ### Look at the posterior weights of prior covariance matrices
 ```{r warning=F}
-pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=6, fontsize_col=6, 
+pheatmap(pi.mat, cluster_rows=FALSE, cluster_cols=FALSE, fontsize_row=9, fontsize_col=9, 
          main="Estimated weights of prior covariances in poisson mash fit")
 
 ```
