@@ -9,9 +9,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Yusha Liu" />
 
 
-<title>Home</title>
+<title>Application of poisson mash and mash to simulated single cell data under the null</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -258,6 +262,69 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -265,6 +332,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -308,7 +385,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Home</h1>
+<h1 class="title toc-ignore">Application of poisson mash and mash to simulated single cell data under the null</h1>
+<h4 class="author">Yusha Liu</h4>
+<h4 class="date">2020-10-1</h4>
 
 </div>
 
@@ -441,7 +520,7 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <div id="versions" class="tab-pane fade">
 
 <p>
-These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/index.Rmd</code>) and HTML (<code>docs/index.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/sim_null_B_cells_pre.Rmd</code>) and HTML (<code>docs/sim_null_B_cells_pre.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
 </p>
 <div class="table-responsive">
 <table class="table table-condensed table-hover">
@@ -470,7 +549,7 @@ Message
 Rmd
 </td>
 <td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/90de8906089c4d6a9b9ae29ccd750ff4419b9525/analysis/index.Rmd" target="_blank">90de890</a>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/90de8906089c4d6a9b9ae29ccd750ff4419b9525/analysis/sim_null_B_cells_pre.Rmd" target="_blank">90de890</a>
 </td>
 <td>
 yushaliu
@@ -482,550 +561,6 @@ yushaliu
 Update the results for presentation
 </td>
 </tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/62b86154edb39ea775582a334432d1ee2908ed2b/docs/index.html" target="_blank">62b8615</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-18
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/f18d7d1ce7fabad1c141f066d3ae0bf16ddf7fed/analysis/index.Rmd" target="_blank">f18d7d1</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-18
-</td>
-<td>
-Update the treatment labels of plots
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/b78793d2ec7549acf771155d13a764537735f9b7/docs/index.html" target="_blank">b78793d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/7cf873e10d241fe0bf689d5c469e6d8b7189f129/analysis/index.Rmd" target="_blank">7cf873e</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-16
-</td>
-<td>
-Add more application and simulation results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fceb44f5546811f7e0c6169ebed994eba6fc20bd/docs/index.html" target="_blank">fceb44f</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-16
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/c80f9539eb01534801e46e9601f55df1679687fc/analysis/index.Rmd" target="_blank">c80f953</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-09-16
-</td>
-<td>
-Add more application and simulation results for other cell types
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/d0e6466868312ebc5244a17d5bdfe275ed89c967/docs/index.html" target="_blank">d0e6466</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-20
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/2bf72bbbf6490c2fc9d712096c1cc40d7e4f5258/analysis/index.Rmd" target="_blank">2bf72bb</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-20
-</td>
-<td>
-Add more results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/1748a0d4ca37844f7b8ec4dbc9d8f6ca6bd0d93d/docs/index.html" target="_blank">1748a0d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-05
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/e287f376cdcc5e1d5ebb718678b30c63a0248f39/analysis/index.Rmd" target="_blank">e287f37</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-05
-</td>
-<td>
-Update plots and add FDR
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/85cfd1d92bceb5a521ce0c900eed779a65ba7b3d/docs/index.html" target="_blank">85cfd1d</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/60163cb3932643bb9d1e2d2784010122e3a157f2/analysis/index.Rmd" target="_blank">60163cb</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-04
-</td>
-<td>
-add simulation results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/f8284914e71c1069b66bdd41c4725e8f3aae0fae/docs/index.html" target="_blank">f828491</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/542307af9297823f6b022a87e8ed56fa5cb251d4/analysis/index.Rmd" target="_blank">542307a</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-08-03
-</td>
-<td>
-Add simulation results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/7a03022d9ed2c4629502eed397851fed01b355f1/docs/index.html" target="_blank">7a03022</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/dd66b6cc4bfabf1c77b2b8a3023e7234670a6fd4/analysis/index.Rmd" target="_blank">dd66b6c</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-31
-</td>
-<td>
-Add simulation results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fcd8675be7c1b19818dcee516097ce153ad5c31d/docs/index.html" target="_blank">fcd8675</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-30
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/8bed636b59ca376b988ad3ac924af4c55f36de51/analysis/index.Rmd" target="_blank">8bed636</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-30
-</td>
-<td>
-Update some examples
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/db445f3c90fb9f0df50e7ecbd4bd409e69398f1f/docs/index.html" target="_blank">db445f3</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-17
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/10208c10a56c88ab605d04be8ea1b5f8522b4766/analysis/index.Rmd" target="_blank">10208c1</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-17
-</td>
-<td>
-Add analysis results of poisson mash with random effects
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/fbbd90c63e1b7ded64de5753f3e4707e599d57e6/docs/index.html" target="_blank">fbbd90c</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-01
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/264ddb04f8619e22bd5d16607e21ea52e32d85a3/analysis/index.Rmd" target="_blank">264ddb0</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-07-01
-</td>
-<td>
-Add more results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/cb1ba2cc42e4395c124a747538aff00484c0a5a2/docs/index.html" target="_blank">cb1ba2c</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-26
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/48262ed4e5ed843ea682c527b41fe51aebe41051/analysis/index.Rmd" target="_blank">48262ed</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-26
-</td>
-<td>
-Add poisson mash fit results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/acbbc57d99b6930c3fd8e4f0dffffb2ddeb7a94b/docs/index.html" target="_blank">acbbc57</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/27c79ee5308068aaa1249ab9531d410a1c8224c4/analysis/index.Rmd" target="_blank">27c79ee</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Upload the poisson mash ed results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/bf8b7ddf920e33007638ee5615ae8d62f14494b7/docs/index.html" target="_blank">bf8b7dd</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/484fa62e4e67da8b7dfc02a812abc7fdece07228/analysis/index.Rmd" target="_blank">484fa62</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Upload the poisson mash ed results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/ed36f662c451ade4e4cf50b424ca82348f36e0cd/docs/index.html" target="_blank">ed36f66</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/fab2db6a9df4dc26e794c3a83ba0bd6da71acd6e/analysis/index.Rmd" target="_blank">fab2db6</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Upload the poisson mash ed results
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/YushaLiu/poisson_mash/87f22a1d87ae6beb83b75a53e7ac31024ca0dc75/docs/index.html" target="_blank">87f22a1</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Build site.
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/YushaLiu/poisson_mash/blob/0d8624ec86709a08e011874135001f9bb5877641/analysis/index.Rmd" target="_blank">0d8624e</a>
-</td>
-<td>
-yushaliu
-</td>
-<td>
-2020-06-18
-</td>
-<td>
-Start workflowr project.
-</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1033,38 +568,27 @@ Start workflowr project.
 </div>
 </div>
 </div>
-<p>Welcome to my research website.</p>
-<div id="application-and-simulation-based-on-cytokines-dataset-from-b-cells" class="section level2">
-<h2>Application and simulation based on cytokines dataset from B cells</h2>
-<p>Click on this <a href="application_B_cells_pre.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/> Click on this <a href="sim_null_B_cells_pre.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_B_cells_pre.html">link</a> to see simulation results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
+<div id="simulation-procedure" class="section level2">
+<h2>Simulation procedure</h2>
+<p>We apply poisson mash and mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data, which include 1) 9,902 cells from 25 conditions, and 2) 8,568 genes that have at least 100 total counts over these 25 conditions. Then we consider two ways to simulate null data based on the real dataset:</p>
+<p>1). randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions;</p>
+<p>2). apply 1) followed by addition of gene-specific random effects via thinning to the randomly permuted data (<a href="https://cran.r-project.org/web/packages/seqgendiff/index.html" class="uri">https://cran.r-project.org/web/packages/seqgendiff/index.html</a>). We choose <span class="math inline">\(\phi_j\)</span>, which controls the gene-specific random effect size, from the set <span class="math inline">\(\log_2(\exp(1))*\{0.01, 0.05, 0.1, 0.2\}\)</span> with probability <span class="math inline">\(\{0.4, 0.4, 0.1, 0.1\}\)</span>, so that it resembles the empirical distribution of <span class="math inline">\(\phi_j\)</span> we see from the poisson mash fit to the real data.</p>
 </div>
-<div id="application-to-a-subset-of-the-cytokines-dataset-from-cd4-t-cells" class="section level2">
-<h2>Application to a subset of the cytokines dataset from CD4 T cells</h2>
-<p>Click on this <a href="pois_mash_random_effects.html">link</a> to see how to fit poisson mash with random effects to a subset of cytokines data. <br/> Click on this <a href="pois_mash_random_effects_only_examples.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/> Click on this <a href="pois_mash_and_mash_random_effects_examples.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by both poisson mash and mash. <br/> Click on this <a href="mash_only_examples.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by mash only.</p>
+<div id="description-of-competing-approaches" class="section level2">
+<h2>Description of competing approaches</h2>
+<p>Fixed effects-based mash: we fit a linear fixed effects model separately to each gene <span class="math inline">\(j\)</span>, using the single-cell level normalized gene expression data as the response and the condition assignment of each cell as the predictor, to obtain <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> for each gene <span class="math inline">\(j\)</span> and condition <span class="math inline">\(r\)</span>. When fitting this model, we assume that the Gaussian observation noise is constant over conditions for each gene <span class="math inline">\(j\)</span>. We then feed <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> to mash without common baseline.</p>
+<p>Mixed effects-based mash: we fit a linear mixed effects model separately to each gene <span class="math inline">\(j\)</span>, using the single-cell level normalized gene expression data as the response and the condition assignment of each cell as the design matrix for both fixed and random effects, to obtain <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> for each gene <span class="math inline">\(j\)</span> and condition <span class="math inline">\(r\)</span>. We use the dream function in the R package variancePartition to fit this mixed effects model (<a href="https://www.bioconductor.org/packages/release/bioc/html/variancePartition.html" class="uri">https://www.bioconductor.org/packages/release/bioc/html/variancePartition.html</a>). We then feed <span class="math inline">\(\hat{b}_{jr}\)</span> and <span class="math inline">\(\hat{s}_{jr}\)</span> to mash without common baseline.</p>
 </div>
-<div id="application-to-a-subset-of-the-cytokines-dataset-from-cd4-t-cells-updated-analysis" class="section level2">
-<h2>Application to a subset of the cytokines dataset from CD4 T cells (updated analysis)</h2>
-<p>Click on this <a href="pois_mash_random_effects_updated.html">link</a> to see how to fit poisson mash with random effects to a subset of cytokines data. <br/> Click on this <a href="pois_mash_random_effects_only_examples_updated.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/> Click on this <a href="mash_only_examples_updated.html">link</a> to see some examples of genes that are identified to be differentially expressed across treatments by fixed effects-based mash only.</p>
+<div id="results" class="section level2">
+<h2>Results</h2>
+<p>For each of the two scenarios described above, we simulate 5 single cell datasets.</p>
+<p>For scenario 1), the number of false positives are <span class="math inline">\(46, 15, 28, 22, 56\)</span> for poisson mash, and <span class="math inline">\(6, 3, 12, 5, 6\)</span> for fixed effects-based mash.</p>
+<p>For scenario 2), the number of false positives are <span class="math inline">\(20, 9, 9, 10, 8\)</span> for poisson mash, <span class="math inline">\(338, 348, 329, 310, 310\)</span> for fixed effects-based mash, and <span class="math inline">\(36, 34, 29, 30, 35\)</span> for mixed effects-based mash.</p>
 </div>
-<div id="application-to-simulated-data-based-on-cd4-t-cells" class="section level2">
-<h2>Application to simulated data based on CD4 T cells</h2>
-<p>Click on this <a href="pois_mash_random_effects_sim_null.html">link</a> to see results based on single cell data simulated under the null. <br/> Click on this <a href="pois_mash_random_effects_sim_null_random_effects.html">link</a> to see results based on single cell data simulated under the null with random effects added by thinning. <br/> Click on this <a href="pois_mash_random_effects_sim_non_null.html">link</a> to see results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
-</div>
-<div id="application-and-simulation-based-on-cytokines-dataset-from-b-cells-1" class="section level2">
-<h2>Application and simulation based on cytokines dataset from B cells</h2>
-<p>Click on this <a href="application_B_cells.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/> Click on this <a href="sim_null_B_cells.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_B_cells.html">link</a> to see simulation results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
-</div>
-<div id="application-and-simulation-based-on-cytokines-dataset-from-ly6c--monocytes" class="section level2">
-<h2>Application and simulation based on cytokines dataset from Ly6C- monocytes</h2>
-<p>Click on this <a href="application_Ly6C.html">link</a> to see application of poisson mash and mash to a subset of cytokines data from Ly6C- monocytes. <br/> Click on this <a href="sim_null_Ly6C.html">link</a> to see simulation results based on single cell data simulated under the null. <br/> Click on this <a href="sim_signal_Ly6C.html">link</a> to see simulation results based on single cell data simulated with both fixed and random effects added by thinning. <br/></p>
-</div>
-<div id="application-and-simulation-based-on-cytokines-dataset-from-il12p70" class="section level2">
-<h2>Application and simulation based on cytokines dataset from IL12p70</h2>
-<p>Click on this <a href="application_IL12p70.html">link</a> to see application and simulation of poisson mash and mash based on a subset of single cell data treated by IL12p70. <br/></p>
-</div>
-<div id="application-and-simulation-based-on-cytokines-dataset-from-ctrl2" class="section level2">
-<h2>Application and simulation based on cytokines dataset from Ctrl2</h2>
-<p>Click on this <a href="application_Ctrl2.html">link</a> to see application and simulation of poisson mash and mash based on a subset of single cell data from control 2. <br/></p>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>1. When random effects are not present, the number of false positives found by fixed effects-based mash is always smaller than that of poisson mash. Since the number of false positives is already negligibly small for fixed effects-based mash, we do not consider mixed effects-based mash in this setting.</p>
+<p>2. When random effects are present, the number of false positives found by fixed effects-based mash is much larger than that of poisson mash, which finds the smallest number of false positives among the three methods (poisson mash, fixed effects-based mash, and mixed effects-based mash).</p>
 </div>
 
 
@@ -1081,6 +605,8 @@ footer is added to webpages before the MathJax javascript. -->
 </script>
 
 
+</div>
+</div>
 
 </div>
 
@@ -1113,6 +639,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
