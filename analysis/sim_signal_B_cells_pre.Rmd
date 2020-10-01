@@ -1,0 +1,249 @@
+---
+title: "Application of poisson mash and mash to simulated single cell data with signal"
+author: "Yusha Liu"
+header-includes:
+date: "2020-9-16"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Simulation procedure
+We apply poisson mash, fixed effects-based mash and mixed effects-based mash to simulated single cell data with differential expression across conditions in a subset of genes. 
+
+We start with a subset of the single cell cytokines data, which include 1) 9,902 cells from $R=25$ conditions from the second batch, and 2) 6,849 genes that have at least 250 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning. 
+
+Starting with the real dataset, we randomly permute the cells with respect to the condition labels to create null data. Then we use thinning to add 1) fixed effects $\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)$ to a subset of genes, and 2) random effects $\eta_j \sim MVN(0, \: \phi_j^2 I_R)$ to all genes. For fixed effects, the prior covariances $U_k$'s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of $\max_r \mid \beta_{jr}\mid$) further scaled to be realistic. For random effects, we simulate $\phi_j$ such that its distribution resembles the empirical distribution of $\phi_j$ we see from the poisson mash fit to the original dataset.
+
+We consider four different scenarios to add fixed effects to a subset of genes:
+
+\noindent 1. add fixed effects to $800$ genes randomly chosen from all the genes;
+
+\noindent 2. add fixed effects to $500$ genes randomly chosen from the genes with relatively high expression (> 80 percentile);
+
+\noindent 3. add fixed effects to $500$ genes randomly chosen from the genes with medium expression levels (50 ~ 75 percentile);
+
+\noindent 4. add fixed effects to $500$ genes randomly chosen from the genes with relatively low expression (25 ~ 50 percentile). 
+
+We simulate 5 single cell datasets for each scenario.
+
+
+### Results for scenario 1:
+```{r warning=FALSE, message=FALSE}
+load("output/B_cells/sim_signal_summary.RData")
+
+### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]
+# fixed effects-based mash
+fdr.mash[,alpha==0.05]
+# mixed effects-based mash
+fdr.dream[,alpha==0.05]
+
+### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]
+# fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]
+# mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]
+
+
+### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting units:\n iter", iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col="blue")
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting unit-condition pairs:\n iter", iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col="blue")
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+
+
+### Results for scenario 2 (signals added to genes with high expression levels):
+```{r warning=FALSE, message=FALSE}
+load("output/B_cells/sim_signal_high_expr_summary.RData")
+
+### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]
+# fixed effects-based mash
+fdr.mash[,alpha==0.05]
+# mixed effects-based mash
+fdr.dream[,alpha==0.05]
+
+### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]
+# fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]
+# mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]
+
+
+### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting units:\n iter", iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col="blue")
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting unit-condition pairs:\n iter", iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col="blue")
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+
+
+### Results for scenario 3 (signals added to genes with medium expression levels):
+```{r warning=FALSE, message=FALSE}
+load("output/B_cells/sim_signal_medium_expr_summary.RData")
+
+### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]
+# fixed effects-based mash
+fdr.mash[,alpha==0.05]
+# mixed effects-based mash
+fdr.dream[,alpha==0.05]
+
+### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]
+# fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]
+# mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]
+
+
+### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting units:\n iter", iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col="blue")
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting unit-condition pairs:\n iter", iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col="blue")
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col="magenta")
+  if(iter %% 5 ==1)
+  {
+    legend("bottomright", legend=c("poisson mash", "mash + fixed", "mash + mixed"), text.col=c("black", "blue", "magenta"), 
+           col=c("black", "blue", "magenta"), lty=c(1,2,4), bty="n")
+  }
+}
+
+```
+
+
+
+### Results for scenario 4 (signals added to genes with low expression levels):
+```{r warning=FALSE, message=FALSE}
+load("output/B_cells/sim_signal_low_expr_summary.RData")
+
+### look at the FDR for identifying genes at alpha=0.05
+# poisson mash
+fdr.pois[,alpha==0.05]
+# fixed effects-based mash
+fdr.mash[,alpha==0.05]
+# mixed effects-based mash
+fdr.dream[,alpha==0.05]
+
+### look at the FSR for identifying unit-condition pairs at alpha=0.05
+# poisson mash
+fsr.pair.pois[,alpha==0.05]
+# fixed effects-based mash
+fsr.pair.mash[,alpha==0.05]
+# mixed effects-based mash
+fsr.pair.dream[,alpha==0.05]
+
+
+### plot ROC for detecting genes
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pois[iter,] , tpr.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting units:\n iter", iter))
+  lines(fpr.mash[iter,], tpr.mash[iter,], lty=2, col="blue")
+  lines(fpr.dream[iter,], tpr.dream[iter,], lty=4, col="magenta")
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### plot ROC for detecting non-null pairs 
+par(mfrow=c(2,3))
+
+for (iter in 1:5){
+  plot(fpr.pair.pois[iter,] , tpr.pair.pois[iter,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("detecting unit-condition pairs:\n iter", iter))
+  lines(fpr.pair.mash[iter,], tpr.pair.mash[iter,], lty=2, col="blue")
+  lines(fpr.pair.dream[iter,], tpr.pair.dream[iter,], lty=4, col="magenta")
+}
+
+```

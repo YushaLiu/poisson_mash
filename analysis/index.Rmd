@@ -10,6 +10,13 @@ editor_options:
 
 Welcome to my research website.
 
+
+## Application and simulation based on cytokines dataset from B cells
+Click on this [link](application_B_cells_pre.html) to see application of poisson mash and mash to a subset of cytokines data from B cells. <br/>
+Click on this [link](sim_null_B_cells_pre.html) to see simulation results based on single cell data simulated under the null. <br/>
+Click on this [link](sim_signal_B_cells_pre.html) to see simulation results based on single cell data simulated with both fixed and random effects added by thinning. <br/>
+
+
 ## Application to a subset of the cytokines dataset from CD4 T cells
 Click on this [link](pois_mash_random_effects.html) to see how to fit poisson mash with random effects to a subset of cytokines data. <br/>
 Click on this [link](pois_mash_random_effects_only_examples.html) to see some examples of genes that are identified to be differentially expressed across treatments by poisson mash with random effects, but not mash. <br/>
