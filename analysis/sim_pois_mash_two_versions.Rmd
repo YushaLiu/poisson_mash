@@ -1,0 +1,234 @@
+---
+title: "Comparison of two versions of poisson mash to simulated single cell data"
+author: "Yusha Liu"
+header-includes:
+date: "2020-10-24"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+
+### Model
+Suppose there are $j=1, \dots, J$ genes and $r=1, \dots, R$ conditions. For each gene $j$, denote the sum of counts over cells from condition $r$ by $X_{jr}$.  Let $s_r$ denote the sequencing depth of condition $r$, a constant that is proportional to $\sum_{j=1}^{J} X_{jr}$. We assume the following model:
+\begin{align} 
+X_{jr} \sim & \; Pois(s_r \lambda_{jr}), \\
+\log(\lambda_{jr}) = & \; \mu_j + \theta_{jr}, \\
+\theta_j = & \; \beta_j + \eta_j, \\
+\quad \beta_j \sim & \; \sum_{k,l} \pi_{kl} N(0, w_l U_k)  \quad \text{where} \;\; \sum_{k,l} \pi_{kl} =1, \\
+\eta_j \sim & \; N(0, S_j)  \quad \text{where} \;\;  S_j = \psi_j^2 I. \\
+\end{align} 
+
+We introduce a $KL \times 1$ vector of latent indicator $z_j$ for each gene $j$ such that $\sum_{k,l} z_{jkl} = 1$ and
+\begin{align}
+\beta_j \mid (z_{jkl} = 1) \; \sim  \; MVN(0,  \: w_l U_k). \\
+\end{align}
+
+We approximate the true posterior $p\left(\theta_j, z_j \mid x_j, \mu_j, \psi_j^2, \pi, U \right)$ with
+\begin{align}
+q(\theta_j, z_j) = \prod_{k, l} \left[\zeta_{jkl} \: q_{jkl}(\theta_j) \right]^{z_{jkl}}, \\
+\end{align}
+where each $q_{jkl}(\theta_j)$ is restricted to be a MVN. 
+
+Depending on the assumption of the joint posterior of $(\beta_j, \eta_j)$, we consider two different versions of poisson mash model. The "independent" version assumes $q(\beta_j, \eta_j) = q(\beta_j) q(\eta_j)$, and the "general" version does not enforce this posterior independence between $\beta_j$ and $\eta_j$. We apply the two versions of poisson mash to some simulated single cell datasets, and compare their performance in various aspects.
+
+
+### Null case
+We apply poisson mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions. 
+
+```{r warning=FALSE, message=FALSE}
+res <- readRDS("output/Ly6C-/null_summary.Rds")
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.ed[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])
+# the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.fit[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]
+# the general version
+res$runtime2.fit[[1]]
+
+
+### look at the number of false positives
+# the independent version
+res$num_effects
+# the general version
+res$num_effects2
+```
+
+
+### Null case with random effects
+We then apply poisson mash to single cell data simulated under the null and with random effects added. That is, we first permute the cells randomly with respect to the condition labels to generate null data, and then add gene-wise random effects via thinning to the randomly permuted data. For random effects, we simulate $\psi^2_j$ such that its distribution resembles the empirical distribution of $\psi^2_j$ we see from the poisson mash fit to the original dataset.
+
+```{r warning=FALSE, message=FALSE}
+res <- readRDS("output/Ly6C-/null_random_effects_summary.Rds")
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.ed[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])
+# the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.fit[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]
+# the general version
+res$runtime2.fit[[1]]
+
+
+### look at the number of false positives
+# the independent version
+res$num_effects
+# the general version
+res$num_effects2
+```
+
+
+### Non-null case
+We then apply poisson mash to simulated single cell data with differential expression across conditions in a subset of genes. 
+
+We start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from $R=25$ conditions from the second batch, and 2) $J=5,007$ genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning. 
+
+Starting with the real dataset, we randomly permute the cells with respect to the condition labels to generate null data. Then we use thinning to add 1) fixed effects $\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)$ to a randomly chosen subset of 1000 genes, and 2) random effects $\eta_j \sim MVN(0, \: \psi^2_j I_R)$ to all genes. For fixed effects, the prior covariances $U_k$'s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of $\max_r \mid \beta_{jr}\mid$) further scaled to be realistic. For random effects, we simulate $\psi^2_j$ such that its distribution resembles the empirical distribution of $\psi^2_j$ we see from the poisson mash fit to the original dataset.
+
+```{r warning=FALSE, message=FALSE}
+res <- readRDS("output/Ly6C-/sim_signal_summary.Rds")
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.ed[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])
+# the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = "niter", ylab = "elbo", main=paste0("iter", i))
+  lines(res$ELBO2.fit[[i]], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+```
+
+```{r warning=FALSE, message=FALSE}
+### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]
+# the general version
+res$runtime2.fit[[1]]
+```
+
+```{r warning=FALSE, message=FALSE}
+### plot ROC for detecting non-null units
+par(mfrow=c(2,3))
+for (i in 1:5){
+  plot(res$fpr.pois[i,] , res$tpr.pois[i,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("iter", i))
+  lines(res$fpr.pois2[i,], res$tpr.pois2[i,], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+
+#### plot ROC for detecting non-null pairs
+par(mfrow=c(2,3))
+for (i in 1:5){
+  plot(res$fpr.pair.pois[i,] , res$tpr.pair.pois[i,], type="l", xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab="False positive rate", ylab="True positive rate", main=paste0("iter", i))
+  lines(res$fpr.pair.pois2[i,], res$tpr.pair.pois2[i,], lty=4, col="red")
+  if(i %% 5 ==1)
+  {
+    legend("bottomright", legend=c("independent", "general"), text.col=c("black", "red"),  col=c("black", "red"), lty=c(1,4), bty="n")
+  }
+}
+
+```
