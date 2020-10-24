@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Yusha Liu" />
+
+<meta name="date" content="2020-10-24" />
+
+<title>Comparison of two versions of poisson mash to simulated single cell data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">poisson_mash</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/YushaLiu/poisson_mash">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Comparison of two versions of poisson mash to simulated single cell data</h1>
+<h4 class="author">Yusha Liu</h4>
+<h4 class="date">2020-10-24</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2020-10-24
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>poisson_mash/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20200618code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20200618)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20200618code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20200618)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree6faa5d2cb778974d0150caacb1a65695abf9cc0atargetblank6faa5d2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/YushaLiu/poisson_mash/tree/6faa5d2cb778974d0150caacb1a65695abf9cc0a" target="_blank">6faa5d2</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomYushaLiupoissonmashtree6faa5d2cb778974d0150caacb1a65695abf9cc0atargetblank6faa5d2a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version <a href="https://github.com/YushaLiu/poisson_mash/tree/6faa5d2cb778974d0150caacb1a65695abf9cc0a" target="_blank">6faa5d2</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    .Rhistory
+    Ignored:    code/.DS_Store
+    Ignored:    output/.DS_Store
+
+Untracked files:
+    Untracked:  code/code_random_effects.R
+    Untracked:  code/examples.R
+    Untracked:  code/examples_updated.R
+    Untracked:  code/util6.R
+    Untracked:  code/util8.R
+    Untracked:  code/util_ed.R
+    Untracked:  code/util_random_effects.R
+    Untracked:  code/util_random_effects_v2.R
+    Untracked:  data/data_jr.RData
+    Untracked:  output/B_cells/
+    Untracked:  output/Ctrl2/
+    Untracked:  output/IL12p70/
+    Untracked:  output/Ly6C-/
+    Untracked:  output/ed_all_trts_maxiter1500.Rds
+    Untracked:  output/ed_second_batch_maxiter1500.Rds
+    Untracked:  output/ed_second_batch_v2_maxiter2000.Rds
+    Untracked:  output/ed_v1_maxiter1000.Rds
+    Untracked:  output/ed_v2_maxiter1000.Rds
+    Untracked:  output/examples.pdf
+    Untracked:  output/examples/
+    Untracked:  output/examples_mash.pdf
+    Untracked:  output/mash_data_limma.rds
+    Untracked:  output/mash_data_second_batch.rds
+    Untracked:  output/mash_fit_limma.rds
+    Untracked:  output/mash_fit_limma_all_trts.rds
+    Untracked:  output/mash_fit_second_batch.rds
+    Untracked:  output/non_null_sim_setting1/
+    Untracked:  output/non_null_sim_setting2/
+    Untracked:  output/non_null_sim_setting3/
+    Untracked:  output/non_null_sim_setting4/
+    Untracked:  output/null_sim/
+    Untracked:  output/pois_mash_contrast_posterior_all_trts.Rds
+    Untracked:  output/pois_mash_contrast_posterior_second_batch.Rds
+    Untracked:  output/pois_mash_contrast_posterior_second_batch_v2.Rds
+    Untracked:  output/pois_mash_fit_all_trts.Rds
+    Untracked:  output/pois_mash_fit_second_batch.Rds
+    Untracked:  output/pois_mash_fit_second_batch_v2.Rds
+    Untracked:  output/poisson_mash_fit.Rds
+    Untracked:  output/poisson_mash_fit_contrast_posterior.Rds
+    Untracked:  output/realdata/
+    Untracked:  output/simulations/
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/sim_pois_mash_two_versions.Rmd</code>) and HTML (<code>docs/sim_pois_mash_two_versions.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/YushaLiu/poisson_mash/blob/6faa5d2cb778974d0150caacb1a65695abf9cc0a/analysis/sim_pois_mash_two_versions.Rmd" target="_blank">6faa5d2</a>
+</td>
+<td>
+yushaliu
+</td>
+<td>
+2020-10-24
+</td>
+<td>
+Add comparisons of the two versions of poisson mash
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="model" class="section level3">
+<h3>Model</h3>
+<p>Suppose there are <span class="math inline">\(j=1, \dots, J\)</span> genes and <span class="math inline">\(r=1, \dots, R\)</span> conditions. For each gene <span class="math inline">\(j\)</span>, denote the sum of counts over cells from condition <span class="math inline">\(r\)</span> by <span class="math inline">\(X_{jr}\)</span>. Let <span class="math inline">\(s_r\)</span> denote the sequencing depth of condition <span class="math inline">\(r\)</span>, a constant that is proportional to <span class="math inline">\(\sum_{j=1}^{J} X_{jr}\)</span>. We assume the following model: <span class="math display">\[\begin{align} 
+X_{jr} \sim &amp; \; Pois(s_r \lambda_{jr}), \\
+\log(\lambda_{jr}) = &amp; \; \mu_j + \theta_{jr}, \\
+\theta_j = &amp; \; \beta_j + \eta_j, \\
+\quad \beta_j \sim &amp; \; \sum_{k,l} \pi_{kl} N(0, w_l U_k)  \quad \text{where} \;\; \sum_{k,l} \pi_{kl} =1, \\
+\eta_j \sim &amp; \; N(0, S_j)  \quad \text{where} \;\;  S_j = \psi_j^2 I. \\
+\end{align}\]</span></p>
+<p>We introduce a <span class="math inline">\(KL \times 1\)</span> vector of latent indicator <span class="math inline">\(z_j\)</span> for each gene <span class="math inline">\(j\)</span> such that <span class="math inline">\(\sum_{k,l} z_{jkl} = 1\)</span> and <span class="math display">\[\begin{align}
+\beta_j \mid (z_{jkl} = 1) \; \sim  \; MVN(0,  \: w_l U_k). \\
+\end{align}\]</span></p>
+<p>We approximate the true posterior <span class="math inline">\(p\left(\theta_j, z_j \mid x_j, \mu_j, \psi_j^2, \pi, U \right)\)</span> with <span class="math display">\[\begin{align}
+q(\theta_j, z_j) = \prod_{k, l} \left[\zeta_{jkl} \: q_{jkl}(\theta_j) \right]^{z_{jkl}}, \\
+\end{align}\]</span> where each <span class="math inline">\(q_{jkl}(\theta_j)\)</span> is restricted to be a MVN.</p>
+<p>Depending on the assumption of the joint posterior of <span class="math inline">\((\beta_j, \eta_j)\)</span>, we consider two different versions of poisson mash model. The “independent” version assumes <span class="math inline">\(q(\beta_j, \eta_j) = q(\beta_j) q(\eta_j)\)</span>, and the “general” version does not enforce this posterior independence between <span class="math inline">\(\beta_j\)</span> and <span class="math inline">\(\eta_j\)</span>. We apply the two versions of poisson mash to some simulated single cell datasets, and compare their performance in various aspects.</p>
+</div>
+<div id="null-case" class="section level3">
+<h3>Null case</h3>
+<p>We apply poisson mash to single cell data simulated under the null. More specifically, we start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from 25 conditions from the second batch, and 2) 6,794 genes that have at least 100 total counts over these 25 conditions. Then we randomly permute the cells with respect to the condition labels so that there no longer exists association between gene expression levels and conditions.</p>
+<pre class="r"><code>res &lt;- readRDS(&quot;output/Ly6C-/null_summary.Rds&quot;)
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.ed[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-1-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+1.887110 0.002138 1.890050 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+2.789700 0.002324 2.793030 </code></pre>
+<pre class="r"><code>### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.fit[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]</code></pre>
+<pre><code>    user   system  elapsed 
+2932.942   12.600 2946.572 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.fit[[1]]</code></pre>
+<pre><code>    user   system  elapsed 
+5719.494    9.811 5731.340 </code></pre>
+<pre class="r"><code>### look at the number of false positives
+# the independent version
+res$num_effects</code></pre>
+<pre><code>[1]  98  78 160  92 160</code></pre>
+<pre class="r"><code># the general version
+res$num_effects2</code></pre>
+<pre><code>[1] 135  89 192 114 179</code></pre>
+</div>
+<div id="null-case-with-random-effects" class="section level3">
+<h3>Null case with random effects</h3>
+<p>We then apply poisson mash to single cell data simulated under the null and with random effects added. That is, we first permute the cells randomly with respect to the condition labels to generate null data, and then add gene-wise random effects via thinning to the randomly permuted data. For random effects, we simulate <span class="math inline">\(\psi^2_j\)</span> such that its distribution resembles the empirical distribution of <span class="math inline">\(\psi^2_j\)</span> we see from the poisson mash fit to the original dataset.</p>
+<pre class="r"><code>res &lt;- readRDS(&quot;output/Ly6C-/null_random_effects_summary.Rds&quot;)
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.ed[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+3.824818 0.004466 3.831128 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+4.925436 0.005266 4.935108 </code></pre>
+<pre class="r"><code>### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.fit[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]</code></pre>
+<pre><code>    user   system  elapsed 
+2714.764   10.242 2725.937 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.fit[[1]]</code></pre>
+<pre><code>    user   system  elapsed 
+5284.775   10.692 5299.049 </code></pre>
+<pre class="r"><code>### look at the number of false positives
+# the independent version
+res$num_effects</code></pre>
+<pre><code>[1]  30  25  25 100  44</code></pre>
+<pre class="r"><code># the general version
+res$num_effects2</code></pre>
+<pre><code>[1]  72  46  44 148  70</code></pre>
+</div>
+<div id="non-null-case" class="section level3">
+<h3>Non-null case</h3>
+<p>We then apply poisson mash to simulated single cell data with differential expression across conditions in a subset of genes.</p>
+<p>We start with a subset of the single cell cytokines data from Ly6C- monocytes, which include 1) 1,879 cells from <span class="math inline">\(R=25\)</span> conditions from the second batch, and 2) <span class="math inline">\(J=5,007\)</span> genes that have at least 200 total counts over these 25 conditions. We remove genes that have relatively few reads because we will add signals to the data via thinning.</p>
+<p>Starting with the real dataset, we randomly permute the cells with respect to the condition labels to generate null data. Then we use thinning to add 1) fixed effects <span class="math inline">\(\beta_{jr} \sim \sum_k \pi_k MVN(0, U_k)\)</span> to a randomly chosen subset of 1000 genes, and 2) random effects <span class="math inline">\(\eta_j \sim MVN(0, \: \psi^2_j I_R)\)</span> to all genes. For fixed effects, the prior covariances <span class="math inline">\(U_k\)</span>’s are learned from the poisson mash fit to the original dataset, with the effect size (in terms of <span class="math inline">\(\max_r \mid \beta_{jr}\mid\)</span>) further scaled to be realistic. For random effects, we simulate <span class="math inline">\(\psi^2_j\)</span> such that its distribution resembles the empirical distribution of <span class="math inline">\(\psi^2_j\)</span> we see from the poisson mash fit to the original dataset.</p>
+<pre class="r"><code>res &lt;- readRDS(&quot;output/Ly6C-/sim_signal_summary.Rds&quot;)
+
+### look at ELBO in the ED step
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.ed[[i]], ylim=range(c(res$ELBO.ed[[i]], res$ELBO2.ed[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.ed[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the running time per iteration in the ED step (in one replicate dataset)
+# the independent version
+res$runtime.ed[[1]]/length(res$ELBO.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+15.01519  0.03485 15.07126 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.ed[[1]]/length(res$ELBO2.ed[[1]])</code></pre>
+<pre><code>    user   system  elapsed 
+8.337280 0.010148 8.353272 </code></pre>
+<pre class="r"><code>### look at ELBO when fitting poisson mash to the entire dataset
+par(mfrow=c(2,3))
+
+for(i in 1:5){
+  plot(res$ELBO.fit[[i]], xlim=c(0, pmax(length(res$ELBO.fit[[i]]), length(res$ELBO2.fit[[i]]))),
+    ylim=range(c(res$ELBO.fit[[i]], res$ELBO2.fit[[i]])), xlab = &quot;niter&quot;, ylab = &quot;elbo&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$ELBO2.fit[[i]], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>### look at the total running time when fitting poisson mash to the entire dataset (in one replicate dataset)
+# the independent version
+res$runtime.fit[[1]]</code></pre>
+<pre><code>     user    system   elapsed 
+14946.415    62.524 15025.203 </code></pre>
+<pre class="r"><code># the general version
+res$runtime2.fit[[1]]</code></pre>
+<pre><code>     user    system   elapsed 
+12496.331    23.526 12531.109 </code></pre>
+<pre class="r"><code>### plot ROC for detecting non-null units
+par(mfrow=c(2,3))
+for (i in 1:5){
+  plot(res$fpr.pois[i,] , res$tpr.pois[i,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$fpr.pois2[i,], res$tpr.pois2[i,], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}
+
+#### plot ROC for detecting non-null pairs
+par(mfrow=c(2,3))</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>for (i in 1:5){
+  plot(res$fpr.pair.pois[i,] , res$tpr.pair.pois[i,], type=&quot;l&quot;, xlim=c(0, 0.2), ylim=c(0, 1), 
+       xlab=&quot;False positive rate&quot;, ylab=&quot;True positive rate&quot;, main=paste0(&quot;iter&quot;, i))
+  lines(res$fpr.pair.pois2[i,], res$tpr.pair.pois2[i,], lty=4, col=&quot;red&quot;)
+  if(i %% 5 ==1)
+  {
+    legend(&quot;bottomright&quot;, legend=c(&quot;independent&quot;, &quot;general&quot;), text.col=c(&quot;black&quot;, &quot;red&quot;),  col=c(&quot;black&quot;, &quot;red&quot;), lty=c(1,4), bty=&quot;n&quot;)
+  }
+}</code></pre>
+<p><img src="figure/sim_pois_mash_two_versions.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] workflowr_1.6.2
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.4.6    rprojroot_1.3-2 digest_0.6.25   later_1.0.0    
+ [5] R6_2.4.1        backports_1.1.7 git2r_0.27.1    magrittr_1.5   
+ [9] evaluate_0.14   stringi_1.4.6   rlang_0.4.7     fs_1.4.1       
+[13] promises_1.1.0  whisker_0.4     rmarkdown_2.3   tools_3.6.2    
+[17] stringr_1.4.0   glue_1.4.1      httpuv_1.5.2    xfun_0.17      
+[21] yaml_2.2.1      compiler_3.6.2  htmltools_0.4.0 knitr_1.30     </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
